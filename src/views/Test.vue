@@ -9,7 +9,7 @@
   </div>
 </template>
 <script setup>
-import request from "@/request";
+import request from "@/utils/request";
 
 function dianji() {
   const routes = [

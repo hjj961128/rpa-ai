@@ -1,21 +1,31 @@
 <template>
   <div class="mainpage">
     <el-row :gutter="20">
-      <el-col 
-        v-for="(menuItem, index) in navList"
+      <el-col
+        v-for="(menuItem, index) in departmentList"
         :key="index"
-        :index="menuItem.id" :span="12"
+        :index="menuItem.id"
+        :span="12"
       >
         <div class="kuang">
           <div class="title">
-            {{ menuItem.buName }}
+            {{ menuItem.name }}
           </div>
-          <div class="liangdian" v-for="(specilItem, Index) in menuItem.specilList" :key="Index">
-            {{ specilItem }}
+          <div
+            class="liangdian"
+            v-for="(specilItem, Index) in menuItem.processList"
+            :key="Index"
+          >
+            {{ specilItem.name }}
           </div>
-          <div class="detailLink" @click="goDetail(menuItem.id)">
+          <el-button
+            type="text"
+            link
+            class="detailLink"
+            @click="goDetail(menuItem.id)"
+          >
             了解详情 >
-          </div>
+          </el-button>
         </div>
       </el-col>
     </el-row>
@@ -23,109 +33,128 @@
 </template>
 
 <script lang="ts" setup>
-import router from '../../../router/index.js'
-const navList = [
-  {
-    id:'1',
-    navName: 'RPA营销',
-    buName: '营销部',
-    specilList: [
-      '营财系统数据智能校核',
-      '稽查工单智能核验',
-      '7*24小时服务申请工单监测',
-      '电能计量装置改造',
-      '....'
-    ]
-  },
-  {
-    id:'2',
-    navName: 'RPA人资',
-    buName: '人资部',
-    specilList: [
-      '综合福利报表上报审核',
-      'SAP数据治理',
-      '绩效证明word生成'
-    ]
-  },
-  {
-    id:'3',
-    navName: 'RPA党建',
-    buName: '党建部',
-    specilList: [
-      '南瑞集团党建信息核查'
-    ]
-  },
-  {
-    id:'4',
-    navName: 'RPA财资',
-    buName: '财资部',
-    specilList: [
-      '智能邮件助手',
-      '内部往来核对',
-      '财务月度监督报告一键生成'
-    ]
-  },
-  {
-    id:'5',
-    navName: 'RPA运维',
-    buName: '运维部',
-    specilList: [
-      '变电站电表中断自动处理',
-      '电能量模型配置比对',
-      '电能量线损-母线平衡-站损异常数据排查',
-      '调控云数据异常监控'
-    ]
-  },
-  {
-    id:'6',
-    navName: 'RPA调度自动化',
-    buName: '调度自动部',
-    specilList: [
-      '用户电流曲线监测',
-      '线路电流值监测',
-      '基础数据指标监控',
-      '调控云电量数据校验',
-      '....'
-    ]
-  }
-]
+import { onMounted, reactive, ref } from "vue";
+import { ElMessage } from "element-plus";
+import router from "../../../router/index.js";
+import request from "@/utils/request";
 const handleOpen = (key: string, keyPath: string[]) => {
-  console.log(key, keyPath)
-}
+  console.log(key, keyPath);
+};
 const handleClose = (key: string, keyPath: string[]) => {
-  console.log(key, keyPath)
+  console.log(key, keyPath);
+};
+function goDetail(val) {
+  router.push({ name: "mainListMore", query: { id: val } });
 }
-function goDetail( val ) {
-  console.log(val);
-  router.push({name:'mainListMore'});
-  // router.push({name:'user',params:{id:props.videoInfo.author.ID}});
-
-
-}
+const userInfo = ref({
+  roles: [],
+  department_id: null,
+});
+const processList = ref([]);
+const queryDepartmentListParams = ref({
+  id: null,
+  limit: null,
+});
+//查询部门/api/department
+const departmentList = ref([]);
+const queryDepartmentList = () => {
+  request({
+    method: "GET",
+    url: "/api/department",
+    params: queryDepartmentListParams.value,
+  })
+    .then((res) => {
+      departmentList.value = res.data.data.list;
+      departmentList.value.forEach((item) => {
+        request({
+          method: "GET",
+          url: "/api/process",
+          params: {
+            page_num: 1,
+            page_size: 4,
+            department_id: item.id,
+          },
+        })
+          .then((res) => {
+            item.processList = res.data.data.list;
+          })
+          .catch((err) => {
+            ElMessage({
+              showClose: true,
+              message: err.response.data.detail,
+              type: "error",
+            });
+          });
+      });
+      console.log(departmentList.value);
+    })
+    .catch((err) => {
+      ElMessage({
+        showClose: true,
+        message: err.response.data.detail,
+        type: "error",
+      });
+    });
+};
+//查询流程列表/api/process
+const queryprocessList = (val) => {
+  request({
+    method: "GET",
+    url: "/api/process",
+    params: {
+      limit: false,
+      department_id: val.id,
+    },
+  })
+    .then((res) => {
+      processList.value = res.data.data.list;
+    })
+    .catch((err) => {
+      ElMessage({
+        showClose: true,
+        message: err.response.data.detail,
+        type: "error",
+      });
+    });
+};
+onMounted(() => {
+  userInfo.value = JSON.parse(sessionStorage.getItem("userInfo"));
+  if (userInfo.value.roles.indexOf("SA") == -1) {
+    //不是管理员
+    console.log("不是管理员");
+    queryDepartmentListParams.value.id = userInfo.value.department_id;
+  } else {
+    console.log("是管理员");
+    queryDepartmentListParams.value.limit = false;
+  }
+  queryDepartmentList();
+});
 </script>
 <style lang="scss" scoped>
-.mainpage{
+.mainpage {
   padding: 20px;
-  .kuang{
+  .kuang {
     height: 330px;
-    background-color: pink;
+    background-image: url("../../../assets/images/yewubg.jpg"); /* 替换为你的图片路径 */
+    background-size: cover; /* 背景图片覆盖整个元素 */
+    background-repeat: no-repeat; /* 背景图片不重复 */
     margin-bottom: 20px;
     padding: 30px;
-    .title{
+    .title {
       font-weight: 900;
       font-size: 36px;
       margin-bottom: 20px;
+      color: #000;
     }
-    .liangdian{
+    .liangdian {
       margin-top: 10px;
       color: #666;
     }
-    .detailLink{
+    .detailLink {
       margin-top: 20px;
-      color: #2468F2;
+      color: #2468f2;
     }
   }
 }
-
 </style>
 

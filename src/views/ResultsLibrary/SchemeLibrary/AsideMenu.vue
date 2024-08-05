@@ -21,7 +21,30 @@
 </template>
 
 <script setup>
-const navList = [
+import { onMounted, reactive, ref } from "vue";
+import request from "@/utils/request";
+const userInfo = ref({
+  roles:[]
+})
+const searchForm = ref({
+  page_num: 1,
+  page_size: 10
+})
+const navList = ref([])
+onMounted(() => {
+  userInfo.value = JSON.parse(sessionStorage.getItem("userInfo"))
+  if(userInfo.value.roles.indexOf("SA") == -1){
+    //不是管理员
+    console.log('不是管理员');
+    navList.value = [{
+      id: userInfo.value.department_id,
+      navName: userInfo.value.department_name
+    }]
+    
+  }else{
+    console.log('是管理员');
+    // getProcessList()
+    navList.value = [
   {
     id:'1',
     navName: 'RPA营销'
@@ -47,6 +70,8 @@ const navList = [
     navName: 'RPA调度自动化'
   }
 ]
+  }
+});
 </script>
 <style lang="less" scoped>
 .el-menu{

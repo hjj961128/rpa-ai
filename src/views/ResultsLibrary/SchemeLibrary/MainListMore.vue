@@ -1,136 +1,150 @@
 <template>
   <div class="mainpage">
     <el-row :gutter="20">
-      <el-col 
-        v-for="(menuItem, index) in navList"
+      <el-col
+        v-for="(menuItem, index) in processList"
         :key="index"
-        :index="menuItem.id" :span="8"
+        :index="menuItem.id"
+        :span="8"
       >
         <div class="kuang">
           <div class="title">
-            <!-- {{ menuItem.buName }} -->
-            <span>智能财务智能数据核验</span>
-            <span class="hot">HOT</span>
-            <span class="detail" @click="goDetail('1')"> 》</span>
+            <div class="titlel">
+              {{ menuItem.name }}
+            </div>
+            <div>
+              <svg-icon name="hot" class="hot"></svg-icon>
+            </div>
+            <div>
+              <svg-icon name="goto" class="goto" @click="goDetail(menuItem)"></svg-icon>
+            </div>
           </div>
           <div class="liangdian">
-            <!-- {{ specilItem }} -->
-            核查电费的准确性的大多数大发啊好风光好的发烧发烧开发啊扽的v的范德萨的风风光光赶快回家啊是咖啡馆发感慨
+            {{ menuItem.process_introduction }}
           </div>
-          <div class="detailLink">
-            
-          </div>
+          <div class="detailLink"></div>
         </div>
       </el-col>
     </el-row>
+    <el-pagination
+      v-model:current-page="pageValue.page_num"
+      v-model:page-size="pageValue.page_size"
+      layout="total, prev, pager, next"
+      :total="total"
+      background
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      style="margin-top: 10px; display: flex; justify-content: center"
+    />
   </div>
 </template>
 
 <script lang="ts" setup>
-import router from '../../../router/index.js'
-const navList = [
-  {
-    id:'1',
-    navName: 'RPA营销',
-    buName: '营销部',
-    specilList: [
-      '营财系统数据智能校核',
-      '稽查工单智能核验',
-      '7*24小时服务申请工单监测',
-      '电能计量装置改造',
-      '....'
-    ]
-  },
-  {
-    id:'2',
-    navName: 'RPA人资',
-    buName: '人资部',
-    specilList: [
-      '综合福利报表上报审核',
-      'SAP数据治理',
-      '绩效证明word生成'
-    ]
-  },
-  {
-    id:'3',
-    navName: 'RPA党建',
-    buName: '党建部',
-    specilList: [
-      '南瑞集团党建信息核查'
-    ]
-  },
-  {
-    id:'4',
-    navName: 'RPA财资',
-    buName: '财资部',
-    specilList: [
-      '智能邮件助手',
-      '内部往来核对',
-      '财务月度监督报告一键生成'
-    ]
-  },
-  {
-    id:'5',
-    navName: 'RPA运维',
-    buName: '运维部',
-    specilList: [
-      '变电站电表中断自动处理',
-      '电能量模型配置比对',
-      '电能量线损-母线平衡-站损异常数据排查',
-      '调控云数据异常监控'
-    ]
-  },
-  {
-    id:'6',
-    navName: 'RPA调度自动化',
-    buName: '调度自动部',
-    specilList: [
-      '用户电流曲线监测',
-      '线路电流值监测',
-      '基础数据指标监控',
-      '调控云电量数据校验',
-      '....'
-    ]
-  }
-]
-function goDetail( val ) {
-  router.push({name:'schemeDetail'});
+import router from "../../../router/index.js";
+import { onMounted, reactive, ref } from "vue";
+import { useRoute } from "vue-router";
+import request from "@/utils/request";
+import { ElMessage } from "element-plus";
+
+const route = useRoute();
+const total = ref(0);
+const handleSizeChange = (val) => {
+  pageValue.value.page_size = val;
+  getProcessList();
+};
+const handleCurrentChange = (val) => {
+  pageValue.value.page_num = val;
+  getProcessList();
+};
+
+const goDetail = (val) => {
+  console.log(val);
+  router.push({name:'schemeDetail',query: { id: val.id }})
 }
+
+const pageValue = ref({
+  page_num: 1,
+  page_size: 9,
+});
+const processList = ref([]);
+const getProcessList = () => {
+  request({
+    method: "GET",
+    url: "/api/process",
+    params: {
+      page_num: pageValue.value.page_num,
+      page_size: pageValue.value.page_size,
+      department_id: departmentId.value.id,
+    },
+  })
+    .then((res) => {
+      processList.value = res.data.data.list;
+      total.value = res.data.data.total;
+    })
+    .catch((err) => {
+      ElMessage({
+        showClose: true,
+        message: err.response.data.detail,
+        type: "error",
+      });
+    });
+};
+const departmentId = ref(null);
+onMounted(() => {
+  departmentId.value = route.query.id;
+  getProcessList();
+});
 </script>
 <style lang="scss" scoped>
-.mainpage{
+.mainpage {
   padding: 20px;
-  .kuang{
+  .kuang {
     height: 250px;
-    background: url('../../../assets/images/cardbg.png') no-repeat center/cover;
+    background: url("../../../assets/images/cardbg.png") no-repeat center/cover;
     box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.08);
     margin-bottom: 20px;
     padding: 30px;
     border-radius: 8px;
-    .title{
+    
+    .title {
       font-size: 24px;
-      margin-bottom: 20px;
-      .hot{
-        margin-left: 20px;
-        font-size: 18px;
-        color: #fff;
-        padding: 5px;
-        background-color: red;
-      }
-      .detail{
+      margin-bottom: 15px;
+      display: flex;
+    justify-content: space-between;
+      .detail {
         float: right;
       }
     }
-    .liangdian{
+    .titlel {
+      display: inline-block;
+      white-space: nowrap; /* 确保文本在一行内显示 */
+      overflow: hidden; /* 隐藏超出容器的内容 */
+      text-overflow: ellipsis;
+    }
+    .liangdian {
       margin-top: 10px;
       color: #666;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 4;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
-    .detailLink{
+    .detailLink {
       margin-top: 20px;
-      color: #2468F2;
+      color: #2468f2;
     }
   }
+  svg {
+    width: 40px;
+    height: 40px;
+  }
+  .hot {
+    margin-left: 15px;
+  }
+  .goto {
+    // float: right;
+  }
 }
-
 </style>
 

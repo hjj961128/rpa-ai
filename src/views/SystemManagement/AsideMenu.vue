@@ -21,12 +21,12 @@
 <script setup>
 const navList = [
   {
-    id:'1',
+    id:'2',
     navName: '角色管理',
     path: '/roleList'
   },
   {
-    id:'2',
+    id:'1',
     navName: '用户管理',
     path: '/userList'
   },
