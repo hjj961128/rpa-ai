@@ -45,6 +45,9 @@
         <el-dropdown>
           <span class="el-dropdown-link">
             {{ userInfo.username }}
+            <el-icon class="el-icon--right">
+              <arrow-down />
+            </el-icon>
           </span>
           <template #dropdown>
             <el-dropdown-menu>
@@ -85,6 +88,7 @@ import { onMounted, ref } from "vue";
 import request from "@/utils/request";
 import router from "../router/index.js";
 import { ElMessage } from "element-plus";
+import { ArrowDown } from '@element-plus/icons-vue'
 function handleSelect(val) {
   console.log(val);
 }

@@ -7,7 +7,7 @@ console.log('21313uu12io3u1i23u');
 console.log(sessionStorage.getItem('Authorization'));
 
 
-const API_BASE_URL = 'http://172.20.10.3:8080/'
+const API_BASE_URL = 'http://172.28.144.167:8080/'
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
