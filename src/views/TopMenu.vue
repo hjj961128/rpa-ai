@@ -20,7 +20,7 @@
             color: #fff;
             width: 100%;
             text-align: center;
-            font-size:16px;
+            font-size: 16px;
           "
           index="/schemeLibraryIndex"
           >方案库</el-menu-item
@@ -32,7 +32,7 @@
             color: #fff;
             width: 100%;
             text-align: center;
-            font-size:16px;
+            font-size: 16px;
           "
           index="/toBox"
           >工具箱</el-menu-item
@@ -89,7 +89,7 @@ function handleSelect(val) {
   console.log(val);
 }
 const goLogin = () => {
-  console.log('111');
+  console.log("111");
   sessionStorage.removeItem("refresh_token");
   sessionStorage.removeItem("Authorization");
   sessionStorage.removeItem("userInfo");
@@ -121,7 +121,8 @@ const putPassword = () => {
         message: err.response.data.detail,
         type: "error",
       });
-    }).catch((err) => {
+    })
+    .catch((err) => {
       ElMessage({
         showClose: true,
         message: err.response.data.detail,
@@ -178,5 +179,9 @@ onMounted(() => {
   color: var(--el-color-primary);
   display: flex;
   align-items: center;
+}
+.el-dropdown-link:focus {
+  outline: none;
+  cursor: pointer;
 }
 </style>
