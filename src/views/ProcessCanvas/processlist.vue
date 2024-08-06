@@ -515,11 +515,11 @@ const handleExceed = (files, uploadFiles) => {
 };
 const handleSizeChange = (val) => {
   searchForm.value.page_size = val;
-  getUserList();
+  getProcessList();
 };
 const handleCurrentChange = (val) => {
   searchForm.value.page_num = val;
-  getUserList();
+  getProcessList();
 };
 //查询部门/api/department
 const departmentList = ref([]);

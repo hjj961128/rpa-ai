@@ -5,7 +5,10 @@ const router = createRouter({
   routes: [
     {
       path: '/', // 如果路由为/
-      redirect: '/login' //重定向到登录组件
+      redirect: '/login', //重定向到登录组件
+      meta: {
+        title: '登陆页'
+      }
     },
     {
       path: "/login",

@@ -39,7 +39,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { useUserCounter } from "@/stores/user";
 import { ElMessage } from "element-plus";
 import request from "@/utils/request";

@@ -32,20 +32,20 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script setup>
 import { onMounted, reactive, ref } from "vue";
 import { ElMessage } from "element-plus";
 import router from "../../../router/index.js";
 import request from "@/utils/request";
-const handleOpen = (key: string, keyPath: string[]) => {
+const handleOpen = (key, keyPath) => {
   console.log(key, keyPath);
 };
-const handleClose = (key: string, keyPath: string[]) => {
+const handleClose = (key, keyPath) => {
   console.log(key, keyPath);
 };
-function goDetail(val) {
+const goDetail = (val) => {
   router.push({ name: "mainListMore", query: { id: val } });
-}
+};
 const userInfo = ref({
   roles: [],
   department_id: null,

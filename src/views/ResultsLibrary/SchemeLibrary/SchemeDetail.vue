@@ -39,7 +39,7 @@
       </el-row>
     </div>
     <div class="center">
-      <div class="title1">营财系统数据智能校核</div>
+      <div class="title1">{{ processList.name }}</div>
       <div class="centerview">
         <div class="left">
           <img src="../../../assets/images/u45.png" alt="" />
@@ -48,10 +48,12 @@
           <div class="show">
             <div class="showTitle">简介</div>
             <div class="showDetail">
-              每日需核查电费到账日报的正确性、比对银行回单明细账的准确性、校验营财凭证的一致性。
+              {{ processList.process_introduction }}
             </div>
             <div class="showui">
+              {{ processList.effect.split(".") }}
               <ul>
+                <!-- <li v-for="(item,index) in processList.effectARR" :key="index">{{ item }}</li> -->
                 <li>每日人工处理该业务需5小时，RPA执行仅需1小时</li>
                 <li>提升4倍工作效率</li>
                 <li>核对正确率提高至100%</li>
@@ -60,12 +62,13 @@
           </div>
           <div class="show">
             <div class="showTitle">涉及业务系统</div>
-            <div class="showDetail">营销系统1.0、财务管理信息系统</div>
+            <div class="showDetail">{{processList.business_system}}</div>
             <div class="showui"></div>
           </div>
           <div class="show">
             <div class="showTitle">流程文件</div>
-            <div class="showDetail">流程文件下载</div>
+            <!-- <div class="showDetail">流程文件下载</div> -->
+            <!-- <el-link type="primary">{{processList.file_url?processList.file_url:'https://www.baidu.com/'}}</el-link> -->
           </div>
         </div>
       </div>
@@ -82,13 +85,14 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
+import request from "@/utils/request";
+
 const processList = ref([]);
 const route = useRoute();
 const getProcessList = () => {
-  console.log(route.query.id);
   request({
     method: "GET",
     url: "/api/process",
@@ -98,8 +102,11 @@ const getProcessList = () => {
     },
   })
     .then((res) => {
-      processList.value = res.data.data.list;
-      console.log(processList.value);
+      processList.value = res.data.data.list[0];
+      // processList.value.forEach(item=>{
+      //   processList.value.effectARR = processList.effect.split(",")
+      // })
+      console.log(processList.value.name);
     })
     .catch((err) => {
       ElMessage({
@@ -111,7 +118,7 @@ const getProcessList = () => {
 };
 onMounted(() => {
   getProcessList();
-  console.log('111');
+  console.log("111");
 });
 </script>
 <style lang="scss" scoped>
@@ -205,5 +212,25 @@ svg {
       line-height: 30px;
     }
   }
+}
+.showTitle:before {
+  content: ""; /* 使用空内容生成内容 */
+  background-color: #2468f2; /* 设置背景颜色为蓝色 */
+  border-radius: 3px; /* 圆点形状 */
+  display: inline-block; /* 使其成为行内块元素 */
+  width: 6px; /* 宽度 */
+  height: 16px; /* 高度 */
+  margin-left: -1.5em; /* 向左移动半个列表项内边距，使得小圆点与文本对齐 */
+  margin-right: 0.5em; /* 向右移动，为了间隔效果 */
+}
+.showTitle {
+  font-size: 18px;
+  line-height: 18px;
+}
+.showDetail ,.showui{
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #333;
 }
 </style>

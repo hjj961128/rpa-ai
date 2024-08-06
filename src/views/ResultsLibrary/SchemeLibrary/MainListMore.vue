@@ -39,7 +39,7 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script setup>
 import router from "../../../router/index.js";
 import { onMounted, reactive, ref } from "vue";
 import { useRoute } from "vue-router";

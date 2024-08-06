@@ -22,6 +22,12 @@ import { createPinia } from 'pinia'
 //svg
 import svgIcon from './components/svgIcon.vue';
 
+// 导航守卫
+router.beforeEach((to, from, next) => {
+  window.document.title = to.meta.title == undefined ? 'RPAI' : to.meta.title
+  next();
+})
+
 const app = createApp(App)
 
 const pinia = createPinia()
