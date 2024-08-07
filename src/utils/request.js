@@ -36,14 +36,18 @@ apiClient.interceptors.response.use(
     return response
   },
   error=>{
-
-    // ElMessage({
-    //   message: error.message|| 'Error',
-    //   type: 'error',
-    //   duration: 5 * 1000
-    // })
-    // // window.location.reload();
-    // return router.push('/')
+    if (error.response) {
+      // 401响应
+      if (error.response.status === 401) {
+        // 清除token或做其他登录态清除工作
+        // store.commit('LOGOUT');
+ 
+        // 使用Vue路由器跳转到登录页面
+        router.push('/login');
+      }
+      // 可以在这里处理其他错误
+    }
+    return Promise.reject(error);
   }
 )
 

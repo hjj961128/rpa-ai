@@ -43,7 +43,7 @@
       <el-menu-item index="/systemManagement">系统管理</el-menu-item>
       <div class="userinfo">
         <el-dropdown>
-          <span class="el-dropdown-link">
+          <span class="el-dropdown-link" v-if="userInfo">
             {{ userInfo.username }}
             <el-icon class="el-icon--right">
               <arrow-down />

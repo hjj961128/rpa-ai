@@ -96,13 +96,29 @@
     </div>
     <el-dialog v-model="dialogVisibleUser" :title="dialogTitle" width="500">
       <el-form :model="addUserForm" label-width="auto" style="max-width: 600px">
-        <el-form-item label="用户名称">
-          <el-input v-model="addUserForm.name" />
-        </el-form-item>
         <el-form-item label="部门">
           <el-select v-model="addUserForm.permission" placeholder="请选择部门">
             <el-option
               v-for="(item, Index) in departmentList"
+              :key="Index"
+              :label="item.name"
+              :value="item.id"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="用户名称">
+          <el-input v-model="addUserForm.name" />
+        </el-form-item>
+
+        <el-form-item label="角色">
+          <el-select
+            multiple
+            collapse-tags
+            v-model="addUserForm.roleList"
+            placeholder="请选择角色"
+          >
+            <el-option
+              v-for="(item, Index) in roleList"
               :key="Index"
               :label="item.name"
               :value="item.id"
@@ -149,10 +165,11 @@ const form = reactive({
 const addUserForm = ref({
   id: 0,
   name: "",
-  permission: "",
+  permission: null,
   password: "",
   passwordAgain: "",
   status: true,
+  addUserForm:[],
   comment: "",
 });
 // # 超级管理员
@@ -225,11 +242,32 @@ const addUser = (val, val2) => {
     console.log(val2);
     dialogTitle.value = "编辑用户";
     addUserForm.value.name = val2.username;
-    addUserForm.value.permission = val2.permission;
+    addUserForm.value.permission = val2.department.id;
     addUserForm.value.status = val2.status == 0 ? true : false;
     addUserForm.value.comment = val2.comment;
     addUserForm.value.id = val2.id;
   }
+};
+//查询角色/api/role
+const roleList = ref([])
+const queryRoleList = () => {
+  request({
+    method: "GET",
+    url: "/api/role",
+    params: {
+      limit: false,
+    },
+  })
+    .then((res) => {
+      roleList.value = res.data.data.list;
+    })
+    .catch((err) => {
+      ElMessage({
+        showClose: true,
+        message: err.response.data.detail,
+        type: "error",
+      });
+    });
 };
 //查询部门/api/department
 const departmentList = ref([]);
@@ -267,6 +305,7 @@ const addUserApi = () => {
       status: addUserForm.value.status == true ? 0 : 1,
       comment: addUserForm.value.comment,
       department_id: addUserForm.value.permission * 1,
+      role_ids: addUserForm.value.roleList
     },
   })
     .then((res) => {
@@ -369,6 +408,7 @@ const handleCurrentChange = (val) => {
 onMounted(() => {
   queryDepartmentList();
   getUserList();
+  queryRoleList();
 });
 </script>
 <style lang="less" scoped>
