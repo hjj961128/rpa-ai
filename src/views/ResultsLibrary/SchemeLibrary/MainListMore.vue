@@ -49,12 +49,13 @@ import { ElMessage } from "element-plus";
 const route = useRoute();
 ///
 watch(
-  route.query.id,
+  route,
   (newValue, oldValue) => {
+    getProcessList()
     console.log(route.query);
     console.log(`count发生了变化，老值为${oldValue},新值为${newValue}`);
   },
-  { immediate: true,deep:true }
+  {deep:true }
 );
 const total = ref(0);
 const handleSizeChange = (val) => {
@@ -84,7 +85,7 @@ const getProcessList = () => {
       online: true,
       page_num: pageValue.value.page_num,
       page_size: pageValue.value.page_size,
-      department_id: departmentId.value,
+      department_id: route.query.id,
     },
   })
     .then((res) => {
