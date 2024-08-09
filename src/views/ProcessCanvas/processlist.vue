@@ -170,7 +170,7 @@
           <el-form-item label="流程版本号">
             <el-input v-model="processForm.version" />
           </el-form-item>
-          <el-form-item label="流程状态">
+          <!-- <el-form-item label="流程状态">
             <el-select
               v-model="processForm.status"
               placeholder="请选择执行方式"
@@ -178,7 +178,7 @@
               <el-option label="定时执行" value="0" />
               <el-option label="手动执行" value="1" />
             </el-select>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="文件上传">
             <el-upload
               v-model:file-list="fileList"
@@ -464,7 +464,7 @@ const addProcessApi = (val) => {
   formdata.append("department_id", processForm.value.depart);
   formdata.append("name", processForm.value.name);
   formdata.append("source", isEditprocess.value);
-  formdata.append("execution_type", processForm.value.status);
+  // formdata.append("execution_type", processForm.value.status);
   formdata.append("version", processForm.value.version);
 
   request({
@@ -548,7 +548,7 @@ const userInfo = ref(null);
 const isSA = ref(false)
 onMounted(() => {
   userInfo.value = JSON.parse(sessionStorage.getItem("userInfo"));
-  if (userInfo.value.roles.indexOf("SA") == -1) {
+  if (userInfo.value.roles.indexOf("admin") == -1) {
     //不是管理员
     queryDepartmentListParams.value.id = userInfo.value.department_id;
     isSA.value = false

@@ -70,6 +70,7 @@ const queryDepartmentList = () => {
           method: "GET",
           url: "/api/process",
           params: {
+            online:true,
             page_num: 1,
             page_size: 4,
             department_id: item.id,
@@ -119,7 +120,7 @@ const queryprocessList = (val) => {
 };
 onMounted(() => {
   userInfo.value = JSON.parse(sessionStorage.getItem("userInfo"));
-  if (userInfo.value.roles.indexOf("SA") == -1) {
+  if (userInfo.value.roles.indexOf("admin") == -1) {
     //不是管理员
     console.log("不是管理员");
     queryDepartmentListParams.value.id = userInfo.value.department_id;

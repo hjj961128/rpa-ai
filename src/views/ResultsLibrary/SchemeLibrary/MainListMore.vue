@@ -41,13 +41,21 @@
 
 <script setup>
 import router from "../../../router/index.js";
-import { onMounted, reactive, ref } from "vue";
+import { onMounted,watch, reactive, ref } from "vue";
 import { useRoute } from "vue-router";
 import request from "@/utils/request";
 import { ElMessage } from "element-plus";
 
 const route = useRoute();
 ///
+watch(
+  route.query.id,
+  (newValue, oldValue) => {
+    console.log(route.query);
+    console.log(`count发生了变化，老值为${oldValue},新值为${newValue}`);
+  },
+  { immediate: true,deep:true }
+);
 const total = ref(0);
 const handleSizeChange = (val) => {
   pageValue.value.page_size = val;
@@ -73,9 +81,10 @@ const getProcessList = () => {
     method: "GET",
     url: "/api/process",
     params: {
+      online: true,
       page_num: pageValue.value.page_num,
       page_size: pageValue.value.page_size,
-      department_id: departmentId.value.id,
+      department_id: departmentId.value,
     },
   })
     .then((res) => {
@@ -95,6 +104,7 @@ onMounted(() => {
   departmentId.value = route.query.id;
   getProcessList();
 });
+
 </script>
 <style lang="scss" scoped>
 .mainpage {

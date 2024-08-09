@@ -38,8 +38,8 @@
           >工具箱</el-menu-item
         >
       </el-sub-menu>
-      <el-menu-item index="/processlist">流程</el-menu-item>
-      <el-menu-item index="4">中控</el-menu-item>
+      <el-menu-item index="/processlist">流程画布</el-menu-item>
+      <el-menu-item index="4">中控管理</el-menu-item>
       <el-menu-item index="/systemManagement">系统管理</el-menu-item>
       <div class="userinfo">
         <el-dropdown>

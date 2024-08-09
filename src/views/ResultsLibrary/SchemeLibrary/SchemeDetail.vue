@@ -51,7 +51,8 @@
               {{ processList.process_introduction }}
             </div>
             <div class="showui">
-              {{ processList.effect.split(".") }}
+              {{ processList.effectARR }}
+              <!-- {{ processList.effect.split(".") }} -->
               <ul>
                 <!-- <li v-for="(item,index) in processList.effectARR" :key="index">{{ item }}</li> -->
                 <li>每日人工处理该业务需5小时，RPA执行仅需1小时</li>
@@ -60,7 +61,7 @@
               </ul>
             </div>
           </div>
-          <div class="show">
+          <div class="show" v-if="processList.business_system">
             <div class="showTitle">涉及业务系统</div>
             <div class="showDetail">{{processList.business_system}}</div>
             <div class="showui"></div>
@@ -68,7 +69,7 @@
           <div class="show">
             <div class="showTitle">流程文件</div>
             <!-- <div class="showDetail">流程文件下载</div> -->
-            <!-- <el-link type="primary">{{processList.file_url?processList.file_url:'https://www.baidu.com/'}}</el-link> -->
+            <el-link type="primary">{{processList.file_url?processList.file_url:'https://www.baidu.com/'}}</el-link>
           </div>
         </div>
       </div>
@@ -170,10 +171,10 @@ svg {
   line-height: 50px;
 }
 .centerview {
-  height: 490px;
+  display: flex;
   .left {
+
     width: 50%;
-    float: left;
     padding: 40px;
     // height: 600px;
     img {
@@ -182,7 +183,6 @@ svg {
   }
   .right {
     width: 50%;
-    float: right;
     padding: 50px;
     padding-left: 100px;
   }

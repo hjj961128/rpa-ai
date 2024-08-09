@@ -11,7 +11,7 @@
         :key="index"
         :index="menuItem.path"
       >
-        <el-icon><setting /></el-icon>
+        <svg-icon :name="menuItem.icon"></svg-icon>
         <span> {{ menuItem.navName }} </span>
       </el-menu-item>
       </el-menu>
@@ -19,16 +19,19 @@
   </el-row>
 </template>
 <script setup>
+import { ArrowDown } from '@element-plus/icons-vue'
 const navList = [
   {
     id:'2',
     navName: '角色管理',
-    path: '/roleList'
+    path: '/roleList',
+    icon: 'role'
   },
   {
     id:'1',
     navName: '用户管理',
-    path: '/userList'
+    path: '/userList',
+    icon: 'userlist'
   },
 ]
 </script>
@@ -44,6 +47,11 @@ const navList = [
   text-align: center;
   font-size: 24px;
   color: #7F7F7F;
+}
+svg{
+  margin-right: 15px;
+  width: 24px;
+  height: 24px;
 }
 
 </style>

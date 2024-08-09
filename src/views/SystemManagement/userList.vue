@@ -230,6 +230,7 @@ const dialogVisibleUser = ref(false);
 const dialogTitle = ref("新增用户");
 const isEditUser = ref("0");
 //新增/编辑用户弹窗
+const editRoles = ref([])
 const addUser = (val, val2) => {
   dialogVisibleUser.value = true;
   isEditUser.value = val;
@@ -240,12 +241,17 @@ const addUser = (val, val2) => {
   } else if (val === "1") {
     //编辑
     console.log(val2);
+    val2.role.forEach(item => {
+      editRoles.value.push(item.id)
+    });
+    console.log(editRoles.value);
     dialogTitle.value = "编辑用户";
     addUserForm.value.name = val2.username;
     addUserForm.value.permission = val2.department.id;
     addUserForm.value.status = val2.status == 0 ? true : false;
     addUserForm.value.comment = val2.comment;
     addUserForm.value.id = val2.id;
+    addUserForm.value.roleList = editRoles.value
   }
 };
 //查询角色/api/role
