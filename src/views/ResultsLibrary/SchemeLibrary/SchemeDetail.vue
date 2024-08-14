@@ -63,13 +63,22 @@
           </div>
           <div class="show" v-if="processList.business_system">
             <div class="showTitle">涉及业务系统</div>
-            <div class="showDetail">{{processList.business_system}}</div>
+            <div class="showDetail">{{ processList.business_system }}</div>
             <div class="showui"></div>
           </div>
           <div class="show">
             <div class="showTitle">流程文件</div>
             <!-- <div class="showDetail">流程文件下载</div> -->
-            <el-link type="primary">{{processList.file_url?processList.file_url:'https://www.baidu.com/'}}</el-link>
+            <el-link type="primary">{{
+              processList.file_url
+                ? processList.file_url
+                : "https://www.baidu.com/"
+            }}</el-link>
+          </div>
+          <div class="show">
+            <div class="showTitle">执行方式</div>
+            <el-button @click="runModeVisible = true"  plain>手动执行</el-button>
+            <el-button  type="primary" plain>定时执行</el-button>
           </div>
         </div>
       </div>
@@ -83,6 +92,31 @@
         </div>
       </div>
     </div>
+    <el-dialog
+      v-model="runModeVisible"
+      width="500"
+      title="执行方式"
+      append-to-body
+    >
+      <el-form :model="runModeForm" label-width="auto" style="max-width: 600px">
+        <el-form-item label="流程名称">
+          <el-input v-model="runModeForm.name" disabled />
+        </el-form-item>
+        <el-form-item label="流程简介">
+          <el-input
+            type="textarea"
+            v-model="runModeForm.process_introduction"
+          />
+        </el-form-item>
+        <el-form-item label="涉及业务系统">
+          <el-input v-model="runModeForm.business_system" />
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="clickOnline()">运行</el-button>
+          <el-button @click="runModeVisible = false">取消</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
@@ -90,6 +124,33 @@
 import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import request from "@/utils/request";
+
+const runModeVisible = ref(false)
+const runModeForm = ref({
+  name:null
+})
+
+const taskList = ref([])
+const getTaskList = () => {
+  request({
+    method: "GET",
+    url: "/api/task",
+    params: {
+      limit: false,
+    },
+  })
+    .then((res) => {
+      taskList.value = res.data.data.list
+      console.log(taskList.value);
+    })
+    .catch((err) => {
+      ElMessage({
+        showClose: true,
+        message: err.response.data.detail,
+        type: "error",
+      });
+    });
+};
 
 const processList = ref([]);
 const route = useRoute();
@@ -119,6 +180,7 @@ const getProcessList = () => {
 };
 onMounted(() => {
   getProcessList();
+  getTaskList();
   console.log("111");
 });
 </script>
@@ -173,7 +235,6 @@ svg {
 .centerview {
   display: flex;
   .left {
-
     width: 50%;
     padding: 40px;
     // height: 600px;
@@ -226,11 +287,16 @@ svg {
 .showTitle {
   font-size: 18px;
   line-height: 18px;
+  margin-bottom: 15px;
 }
-.showDetail ,.showui{
+.showDetail,
+.showui {
   margin-top: 10px;
   margin-bottom: 10px;
   font-size: 14px;
   color: #333;
+}
+.show {
+  margin-top: 10px;
 }
 </style>

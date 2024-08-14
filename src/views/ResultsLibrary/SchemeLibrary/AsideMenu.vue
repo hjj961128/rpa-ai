@@ -24,6 +24,7 @@
 import { onMounted, watch, ref } from "vue";
 import request from "@/utils/request";
 import { useRoute } from "vue-router";
+import { ElMessage } from "element-plus";
 
 const route = useRoute();
 

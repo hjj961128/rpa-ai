@@ -1,7 +1,6 @@
-import { createRouter, createWebHistory } from "vue-router";
-
+import { createRouter, createWebHashHistory } from 'vue-router'
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/', // 如果路由为/
@@ -15,13 +14,13 @@ const router = createRouter({
       name: "login",
       component: () => import("@/views/login/index.vue"),
     },
+    // {
+    //   path: '/404',
+    //   component: () => import('@/views/404.vue'),
+    //   hidden: true
+    // },
     {
-      path: '/404',
-      component: () => import('@/views/404.vue'),
-      hidden: true
-    },
-    {
-      path: "/home",
+      path: "/home",执行方式
       name: "home",
       component: () => import("@/views/index.vue"),
       children: [
@@ -61,6 +60,11 @@ const router = createRouter({
           path: "/processlist",
           name: "processlist",
           component: () => import("@/views/ProcessCanvas/processlist.vue"),
+        },
+        {
+          path: "/processCanvas",
+          name: "processCanvas",
+          component: () => import("@/views/ProcessCanvas/processCanvas.vue"),
         },
         {
           path: "/systemManagement",

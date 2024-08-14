@@ -52,7 +52,6 @@ watch(
   route,
   (newValue, oldValue) => {
     getProcessList()
-    console.log(route.query);
     console.log(`count发生了变化，老值为${oldValue},新值为${newValue}`);
   },
   {deep:true }

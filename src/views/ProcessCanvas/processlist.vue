@@ -167,18 +167,18 @@
           <el-form-item label="流程名称">
             <el-input v-model="processForm.name" />
           </el-form-item>
-          <el-form-item label="流程版本号">
+          <!-- <el-form-item label="流程版本号">
             <el-input v-model="processForm.version" />
-          </el-form-item>
-          <!-- <el-form-item label="流程状态">
-            <el-select
-              v-model="processForm.status"
-              placeholder="请选择执行方式"
-            >
-              <el-option label="定时执行" value="0" />
-              <el-option label="手动执行" value="1" />
-            </el-select>
           </el-form-item> -->
+          <el-form-item label="流程文件来源">
+            <el-select
+              v-model="processForm.new_process_file_source"
+              placeholder="请选择流程文件来源"
+            >
+              <el-option label="流程画布" value="0" />
+              <el-option label="手动上传" value="1" />
+            </el-select>
+          </el-form-item>
           <el-form-item label="文件上传">
             <el-upload
               v-model:file-list="fileList"
@@ -241,12 +241,12 @@
 <script setup>
 import { onMounted, reactive, ref } from "vue";
 import request from "@/utils/request";
+import router from "../../router/index.js";
 import { ElMessage, ElMessageBox } from "element-plus";
 const fileList = ref([]);
-
 const searchForm = ref({
   dateValues: [],
-  name: "",
+  name: null,
   page_num: 1,
   page_size: 10,
 });
@@ -296,7 +296,7 @@ const getProcessList = (val) => {
 };
 //重置
 const clearForm = () => {
-  searchForm.value.name = "";
+  searchForm.value.name = null;
   searchForm.value.dateValues = [];
   getProcessList("1");
 };
@@ -349,6 +349,7 @@ const prossDown = (val) => {
       });
     });
 };
+//上线
 const clickOnline = () => {
   request({
     method: "POST",
@@ -416,10 +417,18 @@ const delProcess = (val) => {
       });
     });
 };
+const edit = (val)=>{
+  // console.log(val);
+  router.push({ name: "processCanvas" });
+}
 const choiceSourceShow = ref(false);
 const choiceSourceTitle = ref("新增流程");
 //新增流程第一个弹窗
 const choiceSource = (val) => {
+  processForm.value.depart = ref(departmentList.value[0].id),
+  processForm.value.name = '',
+  processForm.value.new_process_file_source = ref('0'),
+  fileList.value = []
   choiceSourceShow.value = true;
 
   if (val == 0) {
@@ -433,9 +442,10 @@ const innerTitle = ref("创建新流程");
 const isEditprocess = ref(0);
 const processForm = ref({
   name: "",
-  version: "",
+  // version: "",
   status: "",
   depart: 0,
+  new_process_file_source: 0
 });
 //选择是第三方还是新建
 const isNew = (val) => {
@@ -463,9 +473,8 @@ const addProcessApi = (val) => {
 
   formdata.append("department_id", processForm.value.depart);
   formdata.append("name", processForm.value.name);
-  formdata.append("source", isEditprocess.value);
-  // formdata.append("execution_type", processForm.value.status);
-  formdata.append("version", processForm.value.version);
+  formdata.append("source", parseInt(isEditprocess.value));
+  formdata.append("new_process_file_source", parseInt(processForm.value.new_process_file_source));
 
   request({
     method: "POST",
@@ -547,6 +556,7 @@ const queryDepartmentList = () => {
 const userInfo = ref(null);
 const isSA = ref(false)
 onMounted(() => {
+  queryDepartmentList();
   userInfo.value = JSON.parse(sessionStorage.getItem("userInfo"));
   if (userInfo.value.roles.indexOf("admin") == -1) {
     //不是管理员
@@ -558,7 +568,6 @@ onMounted(() => {
   }
   processForm.value.depart = userInfo.value.department_id;
   getProcessList();
-  queryDepartmentList();
 });
 </script>
 <style lang="less" scoped>
