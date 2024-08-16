@@ -1,6 +1,6 @@
 import './assets/main.css'
 
-import { createApp } from 'vue'
+import {createApp} from 'vue'
 
 // 引入Element-plus
 import ElementPlus from 'element-plus'
@@ -17,15 +17,38 @@ import router from './router'
 import * as echarts from 'echarts'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
 
-import { createPinia } from 'pinia'
+import {createPinia} from 'pinia'
 
 //svg
 import svgIcon from './components/svgIcon.vue';
 
+const whiteList = ['/login']
 // 导航守卫
 router.beforeEach((to, from, next) => {
-  window.document.title = to.meta.title == undefined ? 'RPAI' : to.meta.title
-  next();
+    window.document.title = to.meta.title == undefined ? 'RPAI' : to.meta.title
+
+
+    const has_token = sessionStorage.Authorization
+
+    if (has_token) {
+
+        if (to.path === '/login') {
+            next({path: '/'})
+        } else {
+            next()
+        }
+    } else {
+        if (whiteList.indexOf(to.path) !== -1) {
+            // in the free login whitelist, go directly
+            next()
+        } else {
+            // other pages that do not have permission to access are redirected to the login page.
+            next(`/login?redirect=${to.path}`)
+
+        }
+    }
+
+
 })
 
 const app = createApp(App)
@@ -34,7 +57,7 @@ const pinia = createPinia()
 //挂载到全局
 app.use(pinia)
 app.component('svg-icon', svgIcon);
-app.use(ElementPlus,{locale:zhCn})
+app.use(ElementPlus, {locale: zhCn})
 app.use(router)
 app.config.globalProperties.$echarts = echarts
 app.mount('#app')

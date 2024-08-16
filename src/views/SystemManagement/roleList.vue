@@ -223,7 +223,7 @@ const queryRoleList = (val) => {
     .catch((err) => {
       ElMessage({
         showClose: true,
-        message: err.response.data.detail,
+       message: err,
         type: "error",
       });
     });
@@ -241,7 +241,6 @@ const addUser = (val, val2) => {
     dialogTitle.value = "新增用户";
   } else if (val === "1") {
     //编辑
-    console.log(val2);
     dialogTitle.value = "编辑用户";
     addUserForm.value.name = val2.username;
     addUserForm.value.permission = val2.department.id;
@@ -269,7 +268,7 @@ const queryDepartmentList = () => {
     .catch((err) => {
       ElMessage({
         showClose: true,
-        message: err.response.data.detail,
+       message: err,
         type: "error",
       });
     });
@@ -277,7 +276,6 @@ const queryDepartmentList = () => {
 
 //新增用户接口
 const addUserApi = () => {
-  console.log(addUserForm);
   request({
     method: "POST",
     url: "/api/user",
@@ -304,15 +302,13 @@ const addUserApi = () => {
     .catch((err) => {
       ElMessage({
         showClose: true,
-        message: err.response.data.detail,
+       message: err,
         type: "error",
       });
     });
 };
 //编辑用户接口
 const EditUserApi = () => {
-  console.log(addUserForm);
-  console.log(addUserForm.value.id);
   request({
     method: "PUT",
     url: "/api/user",
@@ -345,7 +341,7 @@ const EditUserApi = () => {
     .catch((err) => {
       ElMessage({
         showClose: true,
-        message: err.response.data.detail,
+       message: err,
         type: "error",
       });
     });

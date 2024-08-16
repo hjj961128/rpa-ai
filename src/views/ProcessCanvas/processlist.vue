@@ -46,7 +46,11 @@
         <!-- <el-table-column type="selection" width="55" /> -->
         <el-table-column type="index" label="序号" width="65">
           <template #default="scope">
-            {{ scope.$index + (searchForm.page_num - 1) * searchForm.page_size + 1 }}
+            {{
+              scope.$index +
+              (searchForm.page_num - 1) * searchForm.page_size +
+              1
+            }}
           </template>
         </el-table-column>
         <!-- <el-table-column width="100" prop="id" label="流程号" /> -->
@@ -255,11 +259,6 @@ const total = ref(0);
 // 查询流程列表
 const paramsData = ref({});
 const getProcessList = (val) => {
-  console.log(
-    searchForm.value.dateValues.length > 0
-      ? searchForm.value.dateValues[0]
-      : null
-  );
   if (val == "1") {
     paramsData.value.page_num = searchForm.value.page_num;
     paramsData.value.page_size = searchForm.value.page_size;
@@ -276,7 +275,6 @@ const getProcessList = (val) => {
     paramsData.value.page_num = searchForm.value.page_num;
     paramsData.value.page_size = searchForm.value.page_size;
   }
-  console.log(paramsData.value);
   request({
     method: "GET",
     url: "/api/process",
@@ -287,9 +285,10 @@ const getProcessList = (val) => {
       total.value = res.data.data.total;
     })
     .catch((err) => {
+      console.log(err);
       ElMessage({
         showClose: true,
-        message: err.response.data.detail,
+       message: err,
         type: "error",
       });
     });
@@ -337,7 +336,7 @@ const prossDown = (val) => {
         .catch((err) => {
           ElMessage({
             showClose: true,
-            message: err.response.data.detail,
+            message: err,
             type: "error",
           });
         });
@@ -362,7 +361,6 @@ const clickOnline = () => {
     },
   })
     .then((res) => {
-      console.log(res);
       onLineVisible.value = false;
       getProcessList();
       ElMessage({
@@ -374,7 +372,7 @@ const clickOnline = () => {
     .catch((err) => {
       ElMessage({
         showClose: true,
-        message: err.response.data.detail,
+       message: err,
         type: "error",
       });
     });
@@ -405,7 +403,7 @@ const delProcess = (val) => {
         .catch((err) => {
           ElMessage({
             showClose: true,
-            message: err.response.data.detail,
+           message: err,
             type: "error",
           });
         });
@@ -417,18 +415,33 @@ const delProcess = (val) => {
       });
     });
 };
-const edit = (val)=>{
-  // console.log(val);
-  router.push({ name: "processCanvas" });
-}
+const edit = (val) => {
+  request({
+    method: "GET",
+    url: "/api/auth/mcenter-token",
+  })
+    .then((res) => {
+      sessionStorage.setItem("centerMtoken", res.data.data.token);
+      router.push({ name: "processCanvas", query: { id: val.cloud_flow_id,processId:val.id } });
+      
+    })
+    .catch((err) => {
+      ElMessage({
+        showClose: true,
+       message: err,
+        type: "error",
+      });
+    });
+
+};
 const choiceSourceShow = ref(false);
 const choiceSourceTitle = ref("新增流程");
 //新增流程第一个弹窗
 const choiceSource = (val) => {
-  processForm.value.depart = ref(departmentList.value[0].id),
-  processForm.value.name = '',
-  processForm.value.new_process_file_source = ref('0'),
-  fileList.value = []
+  (processForm.value.depart = ref(departmentList.value[0].id)),
+    (processForm.value.name = ""),
+    (processForm.value.new_process_file_source = ref("0")),
+    (fileList.value = []);
   choiceSourceShow.value = true;
 
   if (val == 0) {
@@ -445,11 +458,10 @@ const processForm = ref({
   // version: "",
   status: "",
   depart: 0,
-  new_process_file_source: 0
+  new_process_file_source: 0,
 });
 //选择是第三方还是新建
 const isNew = (val) => {
-  console.log(val);
   isEditprocess.value = val;
   innerVisible.value = true;
   if (val == "0") {
@@ -460,7 +472,6 @@ const isNew = (val) => {
 };
 // 处理文件上传成功的情况
 const handleSuccess = (response, file, fileList) => {
-  console.log("File uploaded successfully:", response);
 };
 // 新增流程
 const addProcessApi = (val) => {
@@ -474,7 +485,10 @@ const addProcessApi = (val) => {
   formdata.append("department_id", processForm.value.depart);
   formdata.append("name", processForm.value.name);
   formdata.append("source", parseInt(isEditprocess.value));
-  formdata.append("new_process_file_source", parseInt(processForm.value.new_process_file_source));
+  formdata.append(
+    "new_process_file_source",
+    parseInt(processForm.value.new_process_file_source)
+  );
 
   request({
     method: "POST",
@@ -497,31 +511,16 @@ const addProcessApi = (val) => {
     .catch((err) => {
       ElMessage({
         showClose: true,
-        message: err.response.data.detail,
+       message: err,
         type: "error",
       });
     });
-};
-//编辑流程
-const EditProcessApi = () => {
-  request;
 };
 
 const handleRemove = (file, uploadFiles) => {
   fileList.value = uploadFiles;
 };
 
-const handlePreview = (uploadFile) => {
-  console.log(uploadFile);
-};
-
-const handleExceed = (files, uploadFiles) => {
-  ElMessage.warning(
-    `The limit is 3, you selected ${files.length} files this time, add up to ${
-      files.length + uploadFiles.length
-    } totally`
-  );
-};
 const handleSizeChange = (val) => {
   searchForm.value.page_size = val;
   getProcessList();
@@ -548,23 +547,23 @@ const queryDepartmentList = () => {
     .catch((err) => {
       ElMessage({
         showClose: true,
-        message: err.response.data.detail,
+       message: err,
         type: "error",
       });
     });
 };
 const userInfo = ref(null);
-const isSA = ref(false)
+const isSA = ref(false);
 onMounted(() => {
   queryDepartmentList();
   userInfo.value = JSON.parse(sessionStorage.getItem("userInfo"));
   if (userInfo.value.roles.indexOf("admin") == -1) {
     //不是管理员
     queryDepartmentListParams.value.id = userInfo.value.department_id;
-    isSA.value = false
+    isSA.value = false;
   } else {
     queryDepartmentListParams.value.limit = false;
-    isSA.value = true
+    isSA.value = true;
   }
   processForm.value.depart = userInfo.value.department_id;
   getProcessList();

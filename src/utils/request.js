@@ -1,12 +1,8 @@
 import axios from 'axios';
 import { ElMessage, ElMessageBox } from "element-plus";
 import router from "@/router/index.js";
-
-
-console.log('21313uu12io3u1i23u');
-console.log(sessionStorage.getItem('Authorization'));
-
-
+import {useRoute} from "vue-router";
+const route = useRoute();
 const API_BASE_URL = 'http://172.28.144.167:8080/'
 
 const apiClient = axios.create({
@@ -35,7 +31,9 @@ apiClient.interceptors.response.use(
   response =>{
     return response
   },
-  error=>{
+  (error)=>{
+    console.log('1111111');
+    console.log(error.response);
     if (error.response) {
       // 401响应
       if (error.response.status === 401) {
@@ -43,11 +41,16 @@ apiClient.interceptors.response.use(
         // store.commit('LOGOUT');
  
         // 使用Vue路由器跳转到登录页面
-        router.push('/login');
+        // router.push('/login');
+        ElMessage({
+          showClose: true,
+          message: 'TOKEN失效，请重新登录',
+          type: "error",
+        });
       }
       // 可以在这里处理其他错误
     }
-    return Promise.reject(error);
+    return Promise.reject(error.response.data.detail);
   }
 )
 

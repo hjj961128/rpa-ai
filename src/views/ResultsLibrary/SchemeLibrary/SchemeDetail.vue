@@ -77,8 +77,8 @@
           </div>
           <div class="show">
             <div class="showTitle">执行方式</div>
-            <el-button @click="runModeVisible = true"  plain>手动执行</el-button>
-            <el-button  type="primary" plain>定时执行</el-button>
+            <el-button @click="runModeVisible = true" plain>手动执行</el-button>
+            <el-button type="primary" plain>定时执行</el-button>
           </div>
         </div>
       </div>
@@ -102,17 +102,24 @@
         <el-form-item label="流程名称">
           <el-input v-model="runModeForm.name" disabled />
         </el-form-item>
-        <el-form-item label="流程简介">
-          <el-input
-            type="textarea"
-            v-model="runModeForm.process_introduction"
-          />
+        <el-form-item label="是否自动分配worker">
+          <el-switch v-model="runModeForm.isWorker" />
         </el-form-item>
-        <el-form-item label="涉及业务系统">
-          <el-input v-model="runModeForm.business_system" />
+        <el-form-item label="worker名称" v-if="!runModeForm.isWorker">
+          <el-select
+            v-model="runModeForm.workerName"
+            placeholder="请选择worker名称"
+          >
+            <el-option
+              v-for="(item, Index) in taskList"
+              :key="Index"
+              :label="item.wrWorkerName"
+              :value="item.wrWorkerId"
+            />
+          </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="clickOnline()">运行</el-button>
+          <el-button type="primary" @click="clickTask()">运行</el-button>
           <el-button @click="runModeVisible = false">取消</el-button>
         </el-form-item>
       </el-form>
@@ -125,33 +132,57 @@ import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import request from "@/utils/request";
 
-const runModeVisible = ref(false)
+const runModeVisible = ref(false);
 const runModeForm = ref({
-  name:null
-})
+  name: null,
+  isWorker: false,
+});
 
-const taskList = ref([])
-const getTaskList = () => {
+const taskList = ref([]);
+const getWorkerList = () => {
   request({
     method: "GET",
-    url: "/api/task",
+    url: "/api/worker",
     params: {
       limit: false,
     },
   })
     .then((res) => {
-      taskList.value = res.data.data.list
-      console.log(taskList.value);
+      taskList.value = res.data.data.list;
     })
     .catch((err) => {
       ElMessage({
         showClose: true,
-        message: err.response.data.detail,
+       message: err,
         type: "error",
       });
     });
 };
-
+const clickTask = (val) => {
+  request({
+    method: "POST",
+    url: "/api/task",
+    data: {
+      process_id: route.query.id,
+      wr_worker_id: runModeForm.value.workerName,
+      automatic:runModeForm.value.isWorker
+    },
+  })
+    .then((res) => {
+      ElMessage({
+        type: "success",
+        message: "运行成功",
+      });
+      runModeVisible.value = false
+    })
+    .catch((err) => {
+      ElMessage({
+        showClose: true,
+       message: err,
+        type: "error",
+      });
+    });
+};
 const processList = ref([]);
 const route = useRoute();
 const getProcessList = () => {
@@ -168,20 +199,19 @@ const getProcessList = () => {
       // processList.value.forEach(item=>{
       //   processList.value.effectARR = processList.effect.split(",")
       // })
-      console.log(processList.value.name);
+      runModeForm.value.name = processList.value.name;
     })
     .catch((err) => {
       ElMessage({
         showClose: true,
-        message: err.response.data.detail,
+       message: err,
         type: "error",
       });
     });
 };
 onMounted(() => {
   getProcessList();
-  getTaskList();
-  console.log("111");
+  getWorkerList();
 });
 </script>
 <style lang="scss" scoped>

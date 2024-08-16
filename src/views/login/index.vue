@@ -40,10 +40,12 @@
 </template>
 
 <script setup>
-import { useUserCounter } from "@/stores/user";
-import { ElMessage } from "element-plus";
+import {useUserCounter} from "@/stores/user";
+import {ElMessage} from "element-plus";
 import request from "@/utils/request";
-import { reactive } from "vue";
+import {useRoute} from "vue-router";
+import {reactive, watch, ref} from "vue";
+import router from "@/router/index.js";
 const userStore = useUserCounter();
 const isLogin = true;
 // do not use same name with ref
@@ -51,6 +53,28 @@ const loginForm = reactive({
   name: "",
   praswood: "",
 });
+const redirect = ref(null)
+const otherQuery = ref({})
+const route = useRoute();
+const getOtherQuery = (query) => {
+  return Object.keys(query).reduce((acc, cur) => {
+    if (cur !== 'redirect') {
+      acc[cur] = query[cur]
+    }
+    return acc
+  }, {})
+}
+watch(
+    route,
+    (newValue, oldValue) => {
+      const query = route.query
+      if (query) {
+        redirect.value = query.redirect
+        otherQuery.value = getOtherQuery(query)
+      }
+    },
+    {deep: true,immediate:true}
+);
 function onSubmit() {
   request({
     method: "POST",
@@ -68,18 +92,15 @@ function onSubmit() {
         message: "登录成功",
         type: "success",
       });
-      console.log("sessionStorage");
-      console.log(sessionStorage.getItem("Authorization"));
-      console.log("sessionStorage");
-
       if (sessionStorage.getItem("Authorization")) {
         userStore.setUserInfo();
       }
+      router.push({path: redirect.value || '/', query: otherQuery.value})
     })
     .catch((err) => {
       ElMessage({
         showClose: true,
-        message: err.response.data.detail,
+       message: err,
         type: "error",
       });
     });

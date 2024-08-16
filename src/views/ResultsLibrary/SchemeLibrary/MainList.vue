@@ -38,10 +38,8 @@ import { ElMessage } from "element-plus";
 import router from "../../../router/index.js";
 import request from "@/utils/request";
 const handleOpen = (key, keyPath) => {
-  console.log(key, keyPath);
 };
 const handleClose = (key, keyPath) => {
-  console.log(key, keyPath);
 };
 const goDetail = (val) => {
   router.push({ name: "mainListMore", query: { id: val } });
@@ -82,17 +80,16 @@ const queryDepartmentList = () => {
           .catch((err) => {
             ElMessage({
               showClose: true,
-              message: err.response.data.detail,
+             message: err,
               type: "error",
             });
           });
       });
-      console.log(departmentList.value);
     })
     .catch((err) => {
       ElMessage({
         showClose: true,
-        message: err.response.data.detail,
+       message: err,
         type: "error",
       });
     });
@@ -113,7 +110,7 @@ const queryprocessList = (val) => {
     .catch((err) => {
       ElMessage({
         showClose: true,
-        message: err.response.data.detail,
+       message: err,
         type: "error",
       });
     });
@@ -122,10 +119,8 @@ onMounted(() => {
   userInfo.value = JSON.parse(sessionStorage.getItem("userInfo"));
   if (userInfo.value.roles.indexOf("admin") == -1) {
     //不是管理员
-    console.log("不是管理员");
     queryDepartmentListParams.value.id = userInfo.value.department_id;
   } else {
-    console.log("是管理员");
     queryDepartmentListParams.value.limit = false;
   }
   queryDepartmentList();

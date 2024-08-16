@@ -4,10 +4,7 @@ const router = createRouter({
   routes: [
     {
       path: '/', // 如果路由为/
-      redirect: '/login', //重定向到登录组件
-      meta: {
-        title: '登陆页'
-      }
+      redirect: '/home', //重定向到登录组件
     },
     {
       path: "/login",
@@ -20,7 +17,7 @@ const router = createRouter({
     //   hidden: true
     // },
     {
-      path: "/home",执行方式
+      path: "/home",//执行方式
       name: "home",
       component: () => import("@/views/index.vue"),
       children: [

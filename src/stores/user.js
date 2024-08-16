@@ -12,24 +12,23 @@ export const useUserCounter = defineStore(
   "user",
   () => {
     const userInfo = ref({});
-    console.log('12121212');
     const setUserInfo = async () => {
       await request.get("/api/auth/info").then(
         (res) => {
           sessionStorage.setItem("userInfo", JSON.stringify(res.data.data));
-          router.push("/home");
+          // router.push("/home");
         },
         (err) => {
           ElMessage({
             showClose: true,
-            message: err.response.data.detail,
+           message: err,
             type: "error",
           });
         }
       ).catch((err) => {
         ElMessage({
           showClose: true,
-          message: err.response.data.detail,
+         message: err,
           type: "error",
         });
       });

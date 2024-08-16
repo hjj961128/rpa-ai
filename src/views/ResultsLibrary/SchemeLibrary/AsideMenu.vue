@@ -55,18 +55,15 @@ const queryDepartmentList = () => {
     .catch((err) => {
       ElMessage({
         showClose: true,
-        message: err.response.data.detail,
+       message: err,
         type: "error",
       });
     });
 };
 onMounted(() => {
-  console.log(route.query);
   userInfo.value = JSON.parse(sessionStorage.getItem("userInfo"));
   if (userInfo.value.roles.indexOf("admin") == -1) {
     //不是管理员
-    console.log("不是管理员");
-    console.log("不是管理员");
     departmentList.value = [
       {
         id: userInfo.value.department_id,
@@ -75,7 +72,6 @@ onMounted(() => {
       },
     ];
   } else {
-    console.log("是管理员");
     queryDepartmentList();
   }
 });

@@ -90,10 +90,8 @@ import router from "../router/index.js";
 import { ElMessage } from "element-plus";
 import { ArrowDown } from '@element-plus/icons-vue'
 function handleSelect(val) {
-  console.log(val);
 }
 const goLogin = () => {
-  console.log("111");
   sessionStorage.removeItem("refresh_token");
   sessionStorage.removeItem("Authorization");
   sessionStorage.removeItem("userInfo");
@@ -115,21 +113,20 @@ const putPassword = () => {
     },
   })
     .then((res) => {
-      console.log(res);
       dialogVisible.value = false;
       router.push({ name: "login" });
     })
     .catch((err) => {
       ElMessage({
         showClose: true,
-        message: err.response.data.detail,
+       message: err,
         type: "error",
       });
     })
     .catch((err) => {
       ElMessage({
         showClose: true,
-        message: err.response.data.detail,
+       message: err,
         type: "error",
       });
     });

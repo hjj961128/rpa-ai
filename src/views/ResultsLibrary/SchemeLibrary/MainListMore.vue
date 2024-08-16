@@ -52,7 +52,6 @@ watch(
   route,
   (newValue, oldValue) => {
     getProcessList()
-    console.log(`count发生了变化，老值为${oldValue},新值为${newValue}`);
   },
   {deep:true }
 );
@@ -67,7 +66,6 @@ const handleCurrentChange = (val) => {
 };
 
 const goDetail = (val) => {
-  console.log(val);
   router.push({name:'schemeDetail',query: { id: val.id }})
 }
 
@@ -94,7 +92,7 @@ const getProcessList = () => {
     .catch((err) => {
       ElMessage({
         showClose: true,
-        message: err.response.data.detail,
+       message: err,
         type: "error",
       });
     });
