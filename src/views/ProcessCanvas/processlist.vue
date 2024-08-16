@@ -89,6 +89,7 @@
                 link
                 v-if="row.online == false"
                 @click="onlineDialog(row, '0')"
+                :disabled="!isOnline(row)"
             >
               上线
             </el-button>
@@ -97,6 +98,7 @@
                 type="info"
                 link
                 v-else
+                :disabled="!isOnline(row)"
                 @click="prossDown(row)"
             >
               下线
@@ -312,9 +314,6 @@ const onlinesForm = ref({});
 const onLineVisible = ref(false);
 const onlineThisProcess = ref(null);
 const onlineDialog = (val, val2) => {
-
-  console.log(val, 'val,,,')
-
 
   if(val.source === 0){
   //  新建的
@@ -635,12 +634,23 @@ const queryDepartmentList = () => {
 
 const isSA = ref(false);
 
+userInfo.value = JSON.parse(sessionStorage.getItem("userInfo"));
+
+// 是否可操作上线下线
+const isOnline = (row)=>{
+
+  if(isSA.value){
+    return true
+  }else {
+    return row.user.id === userInfo.value.id;
+  }
+}
+
 
 onMounted(() => {
   queryDepartmentList();
-  userInfo.value = JSON.parse(sessionStorage.getItem("userInfo"));
 
-  if (userInfo.value.roles.indexOf("admin") == -1) {
+  if (userInfo.value.roles.indexOf("admin") === -1) {
     //不是管理员
     queryDepartmentListParams.value.id = userInfo.value.department_id;
     isSA.value = false;
