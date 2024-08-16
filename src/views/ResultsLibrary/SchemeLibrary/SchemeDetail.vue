@@ -113,7 +113,7 @@
             <el-option
               v-for="(item, Index) in taskList"
               :key="Index"
-              :label="item.wrWorkerName"
+              :label="item.wrWorkerName+' ('+item.online +') ' +'待运行'+'('+ item.willRun  +')' "
               :value="item.wrWorkerId"
             />
           </el-select>
@@ -130,6 +130,8 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
+import {ElMessage, ElMessageBox} from "element-plus";
+
 import request from "@/utils/request";
 
 const runModeVisible = ref(false);
