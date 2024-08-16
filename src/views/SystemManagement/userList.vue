@@ -97,7 +97,7 @@
     <el-dialog v-model="dialogVisibleUser" :title="dialogTitle" width="500">
       <el-form :model="addUserForm" label-width="auto" style="max-width: 600px">
         <el-form-item label="部门">
-          <el-select v-model="addUserForm.permission" placeholder="请选择部门">
+          <el-select v-model="addUserForm.department_id" placeholder="请选择部门">
             <el-option
               v-for="(item, Index) in departmentList"
               :key="Index"
@@ -126,10 +126,10 @@
           </el-select>
         </el-form-item>
         <el-form-item label="用户密码">
-          <el-input v-model="addUserForm.password" />
+          <el-input v-model="addUserForm.password" show-password/>
         </el-form-item>
         <el-form-item label="再次确认密码">
-          <el-input v-model="addUserForm.passwordAgain" />
+          <el-input v-model="addUserForm.passwordAgain" show-password/>
         </el-form-item>
         <el-form-item label="是否开启">
           <el-switch v-model="addUserForm.status" />
@@ -164,42 +164,25 @@ const form = reactive({
 });
 const addUserForm = ref({
   id: 0,
+  department_id:'',
   name: "",
-  permission: null,
   password: "",
   passwordAgain: "",
   status: true,
-  addUserForm:[],
   comment: "",
+  roleList:[]
 });
-// # 超级管理员
-// SA = 0
-// # 营销
-// MKT = 1
-// # 人资
-// HR = 2
-// # 党建
-// CPC = 3
-// # 财资
-// TM = 4
-// # 运维
-// OP = 5
-// # 调度自动化
-// AS = 6
-const dp = ref({
-  1: "营销",
-  2: "人资",
-  3: "党建",
-  4: "财资",
-  5: "运维",
-  6: "调度自动化",
-});
+
+
 const statusList = ref({
   0: "启用",
   1: "停用",
 });
+
 const tableData = ref([]);
 const total = ref(0);
+
+
 // 查询用户列表
 const getUserList = (val) => {
   request({
@@ -226,11 +209,16 @@ const getUserList = (val) => {
       });
     });
 };
+
 const dialogVisibleUser = ref(false);
+
 const dialogTitle = ref("新增用户");
+
 const isEditUser = ref("0");
+
 //新增/编辑用户弹窗
 const editRoles = ref([])
+
 const addUser = (val, val2) => {
   dialogVisibleUser.value = true;
   isEditUser.value = val;
@@ -245,15 +233,17 @@ const addUser = (val, val2) => {
     });
     dialogTitle.value = "编辑用户";
     addUserForm.value.name = val2.username;
-    addUserForm.value.permission = val2.department.id;
     addUserForm.value.status = val2.status == 0 ? true : false;
     addUserForm.value.comment = val2.comment;
     addUserForm.value.id = val2.id;
+    addUserForm.value.department_id = val2.department.id;
     addUserForm.value.roleList = editRoles.value
   }
 };
+
 //查询角色/api/role
 const roleList = ref([])
+
 const queryRoleList = () => {
   request({
     method: "GET",
@@ -273,8 +263,10 @@ const queryRoleList = () => {
       });
     });
 };
+
 //查询部门/api/department
 const departmentList = ref([]);
+
 const queryDepartmentList = () => {
   request({
     method: "GET",
@@ -307,7 +299,7 @@ const addUserApi = () => {
       permission: addUserForm.value.permission,
       status: addUserForm.value.status == true ? 0 : 1,
       comment: addUserForm.value.comment,
-      department_id: addUserForm.value.permission * 1,
+      department_id: addUserForm.value.department_id * 1,
       role_ids: addUserForm.value.roleList
     },
   })
@@ -328,6 +320,7 @@ const addUserApi = () => {
       });
     });
 };
+
 //编辑用户接口
 const EditUserApi = () => {
   request({
@@ -344,7 +337,7 @@ const EditUserApi = () => {
         addUserForm.value.passwordAgain == ""
           ? null
           : addUserForm.value.passwordAgain,
-      permission: addUserForm.value.permission,
+      role_ids: addUserForm.value.roleList,
       status: addUserForm.value.status == true ? 0 : 1,
       comment: addUserForm.value.comment,
     },
@@ -367,6 +360,7 @@ const EditUserApi = () => {
       });
     });
 };
+
 // 删除用户
 const delUser = (val) => {
   ElMessageBox.confirm("是否确认删除?", "提示", {
@@ -398,19 +392,23 @@ const delUser = (val) => {
       });
     });
 };
+
 const handleSizeChange = (val) => {
   form.value.page_size = val;
   getUserList();
 };
+
 const handleCurrentChange = (val) => {
   form.value.page_num = val;
   getUserList();
 };
+
 onMounted(() => {
   queryDepartmentList();
   getUserList();
   queryRoleList();
 });
+
 </script>
 <style lang="less" scoped>
 .top-search {
