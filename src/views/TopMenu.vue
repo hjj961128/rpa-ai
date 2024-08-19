@@ -39,8 +39,8 @@
         >
       </el-sub-menu>
       <el-menu-item index="/processlist">流程画布</el-menu-item>
-      <el-menu-item index="4">中控管理</el-menu-item>
-      <el-menu-item index="/systemManagement">系统管理</el-menu-item>
+      <el-menu-item index="/center">中控管理</el-menu-item>
+      <el-menu-item index="/roleList">系统管理</el-menu-item>
       <div class="userinfo">
         <el-dropdown>
           <span class="el-dropdown-link" v-if="userInfo">
@@ -82,7 +82,7 @@
       </div>
     </template>
   </el-dialog>
-</template> 
+</template>
 <script setup>
 import { onMounted, ref } from "vue";
 import request from "@/utils/request";
@@ -135,7 +135,7 @@ const userInfo = ref({});
 onMounted(() => {
   userInfo.value = JSON.parse(sessionStorage.getItem("userInfo"));
 });
-</script> 
+</script>
 <style lang="scss" scoped>
 .el-menu {
   border-bottom: 0 !important;

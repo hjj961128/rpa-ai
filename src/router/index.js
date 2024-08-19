@@ -63,6 +63,11 @@ const router = createRouter({
           name: "processCanvas",
           component: () => import("@/views/ProcessCanvas/processCanvas.vue"),
         },
+                  {
+          path: "/center",
+          name: "center",
+          component: () => import("@/views/center/index.vue"),
+        },
         {
           path: "/systemManagement",
           name: "systemManagement",
