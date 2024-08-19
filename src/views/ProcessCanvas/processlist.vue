@@ -574,15 +574,21 @@ const addProcessApi = (val) => {
         choiceSourceShow.value = false;
         innerVisible.value = false;
         console.log(res, 'res')
-        ElMessage({
-          showClose: true,
-          message: "正在打开流程画布......",
-          type: "success",
-        });
-        router.push({
-          name: "processCanvas",
-          query: {id: res.data.data.process.cloud_flow_id, processId: res.data.data.process.id}
-        });
+
+        if(isEditprocess.value == '0' && processForm.value.new_process_file_source == '0'){
+
+              ElMessage({
+                showClose: true,
+                message: "正在打开流程画布......",
+                type: "success",
+            })
+            router.push({
+            name: "processCanvas",
+            query: {id: res.data.data.process.cloud_flow_id, processId: res.data.data.process.id}
+          });
+        }
+
+
 
         getProcessList();
       })
