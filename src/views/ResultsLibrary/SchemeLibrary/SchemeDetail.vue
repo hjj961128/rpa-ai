@@ -430,7 +430,7 @@ const runModeType = (val) => {
   runModeTypeNum.value = val;
   runModeForm.value = {
     tiggerName: null,//触发器名称
-    name: null,//流程名称
+    name: processList.value.name,//流程名称
     isWorker: false,//是否自动分配worker
     workerName: null,//worker名称
     choiceTime: "eDay",//执行频率每日周月
