@@ -428,6 +428,22 @@ const handleCheckedMonthChange = (val2) => {
 const runModeType = (val) => {
   runModeVisible.value = true;
   runModeTypeNum.value = val;
+  runModeForm.value = {
+    tiggerName: null,//触发器名称
+    name: null,//流程名称
+    isWorker: false,//是否自动分配worker
+    workerName: null,//worker名称
+    choiceTime: "eDay",//执行频率每日周月
+    timeType: "dayday",//按日/每月最后一天
+    timeHM: "00:00",
+    monthDay: ["1"],
+  };
+  startTime.value = null;
+  endTime.value = null;
+  checkAllWeeks.value = false;
+  checkedWeeks.value = ["1"];
+  checkAllMonth.value = false
+  checkedMonth.value = ["1"]
 };
 
 const taskList = ref([]);
@@ -567,8 +583,16 @@ const clickTask = (val) => {
         name: runModeForm.value.tiggerName,
         wr_work_id: runModeForm.value.workerName,
         cron_expression: cronExpression.value,
-        work_start_time: (new Date(startTime.value)).toLocaleDateString('en-CA', { year: 'numeric', month: '2-digit', day: '2-digit' }),
-        work_end_time: (new Date(endTime.value)).toLocaleDateString('en-CA', { year: 'numeric', month: '2-digit', day: '2-digit' }),
+        work_start_time: new Date(startTime.value).toLocaleDateString("en-CA", {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+        }),
+        work_end_time: new Date(endTime.value).toLocaleDateString("en-CA", {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+        }),
         automatic: runModeForm.value.isWorker,
         params: ProcessParamsList.value,
       },
