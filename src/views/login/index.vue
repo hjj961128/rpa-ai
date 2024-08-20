@@ -24,6 +24,7 @@
                 v-model="loginForm.praswood"
                 clearable
                 auto-complete="on"
+                @keyup.enter="onSubmit"
               />
             </el-form-item>
             <!-- <div class="forget" @click="fogetpro"> 忘记密码？</div> -->
