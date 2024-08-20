@@ -80,7 +80,7 @@
         </el-table-column>
         <el-table-column prop="id" label="操作" width="320">
           <template #default="{ row }">
-            <el-button @click="edit(row)" key="primary" type="primary" link>
+            <el-button @click="edit(row)" key="primary" type="primary" link :disabled="row.new_process_file_source === 1">
               编辑画布
             </el-button>
             <el-button
