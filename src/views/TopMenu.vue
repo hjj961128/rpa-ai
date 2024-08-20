@@ -34,7 +34,7 @@
             text-align: center;
             font-size: 16px;
           "
-          index="/toBox"
+          index="/workBoxIndex"
           >工具箱</el-menu-item
         >
       </el-sub-menu>

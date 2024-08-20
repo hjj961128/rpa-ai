@@ -54,6 +54,21 @@ const router = createRouter({
           ],
         },
         {
+          path: "/workBoxIndex",
+          name: "workBoxIndex",
+          component: () =>
+            import("@/views/ResultsLibrary/WorkBox/index.vue"),
+          redirect: "/workBoxList",
+          children: [
+            {
+              path: "/workBoxList",
+              name: "workBoxList",
+              component: () =>
+                import("@/views/ResultsLibrary/WorkBox/workBoxList.vue"),
+            },
+          ]
+        },
+        {
           path: "/processlist",
           name: "processlist",
           component: () => import("@/views/ProcessCanvas/processlist.vue"),
