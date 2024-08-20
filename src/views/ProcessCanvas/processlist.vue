@@ -44,9 +44,9 @@
       </el-form>
     </div>
     <div class="table">
-      <el-table ref="multipleTableRef" :data="tableData" style="width: 100%">
+      <el-table ref="multipleTableRef" :data="tableData" style="width: 100%" :header-cell-style="{ textAlign: 'center' }">
         <!-- <el-table-column type="selection" width="55" /> -->
-        <el-table-column type="index" label="序号" width="65">
+        <el-table-column type="index" label="序号" width="65" align="center">
           <template #default="scope">
             {{
               scope.$index +
@@ -56,8 +56,8 @@
           </template>
         </el-table-column>
         <!-- <el-table-column width="100" prop="id" label="流程号" /> -->
-        <el-table-column prop="name" label="流程名称"/>
-        <el-table-column prop="online" label="状态">
+        <el-table-column prop="name" label="流程名称" align="center"/>
+        <el-table-column prop="online" label="状态" align="center">
           <template #default="{ row }">
             <div>
               <svg-icon :name="row.online == true ? 'blue' : 'red'"></svg-icon
@@ -66,19 +66,19 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="user.username" label="创建人"/>
+        <el-table-column prop="user.username" label="创建人" align="center"/>
 
-        <el-table-column prop="source" label="流程来源">
+        <el-table-column prop="source" label="流程来源" align="center">
           <template #default="{ row }">
             <div>{{ row.source == 0 ? "新建" : "导入" }}</div>
           </template>
         </el-table-column>
-        <el-table-column prop="created_at" label="发起时间">
+        <el-table-column prop="created_at" label="发起时间" align="center">
           <template #default="{ row }">
             <div>{{ new Date(row.created_at).toLocaleString() }}</div>
           </template>
         </el-table-column>
-        <el-table-column prop="id" label="操作" width="320">
+        <el-table-column label="操作" width="320" align="center">
           <template #default="{ row }">
             <el-button @click="edit(row)" key="primary" type="primary" link :disabled="row.new_process_file_source === 1">
               编辑画布
