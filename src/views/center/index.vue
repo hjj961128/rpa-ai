@@ -19,7 +19,7 @@
 <script setup>
 
 import {ElMessage, ElMessageBox} from 'element-plus'
-import {ref, onMounted} from "vue";
+import {ref, onMounted,onBeforeMount} from "vue";
 import request from "@/utils/request.js";
 import router from "@/router/index.js";
 
@@ -33,41 +33,40 @@ const centerMToken = ref('')
 const centerMURL = ref('http://106.14.149.100:8178/index')
 
 
-// 生命周期函数
-onMounted(async () => {
-  console.log('onMounted')
-  // 获取center token
+onBeforeMount(async ()=>{
 
   if(sessionStorage.getItem("centerMtoken")){
     centerMToken.value = sessionStorage.getItem("centerMtoken")
 
   }else {
-    getCenterMToken()
+    await getCenterMToken()
   }
 
   centerMIndex.value = `${centerMURL.value}?token=${centerMToken.value}`
 
-  console.log(centerMIndex.value)
+})
 
+// 生命周期函数
+onMounted(async () => {
+  console.log('onMounted')
+  // 获取center token
 })
 
 // 获取center token
 const getCenterMToken = async () => {
-    request({
-    method: "GET",
-    url: "/api/auth/mcenter-token",
-  })
-      .then((res) => {
-        sessionStorage.setItem("centerMtoken", res.data.data.token);
-        centerMToken.value =   res.data.data.token
-      })
-      .catch((err) => {
-        ElMessage({
+
+
+  try {
+    const res = await request({method: "GET",url: "/api/auth/mcenter-token"})
+    sessionStorage.setItem("centerMtoken", res.data.data.token);
+    centerMToken.value =   res.data.data.token
+  }catch (e) {
+    ElMessage({
           showClose: true,
           message: err,
           type: "error",
         });
-      });
+  }
 }
 
 </script>
