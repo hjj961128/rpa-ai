@@ -85,7 +85,7 @@ function onSubmit() {
       password: loginForm.praswood,
     },
   })
-    .then((res) => {
+    .then(async (res) => {
       sessionStorage.setItem("Authorization", res.data.data.access_token);
       sessionStorage.setItem("refresh_token", res.data.data.refresh_token);
       ElMessage({
@@ -94,7 +94,7 @@ function onSubmit() {
         type: "success",
       });
       if (sessionStorage.getItem("Authorization")) {
-        userStore.setUserInfo();
+        await userStore.setUserInfo();
       }
       router.push({path: redirect.value || '/', query: otherQuery.value})
     })

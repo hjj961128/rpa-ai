@@ -13,25 +13,19 @@ export const useUserCounter = defineStore(
   () => {
     const userInfo = ref({});
     const setUserInfo = async () => {
-      await request.get("/api/auth/info").then(
-        (res) => {
-          sessionStorage.setItem("userInfo", JSON.stringify(res.data.data));
-          // router.push("/home");
-        },
-        (err) => {
-          ElMessage({
+
+        try {
+            const res = await request.get("/api/auth/info")
+            sessionStorage.setItem("userInfo", JSON.stringify(res.data.data));
+
+        }catch (e) {
+            ElMessage({
             showClose: true,
-           message: err,
+            message: err,
             type: "error",
           });
         }
-      ).catch((err) => {
-        ElMessage({
-          showClose: true,
-         message: err,
-          type: "error",
-        });
-      });
+
     };
     //清除用户信息
     const clearUserInfo = () => {
