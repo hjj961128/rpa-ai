@@ -39,7 +39,7 @@
         >
       </el-sub-menu>
       <el-menu-item index="/processlist">流程画布</el-menu-item>
-      <el-menu-item index="/center">中控管理</el-menu-item>
+      <el-menu-item index="/center" v-if="hasPermission()">中控管理</el-menu-item>
       <el-menu-item index="/roleList">系统管理</el-menu-item>
       <div class="userinfo">
         <el-dropdown>
@@ -131,10 +131,18 @@ const putPassword = () => {
       });
     });
 };
-const userInfo = ref({});
+
+const userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
+
 onMounted(() => {
-  userInfo.value = JSON.parse(sessionStorage.getItem("userInfo"));
+
 });
+
+const hasPermission=()=>{
+
+  return userInfo.roles.indexOf('admin') !== -1;
+}
+
 </script>
 <style lang="scss" scoped>
 .el-menu {
