@@ -77,8 +77,10 @@
           </div>
           <div class="show">
             <div class="showTitle">执行方式</div>
-            <el-button @click="runModeVisible = true" plain>手动执行</el-button>
-            <el-button type="primary" plain>定时执行</el-button>
+            <el-button @click="runModeType('1')" plain>手动执行</el-button>
+            <el-button @click="runModeType('2')" type="primary" plain
+              >定时执行</el-button
+            >
           </div>
         </div>
       </div>
@@ -94,11 +96,17 @@
     </div>
     <el-dialog
       v-model="runModeVisible"
-      width="500"
-      title="执行方式"
+      width="800"
+      :title="runModeTypeNum == '1' ? '手动执行' : '定时执行'"
       append-to-body
     >
-      <el-form :model="runModeForm" label-width="auto" style="max-width: 600px">
+      <el-form :model="runModeForm" label-width="auto" style="max-width: 800px">
+        <el-form-item label="触发器名称" v-if="runModeTypeNum == '2'">
+          <el-input
+            v-model="runModeForm.tiggerName"
+            placeholder="请输入触发器名称"
+          />
+        </el-form-item>
         <el-form-item label="流程名称">
           <el-input v-model="runModeForm.name" disabled />
         </el-form-item>
@@ -113,13 +121,172 @@
             <el-option
               v-for="(item, Index) in taskList"
               :key="Index"
-              :label="item.wrWorkerName+' ('+item.online +') ' +'待运行'+'('+ item.willRun  +')' "
+              :label="
+                item.wrWorkerName +
+                ' (' +
+                item.online +
+                ') ' +
+                '待运行' +
+                '(' +
+                item.willRun +
+                ')'
+              "
               :value="item.wrWorkerId"
             />
           </el-select>
         </el-form-item>
+        <el-form-item label="配置参数" v-if="ProcessParamsList.length > 2">
+          <el-table
+            :data="ProcessParamsList.filter((item) => item.show !== false)"
+            show-overflow-tooltip
+            border
+            style="width: 100%"
+          >
+            <el-table-column prop="key" label="参数名" />
+            <el-table-column prop="showType" label="参数类型" width="90" />
+            <el-table-column prop="value" label="参数值">
+              <template #default="{ row }">
+                <el-input
+                  style="width: 100%"
+                  v-model="row.value"
+                  controls-position="right"
+                ></el-input>
+              </template>
+            </el-table-column>
+            <el-table-column prop="annotation" label="备注" />
+          </el-table>
+        </el-form-item>
+        <el-form-item label="执行频率" v-if="runModeTypeNum == '2'">
+          <el-radio-group v-model="runModeForm.choiceTime">
+            <el-radio-button label="每日" value="eDay"> </el-radio-button>
+            <el-radio-button label="每周" value="eWeek" />
+            <el-radio-button label="每月" value="eMonth" />
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label=" " v-if="runModeTypeNum == '2'">
+          <el-card style="padding: 0px 20px">
+            <p class="cardTitle">执行方式</p>
+            <div v-if="runModeForm.choiceTime == 'eWeek'">
+              <el-checkbox
+                v-model="checkAllWeeks"
+                :indeterminate="isIndeterminate"
+                @change="handleCheckAllChange"
+              >
+                全选
+              </el-checkbox>
+              <el-checkbox-group
+                v-model="checkedWeeks"
+                @change="handleCheckedCitiesChange"
+              >
+                <el-checkbox
+                  v-for="week in weekList"
+                  :key="week.label"
+                  :label="week.value"
+                  :value="week.label"
+                >
+                  {{ week.value }}
+                </el-checkbox>
+              </el-checkbox-group>
+            </div>
+            <div v-if="runModeForm.choiceTime == 'eMonth'">
+              <el-checkbox
+                v-model="checkAllMonth"
+                :indeterminate="isIndeterminateMonth"
+                @change="handleCheckAllChangeMonth"
+              >
+                全选
+              </el-checkbox>
+              <el-checkbox-group
+                v-model="checkedMonth"
+                @change="handleCheckedMonthChange"
+              >
+                <el-checkbox
+                  v-for="month in MonthList"
+                  :key="month"
+                  :label="month"
+                  :value="month"
+                >
+                  {{ month }}月
+                </el-checkbox>
+              </el-checkbox-group>
+              <p class="cardTitle">指定日</p>
+              <el-radio-group v-model="runModeForm.timeType">
+                <el-radio value="dayday" size="large">按日</el-radio>
+                <el-radio value="monthlast" size="large">当月最后一天</el-radio>
+              </el-radio-group>
+              <div v-if="runModeForm.timeType == 'dayday'">
+                当月第
+                <el-select
+                  v-model="runModeForm.monthDay"
+                  multiple
+                  placeholder="请选择"
+                  style="width: 240px"
+                >
+                  <el-option
+                    v-for="item in montDayList"
+                    :key="item"
+                    :label="item"
+                    :value="item"
+                  />
+                </el-select>
+                日
+              </div>
+            </div>
+
+            <div>
+              在&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <el-time-picker
+                v-model="runModeForm.timeHM"
+                placeholder="选择时间"
+                format="HH:mm"
+                value-format="HH:mm"
+              />
+              执行
+            </div>
+          </el-card>
+        </el-form-item>
+        <el-form-item label="触发预览" v-if="runModeTypeNum == '2'">
+          <!-- {{
+            runModeForm.choiceTime == "eDay"
+              ? "每日"
+              : runModeForm.choiceTime == "eWeek"
+              ? "每周"
+              : "每月"
+          }}的{{ runModeForm.timeHM }} -->
+          <p v-if="runModeForm.choiceTime == 'eDay'">
+            每日的 {{ runModeForm.timeHM }} 执行
+          </p>
+          <p v-if="runModeForm.choiceTime == 'eWeek'">
+            每周 {{ checkedWeeks }} 的 {{ runModeForm.timeHM }} 执行
+          </p>
+          <div v-if="runModeForm.choiceTime == 'eMonth'">
+            <p v-if="runModeForm.timeType == 'dayday'">
+              每 {{ checkedMonth }} 第 {{ runModeForm.monthDay }} 的
+              {{ runModeForm.timeHM }} 执行
+            </p>
+            <p v-else>
+              每 {{ checkedMonth }} 最后1日的 {{ runModeForm.timeHM }} 执行
+            </p>
+          </div>
+        </el-form-item>
+        <el-form-item label="启动时间">
+          <el-date-picker
+            v-model="startTime"
+            placeholder="请输入启动时间"
+            :disabled-date="disabledDate"
+          />
+        </el-form-item>
+        <el-form-item label="结束时间">
+          <el-date-picker
+            v-model="endTime"
+            placeholder="请输入结束时间"
+            :disabled-date="disabledendDate"
+          />
+        </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="clickTask()">运行</el-button>
+          <el-button type="primary" @click="clickTask(runModeTypeNum)"
+            >运行</el-button
+          >
           <el-button @click="runModeVisible = false">取消</el-button>
         </el-form-item>
       </el-form>
@@ -130,15 +297,138 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
-import {ElMessage, ElMessageBox} from "element-plus";
+import { ElMessage, ElMessageBox } from "element-plus";
 
 import request from "@/utils/request";
+const disabledDate = (time) => {
+  return time.getTime() < Date.now() - 8.64e7;
+};
 
+const disabledendDate = (time) => {
+  return time < startTime.value;
+};
+
+const runModeTypeNum = ref("1");
 const runModeVisible = ref(false);
 const runModeForm = ref({
   name: null,
   isWorker: false,
+  choiceTime: "eDay",
+  timeType: "dayday",
+  timeHM: "00:00",
+  monthDay: ["1"],
 });
+const startTime = ref(null);
+const endTime = ref(null);
+
+const weekList = ref([
+  {
+    label: "1",
+    value: "周日",
+  },
+  {
+    label: "2",
+    value: "周一",
+  },
+  {
+    label: "3",
+    value: "周二",
+  },
+  {
+    label: "4",
+    value: "周三",
+  },
+  {
+    label: "5",
+    value: "周四",
+  },
+  {
+    label: "6",
+    value: "周五",
+  },
+  {
+    label: "7",
+    value: "周六",
+  },
+]);
+const checkAllWeeks = ref(false);
+const isIndeterminate = ref(true);
+const checkedWeeks = ref(["1"]);
+
+const handleCheckAllChange = (val) => {
+  checkedWeeks.value = val ? ["1", "2", "3", "4", "5", "6", "7"] : [];
+  isIndeterminate.value = false;
+};
+const handleCheckedCitiesChange = (val2) => {
+  checkAllWeeks.value = val2.length === weekList.value.length;
+  isIndeterminate.value =
+    val2.length > 0 && val2.length < weekList.value.length;
+};
+const montDayList = ref([
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+  "11",
+  "12",
+  "13",
+  "14",
+  "15",
+  "16",
+  "17",
+  "18",
+  "19",
+  "20",
+  "21",
+  "22",
+  "23",
+  "24",
+  "25",
+  "26",
+  "27",
+  "28",
+  "29",
+  "30",
+  "31",
+]);
+const MonthList = ref([
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+  "11",
+  "12",
+]);
+const checkAllMonth = ref(false);
+const isIndeterminateMonth = ref(true);
+const checkedMonth = ref(["1"]);
+
+const handleCheckAllChangeMonth = (val) => {
+  checkedMonth.value = val ? MonthList.value : [];
+  isIndeterminateMonth.value = false;
+};
+const handleCheckedMonthChange = (val2) => {
+  checkAllMonth.value = val2.length === MonthList.value.length;
+  isIndeterminateMonth.value =
+    val2.length > 0 && val2.length < MonthList.value.length;
+};
+
+const runModeType = (val) => {
+  runModeVisible.value = true;
+  runModeTypeNum.value = val;
+};
 
 const taskList = ref([]);
 const getWorkerList = () => {
@@ -155,35 +445,149 @@ const getWorkerList = () => {
     .catch((err) => {
       ElMessage({
         showClose: true,
-       message: err,
+        message: err,
         type: "error",
       });
     });
 };
-const clickTask = (val) => {
+const ProcessParamsList = ref([]);
+const getProcessParams = () => {
   request({
-    method: "POST",
-    url: "/api/task",
-    data: {
-      process_id: route.query.id,
-      wr_worker_id: runModeForm.value.workerName,
-      automatic:runModeForm.value.isWorker
+    method: "GET",
+    url: "/api/process/params",
+    params: {
+      id: route.query.id,
     },
   })
     .then((res) => {
-      ElMessage({
-        type: "success",
-        message: "运行成功",
-      });
-      runModeVisible.value = false
+      if (res.data.data.length > 2) {
+        ProcessParamsList.value = res.data.data;
+      }
     })
     .catch((err) => {
       ElMessage({
         showClose: true,
-       message: err,
+        message: err,
         type: "error",
       });
     });
+};
+const cronExpression = ref("");
+const clickTask = (val) => {
+  console.log(val);
+  if (runModeForm.value.choiceTime == "eDay") {
+    cronExpression.value =
+      "0" +
+      " " +
+      runModeForm.value.timeHM.substring(
+        runModeForm.value.timeHM.length - 2,
+        runModeForm.value.timeHM.length
+      ) +
+      " " +
+      runModeForm.value.timeHM.substring(0, 2) +
+      " " +
+      "*" +
+      " " +
+      "*" +
+      " " +
+      "?";
+  } else if (runModeForm.value.choiceTime == "eWeek") {
+    cronExpression.value =
+      "0" +
+      " " +
+      runModeForm.value.timeHM.substring(
+        runModeForm.value.timeHM.length - 2,
+        runModeForm.value.timeHM.length
+      ) +
+      " " +
+      runModeForm.value.timeHM.substring(0, 2) +
+      " " +
+      "?" +
+      " " +
+      "*" +
+      " " +
+      checkedWeeks.value.toString();
+  } else {
+    const timeTypeValue = ref("");
+    console.log(timeTypeValue.value);
+    console.log(runModeForm.value.timeType);
+    if (runModeForm.value.timeType == "monthlast") {
+      timeTypeValue.value = "L";
+    } else {
+      timeTypeValue.value = runModeForm.value.monthDay.toString();
+    }
+    cronExpression.value =
+      "0" +
+      " " +
+      runModeForm.value.timeHM.substring(
+        runModeForm.value.timeHM.length - 2,
+        runModeForm.value.timeHM.length
+      ) +
+      " " +
+      runModeForm.value.timeHM.substring(0, 2) +
+      " " +
+      timeTypeValue.value +
+      " " +
+      checkedMonth.value.toString() +
+      " " +
+      "?";
+  }
+  console.log(cronExpression.value);
+  if (val == "1") {
+    request({
+      method: "POST",
+      url: "/api/task",
+      data: {
+        process_id: route.query.id,
+        wr_worker_id: runModeForm.value.workerName,
+        automatic: runModeForm.value.isWorker,
+        file_params: ProcessParamsList.value,
+      },
+    })
+      .then((res) => {
+        ElMessage({
+          type: "success",
+          message: "运行成功",
+        });
+        runModeVisible.value = false;
+      })
+      .catch((err) => {
+        ElMessage({
+          showClose: true,
+          message: err,
+          type: "error",
+        });
+      });
+  } else {
+    request({
+      method: "POST",
+      url: "/api/trigger",
+      data: {
+        process_id: route.query.id,
+        name: runModeForm.value.tiggerName,
+        wr_work_id: runModeForm.value.workerName,
+        cron_expression: cronExpression.value,
+        work_start_time: (new Date(startTime.value)).toLocaleDateString('en-CA', { year: 'numeric', month: '2-digit', day: '2-digit' }),
+        work_end_time: (new Date(endTime.value)).toLocaleDateString('en-CA', { year: 'numeric', month: '2-digit', day: '2-digit' }),
+        automatic: runModeForm.value.isWorker,
+        params: ProcessParamsList.value,
+      },
+    })
+      .then((res) => {
+        ElMessage({
+          type: "success",
+          message: "运行成功",
+        });
+        runModeVisible.value = false;
+      })
+      .catch((err) => {
+        ElMessage({
+          showClose: true,
+          message: err,
+          type: "error",
+        });
+      });
+  }
 };
 const processList = ref([]);
 const route = useRoute();
@@ -206,7 +610,7 @@ const getProcessList = () => {
     .catch((err) => {
       ElMessage({
         showClose: true,
-       message: err,
+        message: err,
         type: "error",
       });
     });
@@ -214,6 +618,7 @@ const getProcessList = () => {
 onMounted(() => {
   getProcessList();
   getWorkerList();
+  getProcessParams();
 });
 </script>
 <style lang="scss" scoped>
@@ -278,6 +683,7 @@ svg {
     width: 50%;
     padding: 50px;
     padding-left: 100px;
+    // display: inline-block;
   }
 }
 .bottom {
@@ -330,5 +736,15 @@ svg {
 }
 .show {
   margin-top: 10px;
+}
+.cardTitle:before {
+  content: ""; /* 使用空内容生成内容 */
+  background-color: #2468f2; /* 设置背景颜色为蓝色 */
+  border-radius: 3px; /* 圆点形状 */
+  display: inline-block; /* 使其成为行内块元素 */
+  width: 6px; /* 宽度 */
+  height: 16px; /* 高度 */
+  margin-left: -1.5em; /* 向左移动半个列表项内边距，使得小圆点与文本对齐 */
+  margin-right: 0.5em; /* 向右移动，为了间隔效果 */
 }
 </style>

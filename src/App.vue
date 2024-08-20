@@ -46,4 +46,14 @@ body {
 .el-sub-menu.is-active .el-sub-menu__title{
   background-color: rgba(0, 0, 0, 0.2);
 }
+/* 隐藏滚动条 */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* 适用于所有浏览器 */
+body {
+  overflow: -moz-scrollbars-none;
+  -ms-overflow-style: none;
+}
 </style>
