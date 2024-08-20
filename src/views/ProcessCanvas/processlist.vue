@@ -582,10 +582,7 @@ const addProcessApi = (val) => {
                 message: "正在打开流程画布......",
                 type: "success",
             })
-            router.push({
-            name: "processCanvas",
-            query: {id: res.data.data.process.cloud_flow_id, processId: res.data.data.process.id}
-          });
+            edit(res.data.data.process)
         }
 
 
