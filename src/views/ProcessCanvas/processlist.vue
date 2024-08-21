@@ -285,6 +285,10 @@ const getProcessList = (val) => {
     paramsData.value.page_num = searchForm.value.page_num;
     paramsData.value.page_size = searchForm.value.page_size;
   }
+
+  // 如果是admin即可获取所有部门 否则只获取自己的部门
+  paramsData.value.department_id = isSA.value ? null : userInfo.value.department_id
+
   request({
     method: "GET",
     url: "/api/process",
