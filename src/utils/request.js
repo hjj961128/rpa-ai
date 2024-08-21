@@ -14,7 +14,7 @@ const apiClient = axios.create({
   }
   // 其他axios配置选项
 });
- // 请求拦截器                                                                                                                  
+ // 请求拦截器
  apiClient.interceptors.request.use(
   (config) => {
     const accessToken = sessionStorage.getItem("Authorization");
@@ -40,7 +40,7 @@ apiClient.interceptors.response.use(
       if (error.response.status === 401) {
         // 清除token或做其他登录态清除工作
         // store.commit('LOGOUT');
- 
+
         // 使用Vue路由器跳转到登录页面
         // router.push('/login');
         ElMessage({
@@ -48,6 +48,9 @@ apiClient.interceptors.response.use(
           message: 'TOKEN失效，请重新登录',
           type: "error",
         });
+        sessionStorage.clear();
+        // router.push({path:`/login?redirect=${route.path}`})
+
       }
       // 可以在这里处理其他错误
     }

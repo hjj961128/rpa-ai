@@ -24,6 +24,7 @@ import { useRoute } from "vue-router";
 import { Upload } from "@element-plus/icons-vue";
 import request from "@/utils/request";
 import { ElMessage, ElMessageBox } from "element-plus";
+import router from "../../router/index.js";
 
 const route = useRoute();
 
@@ -43,7 +44,7 @@ const publish = () => {
         message: "发布成功",
       });
       router.push({ name: "processlist" });
-      
+
     })
     .catch((err) => {
       ElMessage({
