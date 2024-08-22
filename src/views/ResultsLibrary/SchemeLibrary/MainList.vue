@@ -35,8 +35,11 @@
 <script setup>
 import { onMounted, reactive, ref } from "vue";
 import { ElMessage } from "element-plus";
-import router from "../../../router/index.js";
+// import router from "../../../router/index.js";
 import request from "@/utils/request";
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 const handleOpen = (key, keyPath) => {
 };
 const handleClose = (key, keyPath) => {

@@ -86,11 +86,14 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import request from "@/utils/request";
-import router from "../router/index.js";
+// import router from "../router/index.js";
 import { ElMessage } from "element-plus";
 import { ArrowDown } from '@element-plus/icons-vue'
 function handleSelect(val) {
 }
+import { useRouter } from 'vue-router';
+const router = useRouter();
+
 const goLogin = () => {
   sessionStorage.removeItem("refresh_token");
   sessionStorage.removeItem("Authorization");

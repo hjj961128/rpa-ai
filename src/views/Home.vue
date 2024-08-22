@@ -46,40 +46,36 @@
       </div>
     </div>
     <div class="bottom">
-      <el-row :gutter="20">
-        <el-col :span="6" :offset="1">
-          <div class="bottom-div">
-            <div class="bottom-title">
-              <span class="bottom-title-txt"> RPA与传统人工运行次数对比</span>
-            </div>
-            <div
-              id="myEcharts1"
-              :style="{ width: '370px', height: '350px', background: '#fff' }"
-            ></div>
+      <div class="bottom-div">
+        <div class="bottom-title">
+          <span class="bottom-title-txt"> RPA与传统人工运行次数对比</span>
+        </div>
+        <div
+          id="myEcharts1"
+          :style="{ width: '100%', height: '350px', background: '#fff' }"
+        ></div>
+      </div>
+      <div class="bottom-div">
+        <div class="bottom-title">
+          <span class="bottom-title-txt"> RPA区域划分</span>
+        </div>
+        <div
+          id="myEcharts2"
+          :style="{ width: '100%', height: '350px', background: '#fff' }"
+        ></div>
+      </div>
+      <div class="bottom-div">
+        <div class="bottom-title">
+          <span class="bottom-title-txt">热门流程</span>
+        </div>
+        <div class="bottombox">
+          <div class="process" v-for="(item, index) in tableData" :key="index">
+           <el-button key="primary" type="primary" size="large" link @click="goDetail(item)">
+            {{index+1}}  {{ item.name }}
+            </el-button>
           </div>
-        </el-col>
-        <el-col :span="6" :offset="2">
-          <div class="bottom-div">
-            <div class="bottom-title">
-              <span class="bottom-title-txt"> RPA与传统人工运行次数对比</span>
-            </div>
-            <div
-              id="myEcharts1"
-              :style="{ width: '370px', height: '350px', background: '#fff' }"
-            ></div>
-          </div>
-        </el-col>
-        <el-col :span="6" :offset="2"><div class="bottom-div">
-            <div class="bottom-title">
-              <span class="bottom-title-txt"> RPA与传统人工运行次数对比</span>
-            </div>
-            <div
-              id="myEcharts1"
-              :style="{ width: '370px', height: '350px', background: '#fff' }"
-            ></div>
-          </div><div class="bottom-div">sas</div>
-        </el-col>
-      </el-row>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -87,10 +83,43 @@
 <script setup>
 import { onMounted, reactive, ref } from "vue";
 import * as echarts from "echarts";
+import { ElMessage, ElMessageBox } from "element-plus";
+import request from "@/utils/request";
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
+
+const goDetail = (val) => {
+  router.push({ name: "schemeDetail", query: { id: val.id } });
+};
+const tableData = ref([]);
+const getProcessList = (val) => {
+  request({
+    method: "GET",
+    url: "/api/process",
+    params: {
+      page_num: 1,
+      page_size: 8,
+    },
+  })
+    .then((res) => {
+      tableData.value = res.data.data.list;
+    })
+    .catch((err) => {
+      console.log(err);
+      ElMessage({
+        showClose: true,
+        message: err,
+        type: "error",
+      });
+    });
+};
 onMounted(() => {
+  getProcessList();
   const chartDom = document.getElementById("myEcharts1");
+  const chartDom2 = document.getElementById("myEcharts2");
   const myChart = echarts.init(chartDom);
+  const myChart2 = echarts.init(chartDom2);
   const option = {
     // title: {
     //   text: 'World Population'
@@ -121,15 +150,90 @@ onMounted(() => {
         name: "传统人工",
         type: "bar",
         data: [351, 414, 367, 256],
+        itemStyle: {
+          normal: {
+            barBorderRadius: [20, 20, 0, 0],
+            color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [
+              { offset: 0, color: "#3977E6" },
+              { offset: 1, color: "#83bff6" },
+            ]),
+          },
+        },
       },
       {
         name: "RPA智能机器人",
         type: "bar",
         data: [1150, 1400, 1021, 1255],
+        itemStyle: {
+          normal: {
+            barBorderRadius: [20, 20, 0, 0],
+            color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [
+              { offset: 0, color: "#147C72" },
+              { offset: 1, color: "#B4F0E8" },
+            ]),
+          },
+        },
+      },
+    ],
+  };
+  const option2 = {
+    // title: {
+    //   text: 'World Population'
+    // },
+    tooltip: {
+      trigger: "axis",
+      axisPointer: {
+        type: "shadow",
+      },
+    },
+    legend: {},
+    grid: {
+      left: "3%",
+      right: "4%",
+      bottom: "3%",
+      containLabel: true,
+    },
+    yAxis: {
+      type: "value",
+      boundaryGap: [0, 0.01],
+    },
+    xAxis: {
+      type: "category",
+      data: ["第一季度", "第二季度", "第三季度", "第四季度"],
+    },
+    series: [
+      {
+        name: "传统人工",
+        type: "bar",
+        data: [351, 414, 367, 256],
+        itemStyle: {
+          normal: {
+            barBorderRadius: [20, 20, 0, 0],
+            color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [
+              { offset: 0, color: "#3977E6" },
+              { offset: 1, color: "#83bff6" },
+            ]),
+          },
+        },
+      },
+      {
+        name: "RPA智能机器人",
+        type: "bar",
+        data: [1150, 1400, 1021, 1255],
+        itemStyle: {
+          normal: {
+            barBorderRadius: [20, 20, 0, 0],
+            color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [
+              { offset: 0, color: "#147C72" },
+              { offset: 1, color: "#B4F0E8" },
+            ]),
+          },
+        },
       },
     ],
   };
   option && myChart.setOption(option);
+  option2 && myChart2.setOption(option2);
 });
 </script>
 <style lang="scss" scoped>
@@ -184,11 +288,17 @@ onMounted(() => {
     color: #333;
   }
 }
+.bottom {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
 
 .bottom-div {
   margin-top: 30px;
-  height: 500px;
-  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.2);
+  width: 30%;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px 0px rgba(0, 0, 0, 0.2);
 
   .bottom-title {
     width: 100%;
@@ -215,5 +325,11 @@ svg {
 .flex-container {
   display: flex;
   justify-content: space-around;
+}
+.bottombox {
+  padding: 20px;
+  .process {
+    height: 40px;
+  }
 }
 </style>

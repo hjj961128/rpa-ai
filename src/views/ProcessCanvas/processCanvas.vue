@@ -24,8 +24,11 @@ import { useRoute } from "vue-router";
 import { Upload } from "@element-plus/icons-vue";
 import request from "@/utils/request";
 import { ElMessage, ElMessageBox } from "element-plus";
-import router from "../../router/index.js";
 
+// import router from "../../router/index.js";
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 const route = useRoute();
 
 const iframe = ref(null);

@@ -11,12 +11,15 @@
           <div class="title">
             <div class="titlel">
               {{ menuItem.name }}
-            </div>
-            <div>
               <svg-icon name="hot" class="hot"></svg-icon>
             </div>
+            <div></div>
             <div>
-              <svg-icon name="goto" class="goto" @click="goDetail(menuItem)"></svg-icon>
+              <svg-icon
+                name="goto"
+                class="goto"
+                @click="goDetail(menuItem)"
+              ></svg-icon>
             </div>
           </div>
           <div class="liangdian">
@@ -40,20 +43,22 @@
 </template>
 
 <script setup>
-import router from "../../../router/index.js";
-import { onMounted,watch, reactive, ref } from "vue";
+// import router from "../../../router/index.js";
+import { onMounted, watch, reactive, ref } from "vue";
 import { useRoute } from "vue-router";
 import request from "@/utils/request";
 import { ElMessage } from "element-plus";
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const route = useRoute();
 ///
 watch(
   route,
   (newValue, oldValue) => {
-    getProcessList()
+    getProcessList();
   },
-  {deep:true }
+  { deep: true }
 );
 const total = ref(0);
 const handleSizeChange = (val) => {
@@ -66,8 +71,8 @@ const handleCurrentChange = (val) => {
 };
 
 const goDetail = (val) => {
-  router.push({name:'schemeDetail',query: { id: val.id }})
-}
+  router.push({ name: "schemeDetail", query: { id: val.id } });
+};
 
 const pageValue = ref({
   page_num: 1,
@@ -92,7 +97,7 @@ const getProcessList = () => {
     .catch((err) => {
       ElMessage({
         showClose: true,
-       message: err,
+        message: err,
         type: "error",
       });
     });
@@ -102,11 +107,11 @@ onMounted(() => {
   departmentId.value = route.query.id;
   getProcessList();
 });
-
 </script>
 <style lang="scss" scoped>
 .mainpage {
   padding: 20px;
+
   .kuang {
     height: 250px;
     background: url("../../../assets/images/cardbg.png") no-repeat center/cover;
@@ -114,22 +119,27 @@ onMounted(() => {
     margin-bottom: 20px;
     padding: 30px;
     border-radius: 8px;
-    
+
     .title {
       font-size: 24px;
       margin-bottom: 15px;
       display: flex;
-    justify-content: space-between;
+      justify-content: space-between;
+
       .detail {
         float: right;
       }
     }
+
     .titlel {
       display: inline-block;
-      white-space: nowrap; /* 确保文本在一行内显示 */
-      overflow: hidden; /* 隐藏超出容器的内容 */
+      white-space: nowrap;
+      /* 确保文本在一行内显示 */
+      overflow: hidden;
+      /* 隐藏超出容器的内容 */
       text-overflow: ellipsis;
     }
+
     .liangdian {
       margin-top: 10px;
       color: #666;
@@ -139,21 +149,24 @@ onMounted(() => {
       overflow: hidden;
       text-overflow: ellipsis;
     }
+
     .detailLink {
       margin-top: 20px;
       color: #2468f2;
     }
   }
+
   svg {
     width: 40px;
     height: 40px;
   }
+
   .hot {
     margin-left: 15px;
   }
+
   .goto {
     // float: right;
   }
 }
 </style>
-

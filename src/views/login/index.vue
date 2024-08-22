@@ -46,8 +46,10 @@ import {ElMessage} from "element-plus";
 import request from "@/utils/request";
 import {useRoute} from "vue-router";
 import {reactive, watch, ref} from "vue";
-import router from "@/router/index.js";
+// import router from "@/router/index.js";
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 import CryptoJS from 'crypto-js'
 
 
