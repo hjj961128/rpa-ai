@@ -35,12 +35,13 @@ const centerMURL = ref('http://106.14.149.100:8178/index')
 
 onBeforeMount(async ()=>{
 
-  if(sessionStorage.getItem("centerMtoken")){
-    centerMToken.value = sessionStorage.getItem("centerMtoken")
-
-  }else {
-    await getCenterMToken()
-  }
+  await getCenterMToken()
+  // if(sessionStorage.getItem("centerMtoken")){
+  //   centerMToken.value = sessionStorage.getItem("centerMtoken")
+  //
+  // }else {
+  //   await getCenterMToken()
+  // }
 
   centerMIndex.value = `${centerMURL.value}?token=${centerMToken.value}`
 
