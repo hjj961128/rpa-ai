@@ -47,6 +47,10 @@ import request from "@/utils/request";
 import {useRoute} from "vue-router";
 import {reactive, watch, ref} from "vue";
 import router from "@/router/index.js";
+
+import CryptoJS from 'crypto-js'
+
+
 const userStore = useUserCounter();
 const isLogin = true;
 // do not use same name with ref
@@ -76,13 +80,21 @@ watch(
     },
     {deep: true,immediate:true}
 );
+
+const Pandora=(plaintext)=>{
+  const secretKey = 'BiMYkWPwm9e29Leyqoc829Jnhfeu229P'; // 应该是一个复杂的密钥
+  const iv = CryptoJS.enc.Utf8.parse('7392999056822815'); // 初始化向量
+  const encrypted = CryptoJS.AES.encrypt(plaintext, CryptoJS.enc.Utf8.parse(secretKey), { iv: iv,mode:CryptoJS .mode.CBC});
+  return encrypted.toString()
+}
+
 function onSubmit() {
   request({
     method: "POST",
     url: "/api/auth/login",
     data: {
       username: loginForm.name,
-      password: loginForm.praswood,
+      password: Pandora(loginForm.praswood),
     },
   })
     .then(async (res) => {
