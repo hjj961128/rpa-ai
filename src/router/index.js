@@ -1,6 +1,9 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-const router = createRouter({
-  history: createWebHashHistory(import.meta.env.BASE_URL),
+//引入vueRouter
+import * as vueRouter from 'vue-router';
+const router = vueRouter.createRouter({
+  // history: createWebHashHistory(import.meta.env.BASE_URL),
+  history: vueRouter.createWebHashHistory(),
   routes: [
     {
       path: '/', // 如果路由为/
@@ -65,6 +68,12 @@ const router = createRouter({
               name: "workBoxList",
               component: () =>
                 import("@/views/ResultsLibrary/WorkBox/workBoxList.vue"),
+            },
+            {
+              path: "/boxDetail",
+              name: "boxDetail",
+              component: () =>
+                import("@/views/ResultsLibrary/WorkBox/boxDetail.vue"),
             },
           ]
         },

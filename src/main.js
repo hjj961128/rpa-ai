@@ -21,7 +21,8 @@ import {createPinia} from 'pinia'
 
 //svg
 import svgIcon from './components/svgIcon.vue';
-
+import vue3videoPlay from 'vue3-video-play' // 引入组件
+import 'vue3-video-play/dist/style.css' // 引入css
 const whiteList = ['/login']
 // 导航守卫
 router.beforeEach((to, from, next) => {
@@ -55,6 +56,7 @@ const app = createApp(App)
 
 const pinia = createPinia()
 //挂载到全局
+app.use(vue3videoPlay)
 app.use(pinia)
 app.component('svg-icon', svgIcon);
 app.use(ElementPlus, {locale: zhCn})

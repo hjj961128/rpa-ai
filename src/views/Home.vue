@@ -50,7 +50,7 @@
         <el-col :span="6" :offset="1">
           <div class="bottom-div">
             <div class="bottom-title">
-              <span class="bottom-title-txt"> RPA与传统人工成本对比</span>
+              <span class="bottom-title-txt"> RPA与传统人工运行次数对比</span>
             </div>
             <div
               id="myEcharts1"
@@ -59,10 +59,25 @@
           </div>
         </el-col>
         <el-col :span="6" :offset="2">
-          <div class="bottom-div">sas</div>
+          <div class="bottom-div">
+            <div class="bottom-title">
+              <span class="bottom-title-txt"> RPA与传统人工运行次数对比</span>
+            </div>
+            <div
+              id="myEcharts1"
+              :style="{ width: '370px', height: '350px', background: '#fff' }"
+            ></div>
+          </div>
         </el-col>
-        <el-col :span="6" :offset="2">
-          <div class="bottom-div">sas</div>
+        <el-col :span="6" :offset="2"><div class="bottom-div">
+            <div class="bottom-title">
+              <span class="bottom-title-txt"> RPA与传统人工运行次数对比</span>
+            </div>
+            <div
+              id="myEcharts1"
+              :style="{ width: '370px', height: '350px', background: '#fff' }"
+            ></div>
+          </div><div class="bottom-div">sas</div>
         </el-col>
       </el-row>
     </div>
@@ -73,49 +88,47 @@
 import { onMounted, reactive, ref } from "vue";
 import * as echarts from "echarts";
 
-
-
 onMounted(() => {
-  const chartDom = document.getElementById('myEcharts1');
-const myChart = echarts.init(chartDom);
+  const chartDom = document.getElementById("myEcharts1");
+  const myChart = echarts.init(chartDom);
   const option = {
-  title: {
-    text: 'World Population'
-  },
-  tooltip: {
-    trigger: 'axis',
-    axisPointer: {
-      type: 'shadow'
-    }
-  },
-  legend: {},
-  grid: {
-    left: '3%',
-    right: '4%',
-    bottom: '3%',
-    containLabel: true
-  },
-  yAxis: {
-    type: 'value',
-    boundaryGap: [0, 0.01]
-  },
-  xAxis: {
-    type: 'category',
-    data: ['Brazil', 'Indonesia', 'USA', 'India', 'China', 'World']
-  },
-  series: [
-    {
-      name: '2011',
-      type: 'bar',
-      data: [18203, 23489, 29034, 104970, 131744, 630230]
+    // title: {
+    //   text: 'World Population'
+    // },
+    tooltip: {
+      trigger: "axis",
+      axisPointer: {
+        type: "shadow",
+      },
     },
-    {
-      name: '2012',
-      type: 'bar',
-      data: [19325, 23438, 31000, 121594, 134141, 681807]
-    }
-  ]
-};
+    legend: {},
+    grid: {
+      left: "3%",
+      right: "4%",
+      bottom: "3%",
+      containLabel: true,
+    },
+    yAxis: {
+      type: "value",
+      boundaryGap: [0, 0.01],
+    },
+    xAxis: {
+      type: "category",
+      data: ["第一季度", "第二季度", "第三季度", "第四季度"],
+    },
+    series: [
+      {
+        name: "传统人工",
+        type: "bar",
+        data: [351, 414, 367, 256],
+      },
+      {
+        name: "RPA智能机器人",
+        type: "bar",
+        data: [1150, 1400, 1021, 1255],
+      },
+    ],
+  };
   option && myChart.setOption(option);
 });
 </script>
@@ -123,9 +136,12 @@ const myChart = echarts.init(chartDom);
 .top-title {
   width: 100%;
   height: 180px;
-  background-image: url("../assets/images/home-bg.jpg"); /* 替换为你的图片路径 */
-  background-size: cover; /* 背景图片覆盖整个元素 */
-  background-repeat: no-repeat; /* 背景图片不重复 */
+  background-image: url("../assets/images/home-bg.jpg");
+  /* 替换为你的图片路径 */
+  background-size: cover;
+  /* 背景图片覆盖整个元素 */
+  background-repeat: no-repeat;
+  /* 背景图片不重复 */
   p {
     padding: 25px;
     width: 60%;
@@ -136,6 +152,7 @@ const myChart = echarts.init(chartDom);
     color: #333;
   }
 }
+
 .top-div {
   margin-top: 20px;
   height: 200px;
@@ -144,11 +161,13 @@ const myChart = echarts.init(chartDom);
   box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.2);
   padding-top: 20px;
   width: 20%;
+
   .iconImg {
     width: 100%;
     margin: 0 auto;
     text-align: center;
   }
+
   .icontitle {
     margin-top: 10px;
     width: 100%;
@@ -157,6 +176,7 @@ const myChart = echarts.init(chartDom);
     font-size: 18px;
     color: #333;
   }
+
   .iconTxt {
     width: 80%;
     margin: 10px auto;
@@ -164,10 +184,12 @@ const myChart = echarts.init(chartDom);
     color: #333;
   }
 }
+
 .bottom-div {
   margin-top: 30px;
   height: 500px;
   box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.2);
+
   .bottom-title {
     width: 100%;
     background-color: #fff;
@@ -176,17 +198,20 @@ const myChart = echarts.init(chartDom);
     font-size: 14px;
     color: #333;
     border-bottom: 1px solid #eaeaea;
+
     .bottom-title-txt {
       display: inline-block;
       margin-left: 20px;
     }
   }
 }
+
 svg {
   width: 48px;
   height: 48px;
   color: rgb(81, 81, 81);
 }
+
 .flex-container {
   display: flex;
   justify-content: space-around;

@@ -42,7 +42,22 @@
       <div class="title1">{{ processList.name }}</div>
       <div class="centerview">
         <div class="left">
-          <img src="../../../assets/images/u45.png" alt="" />
+          <!-- <img src="../../../assets/images/u45.png" alt="" />
+           -->
+          <vue3VideoPlay
+            width="100%"
+            title="视屏演示"
+            :src="videoUrl"
+            @play="onPlay"
+            @pause="onPause"
+            @timeupdate="onTimeupdate"
+            @canplay="onCanplay"
+          />
+          <!-- :poster="options.poster"
+            @play="onPlay"
+            @pause="onPause"
+            @timeupdate="onTimeupdate"
+            @canplay="onCanplay" -->
         </div>
         <div class="right">
           <div class="show">
@@ -66,14 +81,14 @@
             <div class="showDetail">{{ processList.business_system }}</div>
             <div class="showui"></div>
           </div>
-          <div class="show">
+          <div class="show" v-if="processList.full_file_url">
             <div class="showTitle">流程文件</div>
-            <!-- <div class="showDetail">流程文件下载</div> -->
-            <el-link type="primary">{{
+            <!-- <el-link type="primary">{{
               processList.file_url
-                ? processList.file_url
+                ? processList.full_file_url
                 : "https://www.baidu.com/"
-            }}</el-link>
+            }}</el-link> -->
+            <a :href="processList.full_file_url">下载</a>
           </div>
           <div class="show">
             <div class="showTitle">执行方式</div>
@@ -269,14 +284,14 @@
             </p>
           </div>
         </el-form-item>
-        <el-form-item label="启动时间">
+        <el-form-item label="启动时间" v-if="runModeTypeNum == '2'">
           <el-date-picker
             v-model="startTime"
             placeholder="请输入启动时间"
             :disabled-date="disabledDate"
           />
         </el-form-item>
-        <el-form-item label="结束时间">
+        <el-form-item label="结束时间" v-if="runModeTypeNum == '2'">
           <el-date-picker
             v-model="endTime"
             placeholder="请输入结束时间"
@@ -298,6 +313,8 @@
 import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import { ElMessage, ElMessageBox } from "element-plus";
+const baseURL = ref(import.meta.env.VUE_APP_BASE_URL);
+import httpClient from "../../../utils/request.js";
 
 import request from "@/utils/request";
 const disabledDate = (time) => {
@@ -429,12 +446,12 @@ const runModeType = (val) => {
   runModeVisible.value = true;
   runModeTypeNum.value = val;
   runModeForm.value = {
-    tiggerName: null,//触发器名称
-    name: processList.value.name,//流程名称
-    isWorker: false,//是否自动分配worker
-    workerName: null,//worker名称
-    choiceTime: "eDay",//执行频率每日周月
-    timeType: "dayday",//按日/每月最后一天
+    tiggerName: null, //触发器名称
+    name: processList.value.name, //流程名称
+    isWorker: false, //是否自动分配worker
+    workerName: null, //worker名称
+    choiceTime: "eDay", //执行频率每日周月
+    timeType: "dayday", //按日/每月最后一天
     timeHM: "00:00",
     monthDay: ["1"],
   };
@@ -442,8 +459,8 @@ const runModeType = (val) => {
   endTime.value = null;
   checkAllWeeks.value = false;
   checkedWeeks.value = ["1"];
-  checkAllMonth.value = false
-  checkedMonth.value = ["1"]
+  checkAllMonth.value = false;
+  checkedMonth.value = ["1"];
 };
 
 const taskList = ref([]);
@@ -639,20 +656,46 @@ const getProcessList = () => {
       });
     });
 };
+const onPlay = (ev) => {
+  console.log("播放");
+};
+const onPause = (ev) => {
+  console.log(ev, "暂停");
+};
+
+const onTimeupdate = (ev) => {
+  console.log(ev, "时间更新");
+};
+const onCanplay = (ev) => {
+  console.log(ev, "可以播放");
+};
+const videoUrl = ref(null);
+const getVideo = () => {
+  videoUrl.value =
+    httpClient.defaults.baseURL + "api/process/video?id=" + route.query.id;
+  console.log(videoUrl.value);
+
+};
+
 onMounted(() => {
   getProcessList();
   getWorkerList();
   getProcessParams();
+  getVideo();
 });
 </script>
 <style lang="scss" scoped>
 .top-title {
   width: 100%;
   height: 180px;
-  background-image: url("../assets/images/home-bg.jpg"); /* 替换为你的图片路径 */
-  background-size: cover; /* 背景图片覆盖整个元素 */
-  background-repeat: no-repeat; /* 背景图片不重复 */
+  background-image: url("../assets/images/home-bg.jpg");
+  /* 替换为你的图片路径 */
+  background-size: cover;
+  /* 背景图片覆盖整个元素 */
+  background-repeat: no-repeat;
+  /* 背景图片不重复 */
 }
+
 .top-div {
   margin-top: 20px;
   height: 200px;
@@ -660,11 +703,13 @@ onMounted(() => {
   background-color: #fff;
   box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.08);
   padding-top: 20px;
+
   .iconImg {
     width: 100%;
     margin: 0 auto;
     text-align: center;
   }
+
   .icontitle {
     margin-top: 10px;
     width: 100%;
@@ -673,6 +718,7 @@ onMounted(() => {
     font-size: 18px;
     color: #333;
   }
+
   .iconTxt {
     width: 80%;
     margin: 10px auto;
@@ -680,11 +726,13 @@ onMounted(() => {
     color: #333;
   }
 }
+
 svg {
   width: 48px;
   height: 48px;
   color: rgb(81, 81, 81);
 }
+
 .title1 {
   width: 100%;
   margin-top: 20px;
@@ -693,16 +741,20 @@ svg {
   font-size: 28px;
   line-height: 50px;
 }
+
 .centerview {
   display: flex;
+
   .left {
     width: 50%;
     padding: 40px;
+
     // height: 600px;
     img {
       width: 100%;
     }
   }
+
   .right {
     width: 50%;
     padding: 50px;
@@ -710,15 +762,20 @@ svg {
     // display: inline-block;
   }
 }
+
 .bottom {
   .card {
     width: 80%;
     padding: 20px;
     margin-left: 10%;
     height: 200px;
-    background-image: url("../../../assets/images/bbg.png"); /* 替换为你的图片路径 */
-    background-size: cover; /* 背景图片覆盖整个元素 */
-    background-repeat: no-repeat; /* 背景图片不重复 */
+    background-image: url("../../../assets/images/bbg.png");
+    /* 替换为你的图片路径 */
+    background-size: cover;
+    /* 背景图片覆盖整个元素 */
+    background-repeat: no-repeat;
+
+    /* 背景图片不重复 */
     // text-align: center;
     .title {
       width: 100%;
@@ -726,6 +783,7 @@ svg {
       font-weight: 700;
       margin-left: 20px;
     }
+
     .detail {
       margin-left: 20px;
       margin-top: 20px;
@@ -736,21 +794,32 @@ svg {
     }
   }
 }
+
 .showTitle:before {
-  content: ""; /* 使用空内容生成内容 */
-  background-color: #2468f2; /* 设置背景颜色为蓝色 */
-  border-radius: 3px; /* 圆点形状 */
-  display: inline-block; /* 使其成为行内块元素 */
-  width: 6px; /* 宽度 */
-  height: 16px; /* 高度 */
-  margin-left: -1.5em; /* 向左移动半个列表项内边距，使得小圆点与文本对齐 */
-  margin-right: 0.5em; /* 向右移动，为了间隔效果 */
+  content: "";
+  /* 使用空内容生成内容 */
+  background-color: #2468f2;
+  /* 设置背景颜色为蓝色 */
+  border-radius: 3px;
+  /* 圆点形状 */
+  display: inline-block;
+  /* 使其成为行内块元素 */
+  width: 6px;
+  /* 宽度 */
+  height: 16px;
+  /* 高度 */
+  margin-left: -1.5em;
+  /* 向左移动半个列表项内边距，使得小圆点与文本对齐 */
+  margin-right: 0.5em;
+  /* 向右移动，为了间隔效果 */
 }
+
 .showTitle {
   font-size: 18px;
   line-height: 18px;
   margin-bottom: 15px;
 }
+
 .showDetail,
 .showui {
   margin-top: 10px;
@@ -758,17 +827,27 @@ svg {
   font-size: 14px;
   color: #333;
 }
+
 .show {
   margin-top: 10px;
 }
+
 .cardTitle:before {
-  content: ""; /* 使用空内容生成内容 */
-  background-color: #2468f2; /* 设置背景颜色为蓝色 */
-  border-radius: 3px; /* 圆点形状 */
-  display: inline-block; /* 使其成为行内块元素 */
-  width: 6px; /* 宽度 */
-  height: 16px; /* 高度 */
-  margin-left: -1.5em; /* 向左移动半个列表项内边距，使得小圆点与文本对齐 */
-  margin-right: 0.5em; /* 向右移动，为了间隔效果 */
+  content: "";
+  /* 使用空内容生成内容 */
+  background-color: #2468f2;
+  /* 设置背景颜色为蓝色 */
+  border-radius: 3px;
+  /* 圆点形状 */
+  display: inline-block;
+  /* 使其成为行内块元素 */
+  width: 6px;
+  /* 宽度 */
+  height: 16px;
+  /* 高度 */
+  margin-left: -1.5em;
+  /* 向左移动半个列表项内边距，使得小圆点与文本对齐 */
+  margin-right: 0.5em;
+  /* 向右移动，为了间隔效果 */
 }
 </style>
