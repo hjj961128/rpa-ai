@@ -82,6 +82,7 @@ watch(
 );
 
 const Pandora=(plaintext)=>{
+  if(!plaintext) return null
   const secretKey = 'BiMYkWPwm9e29Leyqoc829Jnhfeu229P'; // 应该是一个复杂的密钥
   const iv = CryptoJS.enc.Utf8.parse('7392999056822815'); // 初始化向量
   const encrypted = CryptoJS.AES.encrypt(plaintext, CryptoJS.enc.Utf8.parse(secretKey), { iv: iv,mode:CryptoJS .mode.CBC});
