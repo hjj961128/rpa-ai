@@ -60,6 +60,8 @@
             {{ statusList[row.status] }}
           </template>
         </el-table-column>
+        <el-table-column prop="comment" label="备注" />
+
         <el-table-column prop="id" label="操作" width="120">
           <template #default="scope">
             <!-- {{ scope.row.date }} -->

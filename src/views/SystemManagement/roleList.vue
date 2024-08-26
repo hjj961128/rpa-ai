@@ -35,7 +35,7 @@
                 >增加用户</el-button
               >
             </el-form-item>
-          </el-col> 
+          </el-col>
         </el-row>
       </el-form>
     </div> -->
@@ -49,6 +49,9 @@
         </el-table-column>
         <!-- <el-table-column prop="id" label="用户id" /> -->
         <el-table-column prop="name" label="角色名称" />
+        <el-table-column prop="code" label="角色标识" />
+        <el-table-column prop="comment" label="备注" />
+
         <el-table-column prop="created_at" label="发起时间">
           <template #default="{ row }">
             <div>{{ new Date(row.created_at).toLocaleString() }}</div>
@@ -404,6 +407,6 @@ onMounted(() => {
 }
 .btns {
   // float: right;
-  
+
 }
 </style>
