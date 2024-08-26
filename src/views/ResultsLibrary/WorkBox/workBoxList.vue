@@ -8,25 +8,47 @@
         placeholder="输入工具箱名称条件查询"
         class="input-with-select"
         size="large"
+        clearable
       >
         <template #append>
-          <el-button type="primary">搜索</el-button>
+          <el-button @click="queryBoxList('1')" type="primary"
+            >搜索</el-button
+          >
         </template>
       </el-input>
     </div>
     <div class="toplist">
-      <el-card class="boxcard" v-for="(item, index) in boxList" :key="index">
-        <img src="../../../assets/images/login-bg.png" alt="" />
-        <p class="title">{{ item.title }}</p>
-        <p class="jianjie">
-          {{ item.description }}
-        </p>
-        <div class="bth">
-          <el-button @click="toDetail(item)" key="primary" type="primary" link>
-            了解详情 >
-          </el-button>
-        </div>
-      </el-card>
+      <el-row :gutter="20">
+        <el-col v-for="(item, index) in boxList" :key="index" :span="6">
+          <el-card class="boxcard">
+            <img src="../../../assets/images/login-bg.png" alt="" />
+            <p class="title">{{ item.title }}</p>
+            <p class="jianjie">
+              {{ item.description }}
+            </p>
+            <div class="bth">
+              <el-button
+                @click="toDetail(item)"
+                key="primary"
+                type="primary"
+                link
+              >
+                了解详情 >
+              </el-button>
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>
+      <el-pagination
+      v-model:current-page="pageValue.page_num"
+      v-model:page-size="pageValue.page_size"
+      layout="total, prev, pager, next"
+      :total="total"
+      background
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      style="margin-top: 10px; display: flex; justify-content: center"
+    />
     </div>
   </div>
 </template>
@@ -36,19 +58,35 @@ import { Search } from "@element-plus/icons-vue";
 import request from "@/utils/request";
 // import router from "../../../router/index.js";
 import { ElMessage } from "element-plus";
-import { useRouter } from 'vue-router';
+import { useRouter } from "vue-router";
 const router = useRouter();
-
-const searchValue = ref("");
-const form = ref({
-  name: "",
+const pageValue = ref({
   page_num: 1,
   page_size: 8,
+});
+const total = ref(0);
+const searchValue = ref("");
+const form = ref({
+  title: null,
+  page_num: pageValue.value.page_num,
+  page_size: pageValue.value.page_size,
   limit: true,
   type: 0,
 });
+const handleSizeChange = (val) => {
+  form.value.page_size = val;
+  getProcessList();
+};
+const handleCurrentChange = (val) => {
+  form.value.page_num = val;
+  queryBoxList();
+};
 const boxList = ref([]);
-const queryBoxList = () => {
+const queryBoxList = (val) => {
+  if (val=='1') {
+    form.value.title = searchValue.value;
+  }
+  console.log(form.value);
   request({
     method: "GET",
     url: "/api/tool",
@@ -56,6 +94,7 @@ const queryBoxList = () => {
   })
     .then((res) => {
       boxList.value = res.data.data.list;
+      total.value = res.data.data.total;
     })
     .catch((err) => {
       ElMessage({
@@ -81,17 +120,16 @@ onMounted(() => {
   }
   .toplist {
     margin-top: 50px;
-    display: flex;
-    flex-flow: column;
-    justify-content: space-around;
     width: 100%;
     .boxcard {
-      width: 20%;
+      margin-bottom: 20px;
       img {
         width: 100%;
+        height: 200px;
       }
       .title {
         margin-top: 5px;
+        height: 35px;
         font-weight: 900;
         font-size: 20px;
         overflow: hidden;
@@ -102,6 +140,7 @@ onMounted(() => {
       }
       .jianjie {
         margin-top: 5px;
+        height: 70px;
         font-size: 14px;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -114,15 +153,5 @@ onMounted(() => {
       }
     }
   }
-}
-.el-input-group__append button.el-button,
-.el-input-group__append button.el-button:hover,
-.el-input-group__append div.el-select .el-select__wrapper,
-.el-input-group__append div.el-select:hover .el-select__wrapper,
-.el-input-group__prepend button.el-button,
-.el-input-group__prepend button.el-button:hover,
-.el-input-group__prepend div.el-select .el-select__wrapper,
-.el-input-group__prepend div.el-select:hover .el-select__wrapper {
-  // background-color: ;
 }
 </style>

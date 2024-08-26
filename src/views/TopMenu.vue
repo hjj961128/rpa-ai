@@ -39,7 +39,9 @@
         >
       </el-sub-menu>
       <el-menu-item index="/processlist">流程画布</el-menu-item>
-      <el-menu-item index="/center" v-if="hasPermission()">中控管理</el-menu-item>
+      <el-menu-item index="/center" v-if="hasPermission()"
+        >中控管理</el-menu-item
+      >
       <el-menu-item index="/roleList">系统管理</el-menu-item>
       <div class="userinfo">
         <el-dropdown>
@@ -67,7 +69,13 @@
     width="500"
     style="text-align: left"
   >
-    <el-form :model="passwordForm" label-width="auto" style="max-width: 600px">
+    <el-form
+      :rules="rules"
+      ref="passwordFormRef"
+      :model="passwordForm"
+      label-width="auto"
+      style="max-width: 600px"
+    >
       <el-form-item label="密码">
         <el-input v-model="passwordForm.password" />
       </el-form-item>
@@ -88,10 +96,9 @@ import { onMounted, ref } from "vue";
 import request from "@/utils/request";
 // import router from "../router/index.js";
 import { ElMessage } from "element-plus";
-import { ArrowDown } from '@element-plus/icons-vue'
-function handleSelect(val) {
-}
-import { useRouter } from 'vue-router';
+import { ArrowDown } from "@element-plus/icons-vue";
+function handleSelect(val) {}
+import { useRouter } from "vue-router";
 const router = useRouter();
 
 const goLogin = () => {
@@ -122,14 +129,14 @@ const putPassword = () => {
     .catch((err) => {
       ElMessage({
         showClose: true,
-       message: err,
+        message: err,
         type: "error",
       });
     })
     .catch((err) => {
       ElMessage({
         showClose: true,
-       message: err,
+        message: err,
         type: "error",
       });
     });
@@ -137,15 +144,11 @@ const putPassword = () => {
 
 const userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
 
-onMounted(() => {
+onMounted(() => {});
 
-});
-
-const hasPermission=()=>{
-
-  return userInfo.roles.indexOf('admin') !== -1;
-}
-
+const hasPermission = () => {
+  return userInfo.roles.indexOf("admin") !== -1;
+};
 </script>
 <style lang="scss" scoped>
 .el-menu {

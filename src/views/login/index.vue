@@ -10,14 +10,21 @@
           <div class="login-title">{{ isLogin ? "登录" : "重置密码" }}</div>
           <el-form
             :model="loginForm"
+            :rules="rules"
+            ref="loginFormRef"
             label-width="auto"
             style="max-width: 600px"
             auto-complete="on"
           >
-            <el-form-item ant-row ant-form-item label="用户名">
-              <el-input placeholder="请输入用户名" v-model="loginForm.name" clearable auto-complete="on" />
+            <el-form-item prop="name" ant-row ant-form-item label="用户名">
+              <el-input
+                placeholder="请输入用户名"
+                v-model="loginForm.name"
+                clearable
+                auto-complete="on"
+              />
             </el-form-item>
-            <el-form-item label="密码">
+            <el-form-item label="密码" prop="praswood">
               <el-input
                 placeholder="请输入密码"
                 show-password
@@ -41,17 +48,16 @@
 </template>
 
 <script setup>
-import {useUserCounter} from "@/stores/user";
-import {ElMessage} from "element-plus";
+import { useUserCounter } from "@/stores/user";
+import { ElMessage } from "element-plus";
 import request from "@/utils/request";
-import {useRoute} from "vue-router";
-import {reactive, watch, ref} from "vue";
+import { useRoute } from "vue-router";
+import { reactive, watch, ref } from "vue";
 // import router from "@/router/index.js";
-import { useRouter } from 'vue-router';
+import { useRouter } from "vue-router";
 
 const router = useRouter();
-import CryptoJS from 'crypto-js'
-
+import CryptoJS from "crypto-js";
 
 const userStore = useUserCounter();
 const isLogin = true;
@@ -60,66 +66,99 @@ const loginForm = reactive({
   name: "",
   praswood: "",
 });
-const redirect = ref(null)
-const otherQuery = ref({})
+const loginFormRef = ref(null);
+const validateUsername = (rule, value, callback) => {
+  if (value === "") {
+    callback(new Error("请输入用户名"));
+  } else {
+    callback();
+  }
+};
+
+const validatePassword = (rule, value, callback) => {
+  if (value === "") {
+    callback(new Error("请输入密码"));
+  } else {
+    callback();
+  }
+};
+
+const rules = {
+  name: [{ validator: validateUsername, trigger: "blur" }],
+  praswood: [{ validator: validatePassword, trigger: "blur" }],
+};
+
+const redirect = ref(null);
+const otherQuery = ref({});
 const route = useRoute();
 const getOtherQuery = (query) => {
   return Object.keys(query).reduce((acc, cur) => {
-    if (cur !== 'redirect') {
-      acc[cur] = query[cur]
+    if (cur !== "redirect") {
+      acc[cur] = query[cur];
     }
-    return acc
-  }, {})
-}
+    return acc;
+  }, {});
+};
 watch(
-    route,
-    (newValue, oldValue) => {
-      const query = route.query
-      if (query) {
-        redirect.value = query.redirect
-        otherQuery.value = getOtherQuery(query)
-      }
-    },
-    {deep: true,immediate:true}
+  route,
+  (newValue, oldValue) => {
+    const query = route.query;
+    if (query) {
+      redirect.value = query.redirect;
+      otherQuery.value = getOtherQuery(query);
+    }
+  },
+  { deep: true, immediate: true }
 );
 
-const Pandora=(plaintext)=>{
-  if(!plaintext) return ''
-  const secretKey = 'BiMYkWPwm9e29Leyqoc829Jnhfeu229P'; // 应该是一个复杂的密钥
-  const iv = CryptoJS.enc.Utf8.parse('7392999056822815'); // 初始化向量
-  const encrypted = CryptoJS.AES.encrypt(plaintext, CryptoJS.enc.Utf8.parse(secretKey), { iv: iv,mode:CryptoJS .mode.CBC});
-  return encrypted.toString()
-}
+const Pandora = (plaintext) => {
+  if (!plaintext) return "";
+  const secretKey = "BiMYkWPwm9e29Leyqoc829Jnhfeu229P"; // 应该是一个复杂的密钥
+  const iv = CryptoJS.enc.Utf8.parse("7392999056822815"); // 初始化向量
+  const encrypted = CryptoJS.AES.encrypt(
+    plaintext,
+    CryptoJS.enc.Utf8.parse(secretKey),
+    { iv: iv, mode: CryptoJS.mode.CBC }
+  );
+  return encrypted.toString();
+};
 
 function onSubmit() {
-  request({
-    method: "POST",
-    url: "/api/auth/login",
-    data: {
-      username: loginForm.name,
-      password: Pandora(loginForm.praswood),
-    },
-  })
-    .then(async (res) => {
-      sessionStorage.setItem("Authorization", res.data.data.access_token);
-      sessionStorage.setItem("refresh_token", res.data.data.refresh_token);
-      ElMessage({
-        showClose: true,
-        message: "登录成功",
-        type: "success",
-      });
-      if (sessionStorage.getItem("Authorization")) {
-        await userStore.setUserInfo();
-      }
-      router.push({path: redirect.value || '/', query: otherQuery.value})
-    })
-    .catch((err) => {
-      ElMessage({
-        showClose: true,
-       message: err,
-        type: "error",
-      });
-    });
+  loginFormRef.value.validate((valid) => {
+    if (valid) {
+      request({
+        method: "POST",
+        url: "/api/auth/login",
+        data: {
+          username: loginForm.name,
+          password: Pandora(loginForm.praswood),
+        },
+      })
+        .then(async (res) => {
+          sessionStorage.setItem("Authorization", res.data.data.access_token);
+          sessionStorage.setItem("refresh_token", res.data.data.refresh_token);
+          ElMessage({
+            showClose: true,
+            message: "登录成功",
+            type: "success",
+          });
+          if (sessionStorage.getItem("Authorization")) {
+            await userStore.setUserInfo();
+          }
+          router.push({ path: redirect.value || "/", query: otherQuery.value });
+        })
+        .catch((err) => {
+          ElMessage({
+            showClose: true,
+            message: err,
+            type: "error",
+          });
+        });
+    } else {
+      ElMessage.error("登录失败");
+      return false;
+    }
+  });
 }
 </script>
 
