@@ -81,7 +81,7 @@
 </template>
 
 <script setup>
-import { onMounted, reactive, ref } from "vue";
+import { onMounted, reactive, ref ,onBeforeUnmount} from "vue";
 import * as echarts from "echarts";
 import { ElMessage, ElMessageBox } from "element-plus";
 import request from "@/utils/request";
@@ -238,6 +238,24 @@ onMounted(() => {
   };
   option && myChart.setOption(option);
   option2 && myChart2.setOption(option2);
+
+  const resizeChart = () => {
+    if (myChart) {
+      myChart.resize();
+    }
+    if (myChart2) {
+      myChart2.resize();
+    }
+  };
+
+  window.addEventListener('resize', resizeChart);
+
+
+
+ onBeforeUnmount(() => {
+    window.removeEventListener('resize', resizeChart);
+    // chartInstance.dispose();
+  });
 });
 </script>
 <style lang="scss" scoped>
@@ -254,7 +272,6 @@ onMounted(() => {
     padding: 25px;
     width: 60%;
     font-weight: 800;
-    font-weight: 28px;
     line-height: 36px;
     text-indent: 2ch;
     color: #333;
