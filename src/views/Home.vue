@@ -117,7 +117,11 @@ const getProcessList = (val) => {
 onMounted(() => {
   getProcessList();
   const chartDom = document.getElementById("myEcharts1");
+   // 删除_echarts_instance_属性
+  chartDom.removeAttribute("_echarts_instance_");
   const chartDom2 = document.getElementById("myEcharts2");
+  chartDom2.removeAttribute("_echarts_instance_");
+
   const myChart = echarts.init(chartDom);
   const myChart2 = echarts.init(chartDom2);
   const option = {

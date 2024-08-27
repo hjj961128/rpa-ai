@@ -1,7 +1,7 @@
 <template>
   <div class="main_page">
     <div>
-      <el-button @click="publish" type="primary" class="">
+      <el-button plain @click="publish" type="primary" class="btn">
         发布
         <el-icon class="el-icon--right">
           <Upload />
@@ -47,7 +47,6 @@ const publish = () => {
         message: "发布成功",
       });
       router.push({ name: "processlist" });
-
     })
     .catch((err) => {
       ElMessage({
@@ -87,5 +86,8 @@ onMounted(() => {
   height: 100%;
   border: none;
   z-index: 9;
+}
+.btn{
+  width: 100%;
 }
 </style>

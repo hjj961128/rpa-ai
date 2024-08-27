@@ -580,7 +580,7 @@ const clickTask = (val) => {
       .then((res) => {
         ElMessage({
           type: "success",
-          message: "运行成功",
+          message: "任务已下发，客户端即将运行",
         });
         runModeVisible.value = false;
       })
@@ -617,7 +617,7 @@ const clickTask = (val) => {
       .then((res) => {
         ElMessage({
           type: "success",
-          message: "运行成功",
+          message: "任务已下发，客户端即将运行",
         });
         runModeVisible.value = false;
       })
