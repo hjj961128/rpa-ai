@@ -1,11 +1,17 @@
 <template>
   <div class="main_page">
-    <div>
+    <div class="action">
+
+      <el-button plain @click="goBack" type="primary" class="btn">
+        <el-icon><Back /></el-icon>
+        返回
+      </el-button>
+
       <el-button plain @click="publish" type="primary" class="btn">
-        发布
         <el-icon class="el-icon--right">
           <Upload />
         </el-icon>
+        发布
       </el-button>
     </div>
     <iframe
@@ -21,7 +27,7 @@
 <script setup>
 import { onMounted, watch, ref } from "vue";
 import { useRoute } from "vue-router";
-import { Upload } from "@element-plus/icons-vue";
+import { Upload,Back} from "@element-plus/icons-vue";
 import request from "@/utils/request";
 import { ElMessage, ElMessageBox } from "element-plus";
 
@@ -56,6 +62,11 @@ const publish = () => {
       });
     });
 };
+
+const goBack=()=>{
+  router.go(-1)
+}
+
 onMounted(() => {
   const token = sessionStorage.getItem("centerMtoken");
   iframe.value = `${iframeSrc}?token=${token}`;
@@ -87,7 +98,12 @@ onMounted(() => {
   border: none;
   z-index: 9;
 }
-.btn{
+.action{
   width: 100%;
+  display: flex;
+  //justify-content: space-around;
+  .btn{
+    width: 50%;
+  }
 }
 </style>
