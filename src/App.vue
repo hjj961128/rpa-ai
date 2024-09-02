@@ -3,7 +3,7 @@ import { RouterView } from "vue-router";
 </script>
 
 <template>
-  <RouterView />  
+  <RouterView />
 </template>
 <style lang="scss">
 body {
@@ -11,28 +11,11 @@ body {
   color: #000;
 }
 .el-menu--horizontal > .el-sub-menu .el-sub-menu__title {
-  width: 150px !important;
   color: #fff !important;
   font-size: 20px !important;
   font-weight: 700 !important;
 }
-.el-sub-menu__icon-arrow {
-  color: #fff !important;
-  font-weight: 700 !important;
-  width: 150px !important;
-  right: -40px !important;
-}
-/* .el-tooltip__trigger  {
-    background-color: red;
-} */
-.el-sub-menu.is-opened .el-sub-menu__list {
-  display: block; /* 显示子菜单列表 */
-  background-color: red !important;
-}
-.el-menu-bg-color {
-  background-color: red !important;
-}
-.el-menu--popup{
+.el-menu--popup {
   background-color: #1657b2;
   padding: 0;
   color: #fff;
@@ -43,9 +26,6 @@ body {
   background-color: #1657b2;
   color: #fff;
 }
-.el-sub-menu.is-active .el-sub-menu__title{
-  background-color: rgba(0, 0, 0, 0.2);
-}
 /* 隐藏滚动条 */
 ::-webkit-scrollbar {
   display: none;
@@ -55,5 +35,34 @@ body {
 body {
   overflow: -moz-scrollbars-none;
   -ms-overflow-style: none;
+}
+.test {
+  border: none !important;
+  .el-menu {
+    // 修改二级菜单整个背景颜色
+    background-color: #1657b2;
+    text-align: center;
+    // 二级菜单中的子选项
+    .el-menu-item {
+      background-color: transparent !important;
+      color: #fff !important;
+      // width: 100%;
+      font-size: 14px;
+      text-align: center;
+      // 被选择的子选项
+      &:not(.is-disabled):hover {
+        background-color: rgba(0, 0, 0, 0.2) !important;
+        // width: 100%;
+        text-align: center;
+      }
+    }
+  }
+  // 弹出的二级菜单
+  .el-menu--popup {
+    background-color: #1657b2 !important;
+    min-width: 6.5rem !important;
+    min-height: 7rem !important;
+    text-align: center!important;
+  }
 }
 </style>

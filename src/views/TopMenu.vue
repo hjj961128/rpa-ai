@@ -10,7 +10,7 @@
       @select="handleSelect"
     >
       <el-menu-item index="/home">首页</el-menu-item>
-      <el-sub-menu index="2">
+      <el-sub-menu index="2" popper-class="test">
         <template #title>成果库</template>
         <el-menu-item
           style="
@@ -18,7 +18,6 @@
             height: 60px;
             line-height: 60px;
             color: #fff;
-            width: 100%;
             text-align: center;
             font-size: 16px;
           "
@@ -30,7 +29,6 @@
             height: 60px;
             line-height: 60px;
             color: #fff;
-            width: 100%;
             text-align: center;
             font-size: 16px;
           "
@@ -152,7 +150,7 @@ const hasPermission = () => {
 </script>
 <style lang="scss" scoped>
 .el-menu {
-  border-bottom: 0 !important;
+  text-align: center;
 }
 .el-menu-demo {
   width: 100%;
