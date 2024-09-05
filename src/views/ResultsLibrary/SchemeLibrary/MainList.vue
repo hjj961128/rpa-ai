@@ -1,5 +1,18 @@
 <template>
   <div class="mainpage">
+    <!-- 面包屑 -->
+    <div style="margin:20px">
+      <el-breadcrumb separator="/">
+        <el-breadcrumb-item>
+          <el-link type="primary" @click="gohome()">首页</el-link>
+        </el-breadcrumb-item>
+        <el-breadcrumb-item>
+          <el-link type="primary" @click="goBack()"
+            >上一页</el-link
+          ></el-breadcrumb-item
+        >
+      </el-breadcrumb>
+    </div>
     <el-row :gutter="20">
       <el-col
         v-for="(menuItem, index) in departmentList"
@@ -40,6 +53,12 @@ import request from "@/utils/request";
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
+const gohome = () => {
+  router.push("/home");
+};
+const goBack = () => {
+  router.go(-1);
+};
 const handleOpen = (key, keyPath) => {
 };
 const handleClose = (key, keyPath) => {

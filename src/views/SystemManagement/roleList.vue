@@ -1,44 +1,18 @@
 <template>
   <div>
     <!-- 面包屑 -->
-    <div style="margin-bottom: 20px;">
+    <div style="margin: 20px">
       <el-breadcrumb separator="/">
-        <el-breadcrumb-item>系统管理</el-breadcrumb-item>
-        <el-breadcrumb-item>角色管理</el-breadcrumb-item>
+        <el-breadcrumb-item>
+          <el-link type="primary" @click="gohome()">首页</el-link>
+        </el-breadcrumb-item>
+        <el-breadcrumb-item>
+          <el-link type="primary" @click="goBack()"
+            >上一页</el-link
+          ></el-breadcrumb-item
+        >
       </el-breadcrumb>
     </div>
-    <!-- <div class="top-search">
-      <el-form :model="form" label-width="auto">
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="用户名称">
-              <el-input
-                width="'300"
-                class="sinp"
-                v-model="form.name"
-                clearable
-              />
-              <el-button
-                class="sbtn"
-                type="primary"
-                @click="getUserList(form.name)"
-                >查询</el-button
-              >
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item style="text-align: right">
-              <el-button type="primary">停用</el-button>
-              <el-button type="primary">启用</el-button>
-              <el-button type="primary">删除</el-button>
-              <el-button type="primary" @click="addUser('0')"
-                >增加用户</el-button
-              >
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
-    </div> -->
     <div class="table">
       <el-table ref="multipleTableRef" :data="tableData" style="width: 100%">
         <!-- <el-table-column type="selection" width="55" /> -->
@@ -163,6 +137,9 @@
 import { onMounted, reactive, ref } from "vue";
 import request from "@/utils/request";
 import { ElMessage, ElMessageBox } from "element-plus";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 const form = reactive({
   name: "",
   page_num: 1,
@@ -175,7 +152,7 @@ const addUserForm = ref({
   password: "",
   passwordAgain: "",
   status: true,
-  addUserForm:[],
+  addUserForm: [],
   comment: "",
 });
 // # 超级管理员
@@ -226,7 +203,7 @@ const queryRoleList = (val) => {
     .catch((err) => {
       ElMessage({
         showClose: true,
-       message: err,
+        message: err,
         type: "error",
       });
     });
@@ -250,11 +227,11 @@ const addUser = (val, val2) => {
     addUserForm.value.status = val2.status == 0 ? true : false;
     addUserForm.value.comment = val2.comment;
     addUserForm.value.id = val2.id;
-    addUserForm.value.roleList = val2.role
+    addUserForm.value.roleList = val2.role;
   }
 };
 //查询角色/api/role
-const roleList = ref([])
+const roleList = ref([]);
 //查询部门/api/department
 const departmentList = ref([]);
 const queryDepartmentList = () => {
@@ -271,7 +248,7 @@ const queryDepartmentList = () => {
     .catch((err) => {
       ElMessage({
         showClose: true,
-       message: err,
+        message: err,
         type: "error",
       });
     });
@@ -290,7 +267,7 @@ const addUserApi = () => {
       status: addUserForm.value.status == true ? 0 : 1,
       comment: addUserForm.value.comment,
       department_id: addUserForm.value.permission * 1,
-      role_ids: addUserForm.value.roleList
+      role_ids: addUserForm.value.roleList,
     },
   })
     .then((res) => {
@@ -305,7 +282,7 @@ const addUserApi = () => {
     .catch((err) => {
       ElMessage({
         showClose: true,
-       message: err,
+        message: err,
         type: "error",
       });
     });
@@ -344,7 +321,7 @@ const EditUserApi = () => {
     .catch((err) => {
       ElMessage({
         showClose: true,
-       message: err,
+        message: err,
         type: "error",
       });
     });
@@ -388,6 +365,12 @@ const handleCurrentChange = (val) => {
   form.value.page_num = val;
   queryRoleList();
 };
+const gohome = () => {
+  router.push("/home");
+};
+const goBack = () => {
+  router.go(-1);
+};
 onMounted(() => {
   queryRoleList();
 });
@@ -407,6 +390,5 @@ onMounted(() => {
 }
 .btns {
   // float: right;
-
 }
 </style>

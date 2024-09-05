@@ -1,9 +1,26 @@
 <template>
   <div>
+    <!-- 面包屑 -->
+    <div style="margin:20px">
+      <el-breadcrumb separator="/">
+        <el-breadcrumb-item>
+          <el-link type="primary" @click="gohome()">首页</el-link>
+        </el-breadcrumb-item>
+        <el-breadcrumb-item>
+          <el-link type="primary" @click="goBack()"
+            >上一页</el-link
+          ></el-breadcrumb-item
+        >
+      </el-breadcrumb>
+    </div>
     <div class="top">
       <div class="title1">功能介绍</div>
       <div class="top-div">
-        <el-card class="bxcard" v-for="(item,index) in toolList.features" :key="index">
+        <el-card
+          class="bxcard"
+          v-for="(item, index) in toolList.features"
+          :key="index"
+        >
           <div class="iconImg el-icon-Watch">
             <svg-icon name="fetures"></svg-icon>
           </div>
@@ -22,15 +39,18 @@
         </div>
         <div class="right">
           <div class="show">
+            <!-- <el-button type="primary">Primary</el-button> -->
+          </div>
+          <div class="show">
             <div class="showTitle">简介</div>
             <div class="showDetail">{{ toolList.description }}</div>
-            <div class="showui">
+            <!-- <div class="showui">
               <ul>
                 <li>每日人工处理该业务需5小时，RPA执行仅需1小时</li>
                 <li>提升4倍工作效率</li>
                 <li>核对正确率提高至100%</li>
               </ul>
-            </div>
+            </div> -->
           </div>
           <div class="show" v-if="toolList.doc">
             <div class="showTitle">接口文档</div>
@@ -38,6 +58,42 @@
             <a :href="toolList.doc">下载接口文档</a>
           </div>
           <div class="show">
+            <div class="showTitle">使用工具</div>
+            <ul>
+              <li>
+                <el-upload
+                  v-model:file-list="fileEList"
+                  class="upload-demo"
+                  :limit="1"
+                  :auto-upload="false"
+                  action="#"
+                  accept=".xls,.xlsx"
+                  :on-remove="handleERemove"
+                >
+                  <el-button plain type="primary">请选择Excel文件</el-button>
+                </el-upload>
+              </li>
+              <li>
+                <el-upload
+                  v-model:file-list="fileWList"
+                  class="upload-demo"
+                  :limit="1"
+                  :auto-upload="false"
+                  action="#"
+                  accept=".docx"
+                  :on-remove="handleWRemove"
+                >
+                  <el-button plain type="primary">请选择World文件</el-button>
+                </el-upload>
+              </li>
+              <li>
+                <el-button type="primary" @click="submitFile"
+                  >上传并下载文件</el-button
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="show" v-if="toolList.case">
             <div class="showTitle">已有案例</div>
             <el-link type="primary">{{ toolList.case }}</el-link>
           </div>
@@ -51,8 +107,56 @@ import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import { ElMessage, ElMessageBox } from "element-plus";
 import request from "@/utils/request";
+import { useRouter } from "vue-router";
 
+const router = useRouter();
 const route = useRoute();
+const fileEList = ref([]);
+const fileWList = ref([]);
+
+const handleERemove = (file, uploadFiles) => {
+  fileEList.value = uploadFiles;
+};
+const handleWRemove = (file, uploadFiles) => {
+  fileWList.value = uploadFiles;
+};
+const submitFile = () => {
+  const formData = new FormData();
+  fileWList.value.forEach((item1) => {
+    formData.append("word_file", item1.raw);
+  });
+  fileEList.value.forEach((ele) => {
+    formData.append("excel_file", ele.raw);
+  });
+
+  request({
+    method: "POST",
+    url: "/api/tools-api/excel-join-word",
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    responseType: "blob", // 告知 Axios 以 blob 格式接收响应数据
+    data: formData,
+  })
+    .then((res) => {
+      console.log(res);
+      const url = window.URL.createObjectURL(new Blob([res.data]));
+      const fileName = decodeURI(res.headers["filename"]);
+      const link = document.createElement("a");
+      link.style.display = "none";
+      link.href = url;
+      link.setAttribute("download", fileName);
+      document.body.appendChild(link);
+      link.click();
+    })
+    .catch((err) => {
+      ElMessage({
+        showClose: true,
+        message: err,
+        type: "error",
+      });
+    });
+};
 const toolList = ref([]);
 const gettoolList = () => {
   request({
@@ -73,6 +177,12 @@ const gettoolList = () => {
         type: "error",
       });
     });
+};
+const gohome = () => {
+  router.push("/home");
+};
+const goBack = () => {
+  router.go(-1);
 };
 onMounted(() => {
   gettoolList();

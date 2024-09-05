@@ -1,5 +1,18 @@
 <template>
   <div>
+    <!-- 面包屑 -->
+    <div style="margin:20px">
+      <el-breadcrumb separator="/">
+        <el-breadcrumb-item>
+          <el-link type="primary" @click="gohome()">首页</el-link>
+        </el-breadcrumb-item>
+        <el-breadcrumb-item>
+          <el-link type="primary" @click="goBack()"
+            >上一页</el-link
+          ></el-breadcrumb-item
+        >
+      </el-breadcrumb>
+    </div>
     <div class="top">
       <div class="title1">业务亮点</div>
       <el-row :gutter="20">
@@ -60,7 +73,7 @@
             @canplay="onCanplay" -->
         </div>
         <div class="right">
-          <div class="show">
+          <div class="show" v-if="processList.process_introduction">
             <div class="showTitle">简介</div>
             <div class="showDetail">
               {{ processList.process_introduction }}
@@ -70,9 +83,9 @@
               <!-- {{ processList.effect.split(".") }} -->
               <ul>
                 <!-- <li v-for="(item,index) in processList.effectARR" :key="index">{{ item }}</li> -->
-                <li>每日人工处理该业务需5小时，RPA执行仅需1小时</li>
+                <!-- <li>每日人工处理该业务需5小时，RPA执行仅需1小时</li>
                 <li>提升4倍工作效率</li>
-                <li>核对正确率提高至100%</li>
+                <li>核对正确率提高至100%</li> -->
               </ul>
             </div>
           </div>
@@ -96,6 +109,53 @@
             <el-button @click="runModeType('2')" type="primary" plain
               >定时执行</el-button
             >
+          </div>
+          <div class="show">
+            <div class="showTitle">执行记录</div>
+            <div class="showDetail">
+              <el-table
+                :data="taskStatusList"
+                show-overflow-tooltip
+                border
+                style="width: 100%"
+              >
+                <!-- <el-table-column prop="task_no" label="任务编号" /> -->
+                <el-table-column prop="wr_worker_name" label="worker名" min-width="100" />
+                <el-table-column prop="task_status" label="任务状态" min-width="100">
+                  <template #default="{ row }">
+                    <div>
+                      {{
+                        row.task_status == "0"
+                          ? "待运行"
+                          : row.task_status == "1"
+                          ? "运行中"
+                          : row.task_status == "2"
+                          ? "已取消"
+                          : row.task_status == "3"
+                          ? "成功"
+                          : row.task_status == "4"
+                          ? "失败"
+                          : "异常"
+                      }}
+                    </div>
+                  </template>
+                </el-table-column>
+                <el-table-column prop="automatic" label="自动分配" min-width="100">
+                  <template #default="{ row }">
+                    <div>
+                      {{ row.value == "0" ? "否" : "是" }}
+                    </div>
+                  </template>
+                </el-table-column>
+                <el-table-column prop="work_way" label="运行方式" min-width="100" />
+                <el-table-column prop="created_at" label="创建时间" min-width="100">
+                  <template #default="{ row }">
+                    <div>{{ new Date(row.created_at).toLocaleString() }}</div>
+                  </template>
+                </el-table-column>
+                <!-- <el-table-column prop="annotation" label="备注" /> -->
+              </el-table>
+            </div>
           </div>
         </div>
       </div>
@@ -261,13 +321,6 @@
           </el-card>
         </el-form-item>
         <el-form-item label="触发预览" v-if="runModeTypeNum == '2'">
-          <!-- {{
-            runModeForm.choiceTime == "eDay"
-              ? "每日"
-              : runModeForm.choiceTime == "eWeek"
-              ? "每周"
-              : "每月"
-          }}的{{ runModeForm.timeHM }} -->
           <p v-if="runModeForm.choiceTime == 'eDay'">
             每日的 {{ runModeForm.timeHM }} 执行
           </p>
@@ -505,6 +558,28 @@ const getProcessParams = () => {
       });
     });
 };
+const taskStatusList = ref([]);
+const getTask = () => {
+  request({
+    method: "GET",
+    url: "/api/task",
+    params: {
+      id: route.query.id,
+      page_num: 1,
+      page_size: 5,
+    },
+  })
+    .then((res) => {
+      taskStatusList.value = res.data.data.list;
+    })
+    .catch((err) => {
+      ElMessage({
+        showClose: true,
+        message: err,
+        type: "error",
+      });
+    });
+};
 const cronExpression = ref("");
 const clickTask = (val) => {
   console.log(val);
@@ -674,14 +749,19 @@ const getVideo = () => {
   videoUrl.value =
     httpClient.defaults.baseURL + "api/process/video?id=" + route.query.id;
   console.log(videoUrl.value);
-
 };
-
+const gohome = () => {
+  router.push("/home");
+};
+const goBack = () => {
+  router.go(-1);
+};
 onMounted(() => {
   getProcessList();
   getWorkerList();
   getProcessParams();
   getVideo();
+  getTask();
 });
 </script>
 <style lang="scss" scoped>

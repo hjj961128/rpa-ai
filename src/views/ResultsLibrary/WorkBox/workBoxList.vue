@@ -1,5 +1,18 @@
 <template>
   <div class="main_page">
+    <!-- 面包屑 -->
+    <div  style="margin:20px">
+      <el-breadcrumb separator="/">
+        <el-breadcrumb-item>
+          <el-link type="primary" @click="gohome()">首页</el-link>
+        </el-breadcrumb-item>
+        <el-breadcrumb-item>
+          <el-link type="primary" @click="goBack()"
+            >上一页</el-link
+          ></el-breadcrumb-item
+        >
+      </el-breadcrumb>
+    </div>
     <div class="top_search">
       <el-input
         :prefix-icon="Search"
@@ -106,6 +119,12 @@ const queryBoxList = (val) => {
 };
 const toDetail = (val) => {
   router.push({ name: "boxDetail", query: { id: val.id } });
+};
+const gohome = () => {
+  router.push("/home");
+};
+const goBack = () => {
+  router.go(-1);
 };
 onMounted(() => {
   queryBoxList();

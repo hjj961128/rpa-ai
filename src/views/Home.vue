@@ -64,16 +64,38 @@
           :style="{ width: '100%', height: '350px', background: '#fff' }"
         ></div>
       </div>
-      <div class="bottom-div">
+      <div class="bottom-div" style="max-width: 350px">
         <div class="bottom-title">
           <span class="bottom-title-txt">热门流程</span>
         </div>
         <div class="bottombox">
           <div class="process" v-for="(item, index) in tableData" :key="index">
-           <el-button key="primary" type="primary" size="large" link @click="goDetail(item)">
-            {{index+1}}  {{ item.name }}
+            <el-button
+              key="primary"
+              type="primary"
+              size="large"
+              link
+              @click="goDetail(item)"
+            >
+              <div>
+                <span class="xuhao">{{ index + 1 }}</span>
+                <span class="zi"> {{ item.name }}</span>
+              </div>
             </el-button>
           </div>
+          <!-- <ul v-for="(item, index) in tableData" :key="index">
+            <li>
+              <el-button
+                key="primary"
+                type="primary"
+                size="large"
+                link
+                @click="goDetail(item)"
+              >
+                <span> {{ item.name }}</span>
+              </el-button>
+            </li>
+          </ul> -->
         </div>
       </div>
     </div>
@@ -81,11 +103,11 @@
 </template>
 
 <script setup>
-import { onMounted, reactive, ref ,onBeforeUnmount} from "vue";
+import { onMounted, reactive, ref, onBeforeUnmount } from "vue";
 import * as echarts from "echarts";
 import { ElMessage, ElMessageBox } from "element-plus";
 import request from "@/utils/request";
-import { useRouter } from 'vue-router';
+import { useRouter } from "vue-router";
 
 const router = useRouter();
 
@@ -117,7 +139,7 @@ const getProcessList = (val) => {
 onMounted(() => {
   getProcessList();
   const chartDom = document.getElementById("myEcharts1");
-   // 删除_echarts_instance_属性
+  // 删除_echarts_instance_属性
   chartDom.removeAttribute("_echarts_instance_");
   const chartDom2 = document.getElementById("myEcharts2");
   chartDom2.removeAttribute("_echarts_instance_");
@@ -248,12 +270,10 @@ onMounted(() => {
     }
   };
 
-  window.addEventListener('resize', resizeChart);
+  window.addEventListener("resize", resizeChart);
 
-
-
- onBeforeUnmount(() => {
-    window.removeEventListener('resize', resizeChart);
+  onBeforeUnmount(() => {
+    window.removeEventListener("resize", resizeChart);
     // chartInstance.dispose();
   });
 });
@@ -351,6 +371,13 @@ svg {
   padding: 20px;
   .process {
     height: 40px;
+  }
+  .xuhao{
+    margin-right: 10px;
+    color: #9195a3;
+  }
+  .zi{
+    color: #2440b3;
   }
 }
 </style>

@@ -1,10 +1,16 @@
 <template>
   <div>
     <!-- 面包屑 -->
-    <div>
+    <div style="margin:20px">
       <el-breadcrumb separator="/">
-        <el-breadcrumb-item>系统管理</el-breadcrumb-item>
-        <el-breadcrumb-item>用户管理</el-breadcrumb-item>
+        <el-breadcrumb-item>
+          <el-link type="primary" @click="gohome()">首页</el-link>
+        </el-breadcrumb-item>
+        <el-breadcrumb-item>
+          <el-link type="primary" @click="goBack()"
+            >上一页</el-link
+          ></el-breadcrumb-item
+        >
       </el-breadcrumb>
     </div>
     <div class="top-search">
@@ -159,6 +165,9 @@
 import { onMounted, reactive, ref } from "vue";
 import request from "@/utils/request";
 import { ElMessage, ElMessageBox } from "element-plus";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 const form = reactive({
   name: "",
   page_num: 1,
@@ -404,7 +413,12 @@ const handleCurrentChange = (val) => {
   form.value.page_num = val;
   getUserList();
 };
-
+const gohome = () => {
+  router.push("/home");
+};
+const goBack = () => {
+  router.go(-1);
+};
 onMounted(() => {
   queryDepartmentList();
   getUserList();

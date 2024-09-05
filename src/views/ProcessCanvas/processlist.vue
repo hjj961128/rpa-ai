@@ -1,12 +1,18 @@
 <template>
   <div class="main-page">
     <!-- 面包屑 -->
-    <!-- <div>
+    <div style="margin:20px">
       <el-breadcrumb separator="/">
-        <el-breadcrumb-item>系统管理</el-breadcrumb-item>
-        <el-breadcrumb-item>用户管理</el-breadcrumb-item>
+        <el-breadcrumb-item>
+          <el-link type="primary" @click="gohome()">首页</el-link>
+        </el-breadcrumb-item>
+        <el-breadcrumb-item>
+          <el-link type="primary" @click="goBack()"
+            >上一页</el-link
+          ></el-breadcrumb-item
+        >
       </el-breadcrumb>
-    </div> -->
+    </div>
     <div class="top-search">
       <el-form :model="searchForm" label-width="auto">
         <el-row :gutter="24">
@@ -552,8 +558,6 @@ const isNew = (val) => {
     innerTitle.value = "第三方流程接入";
   }
 };
-// 处理文件上传成功的情况
-const handleSuccess = (response, file, fileList) => {};
 // 新增流程
 const addProcessApi = (val) => {
   const formdata = new FormData();
@@ -660,7 +664,12 @@ const isOnline = (row) => {
     return row.user.id === userInfo.value.id;
   }
 };
-
+const gohome = () => {
+  router.push("/home");
+};
+const goBack = () => {
+  router.go(-1);
+};
 onMounted(() => {
   queryDepartmentList();
 
