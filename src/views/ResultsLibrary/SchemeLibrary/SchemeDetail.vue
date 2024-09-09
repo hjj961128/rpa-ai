@@ -120,7 +120,7 @@
                 style="width: 100%"
               >
                 <!-- <el-table-column prop="task_no" label="任务编号" /> -->
-                <el-table-column prop="wr_worker_name" label="worker名" min-width="100" />
+                <el-table-column prop="wr_worker_name" label="客户端名称" min-width="100" />
                 <el-table-column prop="task_status" label="任务状态" min-width="100">
                   <template #default="{ row }">
                     <div>
@@ -143,11 +143,22 @@
                 <el-table-column prop="automatic" label="自动分配" min-width="100">
                   <template #default="{ row }">
                     <div>
-                      {{ row.value == "0" ? "否" : "是" }}
+                      {{ row.automatic === "0" ? "否" : "是" }}
                     </div>
                   </template>
                 </el-table-column>
                 <el-table-column prop="work_way" label="运行方式" min-width="100" />
+                <el-table-column prop="run_time" label="运行时长" min-width="100" >
+
+                  <template #default="{ row }">
+                    <div>{{ secondsToHMS(row.run_time) }}</div>
+                  </template>
+
+                </el-table-column>
+
+                <el-table-column prop="start_time" label="开始时间" min-width="100" />
+                <el-table-column prop="end_time" label="结束时间" min-width="100" />
+
                 <el-table-column prop="created_at" label="创建时间" min-width="100">
                   <template #default="{ row }">
                     <div>{{ new Date(row.created_at).toLocaleString() }}</div>
@@ -155,6 +166,21 @@
                 </el-table-column>
                 <!-- <el-table-column prop="annotation" label="备注" /> -->
               </el-table>
+
+              <el-pagination
+              :background="true"
+              :current-page="taskPage.page_num"
+              :page-size="taskPage.page_size"
+              :page-sizes="[10, 25, 50, 100]"
+              :total="taskPage.total"
+              layout="total, sizes, prev, pager, next, jumper"
+              size="mini"
+              @size-change="handleTaskSizeChange"
+              @current-change="handleTaskCurrentChange"
+              style="margin-top: 10px"
+              ></el-pagination>
+
+
             </div>
           </div>
         </div>
@@ -558,19 +584,50 @@ const getProcessParams = () => {
       });
     });
 };
+
+
+const secondsToHMS = (seconds)=>{
+  if(seconds){
+
+      let hms = '';
+      const dateObj = new Date(seconds); // 将秒转换为毫秒
+      //时
+      const hours = dateObj.getUTCHours();
+      if(hours) hms+=`${hours}小时 `
+      //分
+      const minutes = dateObj.getUTCMinutes();
+      if(minutes) hms+=`${minutes}分钟 `
+      //秒
+      const remainingSeconds = dateObj.getSeconds();
+      if(remainingSeconds) hms+=`${remainingSeconds}秒`
+
+      return hms
+  }else{
+      return ''
+  }
+
+}
+
+const taskPage = ref({
+  page_num:1,
+  page_size:10,
+  total:0
+})
+
 const taskStatusList = ref([]);
 const getTask = () => {
   request({
     method: "GET",
     url: "/api/task",
     params: {
-      id: route.query.id,
-      page_num: 1,
-      page_size: 5,
+      process_id: route.query.id,
+      page_num: taskPage.value.page_num,
+      page_size: taskPage.value.page_size,
     },
   })
     .then((res) => {
       taskStatusList.value = res.data.data.list;
+      taskPage.value.total = res.data.data.total;
     })
     .catch((err) => {
       ElMessage({
@@ -580,6 +637,18 @@ const getTask = () => {
       });
     });
 };
+
+const handleTaskSizeChange = (val)=>{
+  taskPage.value.page_size = val
+  getTask()
+
+}
+const handleTaskCurrentChange = (val)=>{
+    taskPage.value.page_num = val
+  getTask()
+
+}
+
 const cronExpression = ref("");
 const clickTask = (val) => {
   console.log(val);
