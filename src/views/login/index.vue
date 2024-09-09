@@ -16,15 +16,21 @@
             style="max-width: 600px"
             auto-complete="on"
           >
-            <el-form-item prop="name" ant-row ant-form-item label="用户名">
+            <el-form-item prop="name">
               <el-input
                 placeholder="请输入用户名"
                 v-model="loginForm.name"
                 clearable
                 auto-complete="on"
-              />
+              >
+                <template #prefix>
+                  <el-icon class="el-input__icon">
+                    <user />
+                  </el-icon>
+                </template>
+              </el-input>
             </el-form-item>
-            <el-form-item label="密码" prop="praswood">
+            <el-form-item prop="praswood">
               <el-input
                 placeholder="请输入密码"
                 show-password
@@ -32,11 +38,17 @@
                 clearable
                 auto-complete="on"
                 @keyup.enter="onSubmit"
-              />
+              >
+                <template #prefix>
+                  <el-icon class="el-input__icon">
+                    <lock />
+                  </el-icon>
+                </template>
+              </el-input>
             </el-form-item>
             <!-- <div class="forget" @click="fogetpro"> 忘记密码？</div> -->
             <el-form-item>
-              <el-button class="btn-login" type="primary" @click="onSubmit"
+              <el-button class="btn-login" :icon="UserFilled" type="primary" @click="onSubmit" :loading="loading"
                 >登录</el-button
               >
             </el-form-item>
@@ -50,6 +62,8 @@
 <script setup>
 import { useUserCounter } from "@/stores/user";
 import { ElMessage } from "element-plus";
+import { UserFilled } from "@element-plus/icons-vue";
+
 import request from "@/utils/request";
 import { useRoute } from "vue-router";
 import { reactive, watch, ref } from "vue";
@@ -62,6 +76,8 @@ import CryptoJS from "crypto-js";
 const userStore = useUserCounter();
 const isLogin = true;
 // do not use same name with ref
+
+const loading = ref(false)
 const loginForm = reactive({
   name: "",
   praswood: "",
@@ -125,6 +141,7 @@ const Pandora = (plaintext) => {
 
 function onSubmit() {
   loginFormRef.value.validate((valid) => {
+    loading.value = true;
     if (valid) {
       request({
         method: "POST",
@@ -142,6 +159,8 @@ function onSubmit() {
             message: "登录成功",
             type: "success",
           });
+
+          loading.value = false;
           if (sessionStorage.getItem("Authorization")) {
             await userStore.setUserInfo();
           }
@@ -153,9 +172,11 @@ function onSubmit() {
             message: err,
             type: "error",
           });
+          loading.value = false;
         });
     } else {
       ElMessage.error("登录失败");
+      loading.value = false;
       return false;
     }
   });
@@ -207,9 +228,9 @@ function onSubmit() {
 .btn-login {
   width: 387px;
   height: 56px;
-  background: #2293fc;
+  /*background: #2293fc;*/
   color: #fff;
   border-radius: 56px;
-  margin-top: 49px;
+  margin-top: 20px;
 }
 </style>
