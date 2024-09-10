@@ -33,6 +33,12 @@ const navList = [
     path: '/userList',
     icon: 'userlist'
   },
+  {
+    id:'3',
+    navName: '安全管控',
+    path: '/save',
+    icon: 'save'
+  },
 ]
 </script>
 <style lang="less" scoped>

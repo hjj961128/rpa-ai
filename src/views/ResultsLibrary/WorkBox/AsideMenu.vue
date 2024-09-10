@@ -27,6 +27,12 @@ const navList = [
     path: '/workBoxList',
     icon: 'workBox'
   },
+  {
+    id:'1',
+    navName: '定制化工具',
+    path: '/customization',
+    icon: 'customization'
+  },
 ]
 </script>
 <style lang="less" scoped>

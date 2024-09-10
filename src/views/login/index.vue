@@ -2,12 +2,10 @@
   <div class="login-container">
     <el-row>
       <el-col :span="12" class="left-con">
-        <img class="bg" src="../../assets/images/login-bg.png" />
-      </el-col>
-      <el-col :span="12" class="right-con">
+        <!-- <img class="bg" src="../../assets/images/login-bg.png" /> -->
         <!-- 登录表单 -->
         <div class="content-con">
-          <div class="login-title">{{ isLogin ? "登录" : "重置密码" }}</div>
+          <div class="login-title">{{ isLogin ? "欢迎登录" : "重置密码" }} <span style="font-size:16px;color:#9195a3">RPA+AI系统</span></div>
           <el-form
             :model="loginForm"
             :rules="rules"
@@ -22,6 +20,8 @@
                 v-model="loginForm.name"
                 clearable
                 auto-complete="on"
+                style="height: 60px;"
+                class="custom-input"
               >
                 <template #prefix>
                   <el-icon class="el-input__icon">
@@ -38,6 +38,8 @@
                 clearable
                 auto-complete="on"
                 @keyup.enter="onSubmit"
+                style="height: 60px;"
+                class="custom-input"
               >
                 <template #prefix>
                   <el-icon class="el-input__icon">
@@ -48,12 +50,15 @@
             </el-form-item>
             <!-- <div class="forget" @click="fogetpro"> 忘记密码？</div> -->
             <el-form-item>
-              <el-button class="btn-login" :icon="UserFilled" type="primary" @click="onSubmit" :loading="loading"
+              <el-button class="btn-login"  type="primary" @click="onSubmit" :loading="loading"
                 >登录</el-button
               >
             </el-form-item>
           </el-form>
         </div>
+      </el-col>
+      <el-col :span="12" class="right-con">
+        
       </el-col>
     </el-row>
   </div>
@@ -187,17 +192,24 @@ function onSubmit() {
 .login-container {
   width: 100vw;
   height: 100vh;
+  background-image: url('../../assets/images/login.jpg');
+  /* 替换为你的图片路径 */
+  background-size: cover;
+  /* 背景图片覆盖整个元素 */
+  background-repeat: no-repeat;
+  /* 背景图片不重复 */
 }
 .login-title {
   text-align: center;
   font-size: 28px;
-  color: #2293fc;
-  margin-bottom: 52px;
+  /* color: #2293fc;
+   */
+  margin-bottom: 20px;
 }
 .left-con {
   position: relative;
   height: 100vh;
-  background: #f2f8fd;
+  /* background: #f2f8fd; */
 }
 .bg {
   width: 80%;
@@ -213,6 +225,8 @@ function onSubmit() {
 }
 .content-con {
   position: absolute;
+  background-color: #fff;
+  padding: 50px;
   top: 50%;
   left: 50%;
   -webkit-transform: translate(-50%, -50%);
@@ -228,9 +242,13 @@ function onSubmit() {
 .btn-login {
   width: 387px;
   height: 56px;
-  /*background: #2293fc;*/
+  background: #4E6EF2;
   color: #fff;
-  border-radius: 56px;
+  /* border-radius: 56px; */
   margin-top: 20px;
+  font-size: 20px;
+}
+.custom-input .el-input__inner {
+  font-size: 16px; /* 设置字体大小为16px */
 }
 </style>

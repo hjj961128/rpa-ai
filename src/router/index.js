@@ -70,6 +70,12 @@ const router = vueRouter.createRouter({
                 import("@/views/ResultsLibrary/WorkBox/workBoxList.vue"),
             },
             {
+              path: "/customization",
+              name: "customization",
+              component: () =>
+                import("@/views/ResultsLibrary/WorkBox/customization.vue"),
+            },
+            {
               path: "/boxDetail",
               name: "boxDetail",
               component: () =>
@@ -107,6 +113,11 @@ const router = vueRouter.createRouter({
               path: "/userList",
               name: "userList",
               component: () => import("@/views/SystemManagement/userList.vue"),
+            },
+            {
+              path: "/save",
+              name: "save",
+              component: () => import("@/views/SystemManagement/save.vue"),
             },
           ],
         },
