@@ -1,7 +1,7 @@
 <template>
   <div class="main-page">
     <!-- 面包屑 -->
-    <div style="margin:20px">
+    <div >
       <el-breadcrumb separator="/">
         <el-breadcrumb-item>
           <el-link type="primary" @click="gohome()">首页</el-link>
@@ -688,7 +688,7 @@ onMounted(() => {
 <style lang="less" scoped>
 .main-page {
   padding: 40px;
-
+  padding-top: 20px;
   .onebox {
     width: 100%;
     text-align: center;

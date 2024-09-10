@@ -1,7 +1,7 @@
 <template>
   <div class="mainpage">
     <!-- 面包屑 -->
-    <div style="margin:20px">
+    <div style="margin-bottom: 20px;">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item>
           <el-link type="primary" @click="gohome()">首页</el-link>
@@ -130,7 +130,6 @@ onMounted(() => {
 <style lang="scss" scoped>
 .mainpage {
   padding: 20px;
-
   .kuang {
     height: 250px;
     background: url("../../../assets/images/cardbg.png") no-repeat center/cover;

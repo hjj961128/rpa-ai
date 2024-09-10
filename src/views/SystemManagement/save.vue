@@ -1,7 +1,7 @@
 <template>
   <div class="main_page">
      <!-- 面包屑 -->
-     <div style="margin:20px">
+     <div style="margin-bottom: 20px;">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item>
           <el-link type="primary" @click="gohome()">首页</el-link>

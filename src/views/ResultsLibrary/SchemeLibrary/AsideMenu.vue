@@ -60,17 +60,37 @@ const queryDepartmentList = () => {
       });
     });
 };
+const queryDepartmentListid = () => {
+  request({
+    method: "GET",
+    url: "/api/department",
+    params: {
+      id: userInfo.value.department_id,
+    },
+  })
+    .then((res) => {
+      departmentList.value = res.data.data.list;
+    })
+    .catch((err) => {
+      ElMessage({
+        showClose: true,
+        message: err,
+        type: "error",
+      });
+    });
+};
 onMounted(() => {
   userInfo.value = JSON.parse(sessionStorage.getItem("userInfo"));
   if (userInfo.value.roles.indexOf("admin") == -1) {
     //不是管理员
-    departmentList.value = [
-      {
-        id: userInfo.value.department_id,
-        navName: userInfo.value.department_name,
-        // pathName:
-      },
-    ];
+    // departmentList.value = [
+    //   {
+    //     id: userInfo.value.department_id,
+    //     navName: userInfo.value.department_name,
+    //   },
+    // ];
+    queryDepartmentListid()
+    // console.log(departmentList.value);
   } else {
     queryDepartmentList();
   }

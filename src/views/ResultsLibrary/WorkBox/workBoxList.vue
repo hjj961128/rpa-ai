@@ -133,7 +133,7 @@ onMounted(() => {
 <style lang="scss" scoped>
 .main_page {
   width: 100%;
-  padding: 50px;
+  padding: 0px;
   .top_search {
     text-align: center;
   }
