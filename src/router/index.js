@@ -69,12 +69,7 @@ const router = vueRouter.createRouter({
               component: () =>
                 import("@/views/ResultsLibrary/WorkBox/workBoxList.vue"),
             },
-            {
-              path: "/customization",
-              name: "customization",
-              component: () =>
-                import("@/views/ResultsLibrary/WorkBox/customization.vue"),
-            },
+
             {
               path: "/boxDetail",
               name: "boxDetail",
@@ -82,6 +77,12 @@ const router = vueRouter.createRouter({
                 import("@/views/ResultsLibrary/WorkBox/boxDetail.vue"),
             },
           ]
+        },
+        {
+            path: "/customization",
+            name: "customization",
+            component: () =>
+              import("@/views/ResultsLibrary/WorkBox/customization.vue"),
         },
         {
           path: "/processlist",
