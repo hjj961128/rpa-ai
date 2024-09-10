@@ -815,8 +815,7 @@ const onCanplay = (ev) => {
 };
 const videoUrl = ref(null);
 const getVideo = () => {
-  videoUrl.value =
-    httpClient.defaults.baseURL + "api/process/video?id=" + route.query.id;
+  videoUrl.value = httpClient.defaults.baseURL + "/api/video?id=" + route.query.id;
   console.log(videoUrl.value);
 };
 const gohome = () => {
