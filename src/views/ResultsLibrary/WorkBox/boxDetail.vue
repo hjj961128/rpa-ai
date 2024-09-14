@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 面包屑 -->
-    <div style="margin:20px">
+    <div style="margin: 20px">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item>
           <el-link type="primary" @click="gohome()">首页</el-link>
@@ -13,7 +13,7 @@
         >
       </el-breadcrumb>
     </div>
-    <div class="top">
+    <div class="top" v-if="toolList.features">
       <div class="title1">功能介绍</div>
       <div class="top-div">
         <el-card
@@ -35,29 +35,20 @@
       <div class="title1">{{ toolList.title }}</div>
       <div class="centerview">
         <div class="left">
-          <img src="../../../assets/images/u45.png" alt="" />
+          <img :src="toolList.imgurl" alt="" />
         </div>
         <div class="right">
           <div class="show">
-            <!-- <el-button type="primary">Primary</el-button> -->
           </div>
           <div class="show">
             <div class="showTitle">简介</div>
             <div class="showDetail">{{ toolList.description }}</div>
-            <!-- <div class="showui">
-              <ul>
-                <li>每日人工处理该业务需5小时，RPA执行仅需1小时</li>
-                <li>提升4倍工作效率</li>
-                <li>核对正确率提高至100%</li>
-              </ul>
-            </div> -->
           </div>
           <div class="show" v-if="toolList.doc">
             <div class="showTitle">接口文档</div>
-            <!-- <el-link type="primary">{{toolList.doc }}</el-link> -->
             <a :href="toolList.doc">下载接口文档</a>
           </div>
-          <div class="show">
+          <div class="show" v-if="toolList.title=='协议编制拼接RPA'">
             <div class="showTitle">使用工具</div>
             <ul>
               <li>
@@ -108,6 +99,8 @@ import { useRoute } from "vue-router";
 import { ElMessage, ElMessageBox } from "element-plus";
 import request from "@/utils/request";
 import { useRouter } from "vue-router";
+const baseURL = ref(import.meta.env.VUE_APP_BASE_URL);
+import httpClient from "../../../utils/request.js";
 
 const router = useRouter();
 const route = useRoute();
@@ -169,6 +162,8 @@ const gettoolList = () => {
   })
     .then((res) => {
       toolList.value = res.data.data.list[0];
+      toolList.value.imgurl =
+        httpClient.defaults.baseURL + "api/image?name=" + toolList.value.image;
     })
     .catch((err) => {
       ElMessage({

@@ -34,10 +34,11 @@
       <el-row :gutter="20">
         <el-col v-for="(item, index) in boxList" :key="index" :span="6">
           <el-card class="boxcard">
-            <img src="../../../assets/images/login-bg.png" alt="" />
+            <img :src="item.imgurl" alt="" />
             <p class="title">{{ item.title }}</p>
             <p class="jianjie">
               {{ item.description }}
+
             </p>
             <div class="bth">
               <el-button
@@ -72,6 +73,9 @@ import request from "@/utils/request";
 // import router from "../../../router/index.js";
 import { ElMessage } from "element-plus";
 import { useRouter } from "vue-router";
+const baseURL = ref(import.meta.env.VUE_APP_BASE_URL);
+import httpClient from "../../../utils/request.js";
+
 const router = useRouter();
 const pageValue = ref({
   page_num: 1,
@@ -95,6 +99,7 @@ const handleCurrentChange = (val) => {
   queryBoxList();
 };
 const boxList = ref([]);
+const imgurl = ref('')
 const queryBoxList = (val) => {
   if (val=='1') {
     form.value.title = searchValue.value;
@@ -108,6 +113,9 @@ const queryBoxList = (val) => {
     .then((res) => {
       boxList.value = res.data.data.list;
       total.value = res.data.data.total;
+      boxList.value.forEach(item=>{
+        item.imgurl = httpClient.defaults.baseURL +"api/image?name="+item.image
+      })
     })
     .catch((err) => {
       ElMessage({

@@ -28,7 +28,7 @@ import 'vue3-video-play/dist/style.css' // 引入css
 const whiteList = ['/login']
 // 导航守卫
 router.beforeEach((to, from, next) => {
-    window.document.title = to.meta.title == undefined ? 'RPAI' : to.meta.title
+    window.document.title = to.meta.title == undefined ? 'RPA+AI工具箱' : to.meta.title
 
 
     const has_token = sessionStorage.Authorization

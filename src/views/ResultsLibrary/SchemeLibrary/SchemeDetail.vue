@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 面包屑 -->
-    <div style="margin:20px">
+    <div style="margin: 20px">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item>
           <el-link type="primary" @click="gohome()">首页</el-link>
@@ -58,6 +58,7 @@
           <!-- <img src="../../../assets/images/u45.png" alt="" />
            -->
           <vue3VideoPlay
+            v-if="videoUrl"
             width="100%"
             title="视屏演示"
             :src="videoUrl"
@@ -66,6 +67,8 @@
             @timeupdate="onTimeupdate"
             @canplay="onCanplay"
           />
+          <img v-else src="../../../assets/images/u45.png" alt="" />
+
           <!-- :poster="options.poster"
             @play="onPlay"
             @pause="onPause"
@@ -110,7 +113,7 @@
               >定时执行</el-button
             >
           </div>
-          <div class="show">
+          <!-- <div class="show">
             <div class="showTitle">执行记录</div>
             <div class="showDetail">
               <el-table
@@ -119,7 +122,6 @@
                 border
                 style="width: 100%"
               >
-                <!-- <el-table-column prop="task_no" label="任务编号" /> -->
                 <el-table-column prop="wr_worker_name" label="客户端名称" min-width="100" />
                 <el-table-column prop="task_status" label="任务状态" min-width="100">
                   <template #default="{ row }">
@@ -164,7 +166,6 @@
                     <div>{{ new Date(row.created_at).toLocaleString() }}</div>
                   </template>
                 </el-table-column>
-                <!-- <el-table-column prop="annotation" label="备注" /> -->
               </el-table>
 
               <el-pagination
@@ -182,17 +183,81 @@
 
 
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
     <div class="bottom">
-      <div class="title1">相关组件</div>
+      <div class="title1">执行记录</div>
       <div class="card">
-        <div class="title">生产设计工单智能RPA</div>
-        <div class="detail">
-          基于每月需将固有的资料库的资料，进行word拼接以及格式设置完成商务标书编制，实现通过rpa工具获取标包信息对未开标的标书项目根据配置文件自动获取公用库和专用库文件根据标书大纲进行合并完成商务标书编制。
-        </div>
+        <el-table
+          :data="taskStatusList"
+          show-overflow-tooltip
+          style="width: 100%"
+          class="table-with-bg"
+        >
+          <!-- <el-table-column prop="task_no" label="任务编号" /> -->
+          <el-table-column
+            prop="wr_worker_name"
+            label="客户端名称"
+            min-width="100"
+          />
+          <el-table-column prop="task_status" label="任务状态" min-width="100">
+            <template #default="{ row }">
+              <div>
+                {{
+                  row.task_status == "0"
+                    ? "待运行"
+                    : row.task_status == "1"
+                    ? "运行中"
+                    : row.task_status == "2"
+                    ? "已取消"
+                    : row.task_status == "3"
+                    ? "成功"
+                    : row.task_status == "4"
+                    ? "失败"
+                    : "异常"
+                }}
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="automatic" label="自动分配" min-width="100">
+            <template #default="{ row }">
+              <div>
+                {{ row.automatic === "0" ? "否" : "是" }}
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="work_way" label="运行方式" min-width="100" />
+          <el-table-column prop="run_time" label="运行时长" min-width="100">
+            <template #default="{ row }">
+              <div>{{ secondsToHMS(row.run_time) }}</div>
+            </template>
+          </el-table-column>
+
+          <el-table-column prop="start_time" label="开始时间" min-width="100" />
+          <el-table-column prop="end_time" label="结束时间" min-width="100" />
+
+          <el-table-column prop="created_at" label="创建时间" min-width="100">
+            <template #default="{ row }">
+              <div>{{ new Date(row.created_at).toLocaleString() }}</div>
+            </template>
+          </el-table-column>
+          <!-- <el-table-column prop="annotation" label="备注" /> -->
+        </el-table>
+
+        <el-pagination
+          :background="true"
+          :current-page="taskPage.page_num"
+          :page-size="taskPage.page_size"
+          :page-sizes="[10, 25, 50, 100]"
+          :total="taskPage.total"
+          layout="total, sizes, prev, pager, next, jumper"
+          size="mini"
+          @size-change="handleTaskSizeChange"
+          @current-change="handleTaskCurrentChange"
+          style="margin-top: 10px; float: right"
+        ></el-pagination>
       </div>
     </div>
     <el-dialog
@@ -396,6 +461,9 @@ const baseURL = ref(import.meta.env.VUE_APP_BASE_URL);
 import httpClient from "../../../utils/request.js";
 
 import request from "@/utils/request";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 const disabledDate = (time) => {
   return time.getTime() < Date.now() - 8.64e7;
 };
@@ -585,34 +653,31 @@ const getProcessParams = () => {
     });
 };
 
+const secondsToHMS = (seconds) => {
+  if (seconds) {
+    let hms = "";
+    const dateObj = new Date(seconds); // 将秒转换为毫秒
+    //时
+    const hours = dateObj.getUTCHours();
+    if (hours) hms += `${hours}小时 `;
+    //分
+    const minutes = dateObj.getUTCMinutes();
+    if (minutes) hms += `${minutes}分钟 `;
+    //秒
+    const remainingSeconds = dateObj.getSeconds();
+    if (remainingSeconds) hms += `${remainingSeconds}秒`;
 
-const secondsToHMS = (seconds)=>{
-  if(seconds){
-
-      let hms = '';
-      const dateObj = new Date(seconds); // 将秒转换为毫秒
-      //时
-      const hours = dateObj.getUTCHours();
-      if(hours) hms+=`${hours}小时 `
-      //分
-      const minutes = dateObj.getUTCMinutes();
-      if(minutes) hms+=`${minutes}分钟 `
-      //秒
-      const remainingSeconds = dateObj.getSeconds();
-      if(remainingSeconds) hms+=`${remainingSeconds}秒`
-
-      return hms
-  }else{
-      return ''
+    return hms;
+  } else {
+    return "";
   }
-
-}
+};
 
 const taskPage = ref({
-  page_num:1,
-  page_size:10,
-  total:0
-})
+  page_num: 1,
+  page_size: 10,
+  total: 0,
+});
 
 const taskStatusList = ref([]);
 const getTask = () => {
@@ -638,16 +703,14 @@ const getTask = () => {
     });
 };
 
-const handleTaskSizeChange = (val)=>{
-  taskPage.value.page_size = val
-  getTask()
-
-}
-const handleTaskCurrentChange = (val)=>{
-    taskPage.value.page_num = val
-  getTask()
-
-}
+const handleTaskSizeChange = (val) => {
+  taskPage.value.page_size = val;
+  getTask();
+};
+const handleTaskCurrentChange = (val) => {
+  taskPage.value.page_num = val;
+  getTask();
+};
 
 const cronExpression = ref("");
 const clickTask = (val) => {
@@ -817,7 +880,6 @@ const videoUrl = ref(null);
 const getVideo = () => {
   videoUrl.value =
     httpClient.defaults.baseURL + "api/process/video?id=" + route.query.id;
-  console.log(videoUrl.value);
 };
 const gohome = () => {
   router.push("/home");
@@ -913,12 +975,12 @@ svg {
 }
 
 .bottom {
+  margin-bottom: 70px;
   .card {
-    width: 80%;
+    width: 90%;
     padding: 20px;
-    margin-left: 10%;
-    height: 200px;
-    background-image: url("../../../assets/images/bbg.png");
+    margin-left: 5%;
+    // background-image: url("../../../assets/images/bbg.png");
     /* 替换为你的图片路径 */
     background-size: cover;
     /* 背景图片覆盖整个元素 */
@@ -998,5 +1060,11 @@ svg {
   /* 向左移动半个列表项内边距，使得小圆点与文本对齐 */
   margin-right: 0.5em;
   /* 向右移动，为了间隔效果 */
+}
+.table-with-bg {
+  background-image: url("../../../assets/images/bbg.png"); /* 替换为你的图片路径 */
+  background-size: cover; /* 背景图片覆盖整个元素 */
+  background-position: center; /* 背景图片居中 */
+  background-repeat: no-repeat; /* 背景图片不重复 */
 }
 </style>

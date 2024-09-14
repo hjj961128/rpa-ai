@@ -1,7 +1,7 @@
 <template>
   <div class="mainpage">
     <!-- 面包屑 -->
-    <div style="margin-bottom: 20px;">
+    <div style="margin-bottom: 20px">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item>
           <el-link type="primary" @click="gohome()">首页</el-link>
@@ -18,18 +18,20 @@
         v-for="(menuItem, index) in departmentList"
         :key="index"
         :index="menuItem.id"
-        :span="12"
+        :span="8"
       >
         <div class="kuang">
           <div class="title">
             {{ menuItem.name }}
           </div>
-          <div
-            class="liangdian"
-            v-for="(specilItem, Index) in menuItem.processList"
-            :key="Index"
-          >
-            {{ specilItem.name }}
+          <div style="height:130px">
+            <div
+              class="liangdian"
+              v-for="(specilItem, Index) in menuItem.processList"
+              :key="Index"
+            >
+              {{ specilItem.name }}
+            </div>
           </div>
           <el-button
             type="text"
@@ -50,7 +52,7 @@ import { onMounted, reactive, ref } from "vue";
 import { ElMessage } from "element-plus";
 // import router from "../../../router/index.js";
 import request from "@/utils/request";
-import { useRouter } from 'vue-router';
+import { useRouter } from "vue-router";
 
 const router = useRouter();
 const gohome = () => {
@@ -59,10 +61,8 @@ const gohome = () => {
 const goBack = () => {
   router.go(-1);
 };
-const handleOpen = (key, keyPath) => {
-};
-const handleClose = (key, keyPath) => {
-};
+const handleOpen = (key, keyPath) => {};
+const handleClose = (key, keyPath) => {};
 const goDetail = (val) => {
   router.push({ name: "mainListMore", query: { id: val } });
 };
@@ -90,7 +90,7 @@ const queryDepartmentList = () => {
           method: "GET",
           url: "/api/process",
           params: {
-            online:true,
+            online: true,
             page_num: 1,
             page_size: 4,
             department_id: item.id,
@@ -102,7 +102,7 @@ const queryDepartmentList = () => {
           .catch((err) => {
             ElMessage({
               showClose: true,
-             message: err,
+              message: err,
               type: "error",
             });
           });
@@ -111,7 +111,7 @@ const queryDepartmentList = () => {
     .catch((err) => {
       ElMessage({
         showClose: true,
-       message: err,
+        message: err,
         type: "error",
       });
     });
@@ -132,7 +132,7 @@ const queryprocessList = (val) => {
     .catch((err) => {
       ElMessage({
         showClose: true,
-       message: err,
+        message: err,
         type: "error",
       });
     });

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="main-page">
     <div class="top-title">
       <p>
         以机器人流程自动化（RPA）技术为底座，在传统RPA组件的基础上设计具体场景定制化流程，结合成熟AI组件，打造从创建，流程编排，发布到调优的RPA+AI一体化工具箱，实现UI元素选择器功能，组件库组合处理功能，运行结果回传功能，基于已沉淀的业务场景开发解决方案模块和工具箱模块，可根据电力领域业务场景提供专业RPA解决方案，提供开箱即用的通用工具以及流程在线浏览和试用服务.
@@ -57,7 +57,7 @@
       </div>
       <div class="bottom-div">
         <div class="bottom-title">
-          <span class="bottom-title-txt"> RPA区域划分</span>
+          <span class="bottom-title-txt"> 各业务域RPA机器人数</span>
         </div>
         <div
           id="myEcharts2"
@@ -203,9 +203,6 @@ onMounted(() => {
     ],
   };
   const option2 = {
-    // title: {
-    //   text: 'World Population'
-    // },
     tooltip: {
       trigger: "axis",
       axisPointer: {
@@ -220,41 +217,35 @@ onMounted(() => {
       containLabel: true,
     },
     yAxis: {
-      type: "value",
-      boundaryGap: [0, 0.01],
+      data: ["调度自动化", "运维部", "财资部", "党建部", "人资部", "营销部"],
+      type: "category",
     },
     xAxis: {
-      type: "category",
-      data: ["第一季度", "第二季度", "第三季度", "第四季度"],
+      boundaryGap: [0, 0.01],
+      type: "value",
     },
     series: [
       {
-        name: "传统人工",
         type: "bar",
-        data: [351, 414, 367, 256],
+        showBackground: true,
         itemStyle: {
-          normal: {
-            barBorderRadius: [20, 20, 0, 0],
-            color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [
-              { offset: 0, color: "#3977E6" },
+          barBorderRadius: [0, 20, 20, 0],
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            { offset: 0, color: "#83bff6" },
+            { offset: 0.5, color: "#188df0" },
+            { offset: 1, color: "#188df0" },
+          ]),
+        },
+        emphasis: {
+          itemStyle: {
+            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+              { offset: 0, color: "#2378f7" },
+              { offset: 0.7, color: "#2378f7" },
               { offset: 1, color: "#83bff6" },
             ]),
           },
         },
-      },
-      {
-        name: "RPA智能机器人",
-        type: "bar",
-        data: [1150, 1400, 1021, 1255],
-        itemStyle: {
-          normal: {
-            barBorderRadius: [20, 20, 0, 0],
-            color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [
-              { offset: 0, color: "#147C72" },
-              { offset: 1, color: "#B4F0E8" },
-            ]),
-          },
-        },
+        data: [8, 1, 4, 3, 4, 13],
       },
     ],
   };
@@ -279,6 +270,11 @@ onMounted(() => {
 });
 </script>
 <style lang="scss" scoped>
+.main-page {
+  height: 95vh;
+  width: 100%;
+  background-color: #eef5fd;
+}
 .top-title {
   width: 100%;
   height: 180px;
@@ -288,6 +284,8 @@ onMounted(() => {
   /* 背景图片覆盖整个元素 */
   background-repeat: no-repeat;
   /* 背景图片不重复 */
+  background-color: rgba(255, 255, 255, 0.7);
+
   p {
     padding: 25px;
     width: 60%;
@@ -302,7 +300,7 @@ onMounted(() => {
   margin-top: 20px;
   height: 200px;
   border-radius: 6px;
-  background-color: #fff;
+  background: url("../assets/images/cardbg.png") no-repeat center/cover;
   box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.2);
   padding-top: 20px;
   width: 20%;
@@ -340,7 +338,7 @@ onMounted(() => {
   width: 30%;
   border-radius: 4px;
   box-shadow: 0 2px 8px 0px rgba(0, 0, 0, 0.2);
-
+  background-color: #fff;
   .bottom-title {
     width: 100%;
     background-color: #fff;
@@ -372,11 +370,11 @@ svg {
   .process {
     height: 40px;
   }
-  .xuhao{
+  .xuhao {
     margin-right: 10px;
     color: #9195a3;
   }
-  .zi{
+  .zi {
     color: #2440b3;
   }
 }

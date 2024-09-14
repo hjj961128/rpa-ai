@@ -93,7 +93,7 @@
               key="primary"
               type="primary"
               link
-              :disabled="row.new_process_file_source === 1"
+              :disabled="row.new_process_file_source === 1 || row.source !==0"
             >
               编辑画布
             </el-button>
@@ -286,6 +286,7 @@ const total = ref(0);
 // 查询流程列表
 const paramsData = ref({});
 const getProcessList = (val) => {
+  paramsData.value = {}
   if (val === "1") {
     paramsData.value.page_num = searchForm.value.page_num;
     paramsData.value.page_size = searchForm.value.page_size;
@@ -330,7 +331,7 @@ const getProcessList = (val) => {
 const clearForm = () => {
   searchForm.value.name = null;
   searchForm.value.dateValues = [];
-  getProcessList("1");
+  getProcessList();
 };
 //上线/下线⬇️
 const onlinesForm = ref({});

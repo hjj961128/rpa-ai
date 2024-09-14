@@ -1,25 +1,27 @@
 <template>
   <div class="main_page">
-     <!-- 面包屑 -->
-     <div style="margin:20px">
-      <el-breadcrumb separator="/">
-        <el-breadcrumb-item>
-          <el-link type="primary" @click="gohome()">首页</el-link>
-        </el-breadcrumb-item>
-        <el-breadcrumb-item>
-          <el-link type="primary" @click="goBack()"
-            >上一页</el-link
-          ></el-breadcrumb-item
-        >
-      </el-breadcrumb>
-    </div>
+    <!-- 面包屑 -->
     <div>
-      <el-button plain @click="publish" type="primary" class="btn">
-        发布
-        <el-icon class="el-icon--right">
-          <Upload />
-        </el-icon>
-      </el-button>
+      <div class="leftaa">
+        <el-breadcrumb separator="/">
+          <el-breadcrumb-item>
+            <el-link type="primary" @click="gohome()">首页</el-link>
+          </el-breadcrumb-item>
+          <el-breadcrumb-item>
+            <el-link type="primary" @click="goBack()"
+              >上一页</el-link
+            ></el-breadcrumb-item
+          >
+        </el-breadcrumb>
+      </div>
+      <div class="rightaa">
+        <el-button plain @click="publish" type="primary">
+          发布
+          <el-icon class="el-icon--right">
+            <Upload />
+          </el-icon>
+        </el-button>
+      </div>
     </div>
     <iframe
       id="my-iframe"
@@ -39,7 +41,7 @@ import request from "@/utils/request";
 import { ElMessage, ElMessageBox } from "element-plus";
 
 // import router from "../../router/index.js";
-import { useRouter } from 'vue-router';
+import { useRouter } from "vue-router";
 
 const router = useRouter();
 const route = useRoute();
@@ -64,7 +66,7 @@ const publish = () => {
     .catch((err) => {
       ElMessage({
         showClose: true,
-       message: err,
+        message: err,
         type: "error",
       });
     });
@@ -106,7 +108,19 @@ onMounted(() => {
   border: none;
   z-index: 9;
 }
-.btn{
+.btn {
   width: 100%;
+}
+.leftaa {
+  width: 50%;
+  display: inline-block;
+  margin-top: 20px;
+}
+.rightaa {
+  width: 50%;
+  display: inline-block;
+  margin-top: 20px;
+  text-align: right;
+  padding-right: 50px;
 }
 </style>

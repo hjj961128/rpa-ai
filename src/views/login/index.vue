@@ -4,8 +4,10 @@
       <el-col :span="12" class="left-con">
         <!-- <img class="bg" src="../../assets/images/login-bg.png" /> -->
         <!-- 登录表单 -->
+      </el-col>
+      <el-col :span="12" class="right-con">
         <div class="content-con">
-          <div class="login-title">{{ isLogin ? "欢迎登录" : "重置密码" }} <span style="font-size:16px;color:#9195a3">RPA+AI系统</span></div>
+          <div class="login-title">{{ isLogin ? "RPA+AI工具箱" : "重置密码" }} <span style="font-size:16px;color:#9195a3"></span></div>
           <el-form
             :model="loginForm"
             :rules="rules"
@@ -56,9 +58,6 @@
             </el-form-item>
           </el-form>
         </div>
-      </el-col>
-      <el-col :span="12" class="right-con">
-        
       </el-col>
     </el-row>
   </div>
@@ -188,7 +187,7 @@ function onSubmit() {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .login-container {
   width: 100vw;
   height: 100vh;
@@ -225,12 +224,18 @@ function onSubmit() {
 }
 .content-con {
   position: absolute;
-  background-color: #fff;
+  background-color: rgba(255, 255, 255, 0.5); 
   padding: 50px;
   top: 50%;
   left: 50%;
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
+  width: 40%;
+  border-radius: 20px;
+  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.2);
+  .el-input__wrapper{
+    box-shadow: none !important;
+  }
 }
 .forget {
   font-size: 16px;

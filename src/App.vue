@@ -65,4 +65,12 @@ body {
     text-align: center!important;
   }
 }
+.content-con {
+  .el-input__wrapper{
+    box-shadow: none !important;
+  }
+  .el-input__inner{
+    background: #fff !important;
+  }
+}
 </style>
