@@ -230,7 +230,7 @@ function onSubmit() {
   left: 50%;
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
-  width: 40%;
+  width: 400px;
   border-radius: 20px;
   box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.2);
   .el-input__wrapper{
