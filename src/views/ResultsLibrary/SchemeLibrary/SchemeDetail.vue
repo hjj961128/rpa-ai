@@ -234,6 +234,11 @@
               <div>{{ secondsToHMS(row.run_time) }}</div>
             </template>
           </el-table-column>
+          <el-table-column
+            prop="run_result_reason"
+            label="运行详情"
+            min-width="100"
+          />
 
           <el-table-column prop="start_time" label="开始时间" min-width="100" />
           <el-table-column prop="end_time" label="结束时间" min-width="100" />
