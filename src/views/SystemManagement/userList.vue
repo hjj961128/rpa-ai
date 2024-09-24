@@ -55,6 +55,8 @@
         </el-table-column>
         <!-- <el-table-column prop="id" label="用户id" /> -->
         <el-table-column prop="username" label="用户名称" />
+        <el-table-column prop="email" label="邮箱" />
+
         <el-table-column prop="department.name" label="部门" />
         <!-- <el-table-column prop="permission" label="部门">
           <template #default="{ row }">
@@ -116,6 +118,10 @@
         </el-form-item>
         <el-form-item label="用户名称">
           <el-input v-model="addUserForm.name" />
+        </el-form-item>
+
+        <el-form-item label="邮箱">
+          <el-input v-model="addUserForm.email" />
         </el-form-item>
 
         <el-form-item label="角色">
@@ -247,6 +253,7 @@ const addUser = (val, val2) => {
     addUserForm.value.status = val2.status == 0 ? true : false;
     addUserForm.value.comment = val2.comment;
     addUserForm.value.id = val2.id;
+    addUserForm.value.email = val2.email;
     addUserForm.value.department_id = val2.department.id;
     addUserForm.value.roleList = editRoles.value
   }
@@ -305,6 +312,7 @@ const addUserApi = () => {
     url: "/api/user",
     data: {
       username: addUserForm.value.name,
+      email:  addUserForm.value.email,
       password: addUserForm.value.password,
       password_again: addUserForm.value.passwordAgain,
       permission: addUserForm.value.permission,
@@ -342,6 +350,7 @@ const EditUserApi = () => {
     },
     data: {
       username: addUserForm.value.name,
+      email:  addUserForm.value.email,
       password:
         addUserForm.value.password == "" ? null : addUserForm.value.password,
       password_again:
