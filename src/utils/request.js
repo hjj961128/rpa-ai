@@ -3,7 +3,7 @@ import { ElMessage, ElMessageBox } from "element-plus";
 import router from "@/router/index.js";
 import {useRoute} from "vue-router";
 const route = useRoute();
-const API_BASE_URL = 'http://172.28.144.167:8080/'//tai
+const API_BASE_URL = 'http://172.28.144.16:8080/'//tai
 // const API_BASE_URL = 'http://172.20.10.3:8080/' //sun
 
 const apiClient = axios.create({

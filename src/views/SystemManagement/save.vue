@@ -43,7 +43,7 @@ const getSecondSegment=(str)=> {
 }
 const iframe = ref(null);
 
-const iframeSrc ='http://172.28.144.167:8084/'; // 你的iframe内容的URL
+const iframeSrc =httpClient.defaults.baseURL.slice(0, -5)+'8084/'; // 你的iframe内容的URL
 console.log(iframeSrc.value);
 const gohome = () => {
   router.push("/home");
