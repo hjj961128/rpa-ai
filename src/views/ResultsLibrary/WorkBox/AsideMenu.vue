@@ -27,6 +27,11 @@
               <svg-icon name="toubiao"></svg-icon>
               <span> 投标管理系统 </span>
             </el-menu-item>
+
+          <el-menu-item class="aaa" index="/email-system">
+              <svg-icon name="email-system"></svg-icon>
+              <span> 邮件收发管理 </span>
+            </el-menu-item>
         </el-sub-menu>
       </el-menu>
     </el-col>

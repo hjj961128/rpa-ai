@@ -85,6 +85,12 @@ const router = vueRouter.createRouter({
               import("@/views/ResultsLibrary/WorkBox/customization.vue"),
         },
         {
+            path: "/email-system",
+            name: "email",
+            component: () =>
+              import("@/views/ResultsLibrary/WorkBox/email-system.vue"),
+        },
+        {
           path: "/processlist",
           name: "processlist",
           component: () => import("@/views/ProcessCanvas/processlist.vue"),
