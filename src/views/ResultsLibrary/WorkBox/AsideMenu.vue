@@ -23,7 +23,7 @@
             <svg-icon name="customization"></svg-icon>
             <span> 定制化工具 </span>
           </template>
-            <el-menu-item class="aaa" index="/customization">
+            <el-menu-item class="aaa" index="/bidding-system">
               <svg-icon name="toubiao"></svg-icon>
               <span> 投标管理系统 </span>
             </el-menu-item>

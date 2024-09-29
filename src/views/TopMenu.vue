@@ -21,7 +21,7 @@
             text-align: center;
             font-size: 16px;
           "
-          index="/schemeLibraryIndex"
+          index="/schemeLibrary"
           >方案库</el-menu-item
         >
         <el-menu-item
@@ -40,7 +40,7 @@
       <el-menu-item index="/center" v-if="hasPermission()"
         >中控管理</el-menu-item
       >
-      <el-menu-item index="/roleList">系统管理</el-menu-item>
+      <el-menu-item index="/systemManagement">系统管理</el-menu-item>
       <div class="userinfo">
         <el-dropdown>
           <span class="el-dropdown-link" v-if="userInfo">

@@ -27,3 +27,21 @@ npm run dev
 ```sh
 npm run build
 ```
+
+### 开发环境配置
+开发环境配置后端api地址，通过配置proxy, 禁止写死axios baseUrl, API_BASE_URL=''即可，
+生产环境走的是nginx proxy
+```js
+  server: {
+    // 本地跨域代理 https://cn.vitejs.dev/config/server-options.html#server-proxy
+    proxy:{
+      '/api': {
+        target: 'http://127.0.0.1:8080',
+        changeOrigin: true
+      }
+    }
+  }
+
+
+```
+

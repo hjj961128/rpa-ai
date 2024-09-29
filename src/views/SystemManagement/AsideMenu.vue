@@ -22,21 +22,21 @@
 import { ArrowDown } from '@element-plus/icons-vue'
 const navList = [
   {
-    id:'2',
-    navName: '角色管理',
-    path: '/roleList',
-    icon: 'role'
-  },
-  {
     id:'1',
     navName: '用户管理',
     path: '/userList',
     icon: 'userlist'
   },
   {
+    id:'2',
+    navName: '角色管理',
+    path: '/roleList',
+    icon: 'role'
+  },
+  {
     id:'3',
     navName: '安全管控',
-    path: '/save',
+    path: '/security',
     icon: 'save'
   },
 ]

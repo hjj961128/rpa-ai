@@ -30,29 +30,29 @@ const router = vueRouter.createRouter({
           component: () => import("@/views/Home.vue"),
         },
         {
-          path: "/schemeLibraryIndex",
-          name: "schemeLibraryIndex",
+          path: "/achievementLibrary",
+          name: "achievementLibrary",
           component: () =>
-            import("@/views/ResultsLibrary/SchemeLibrary/index.vue"),
-          redirect: "/mainList",
+            import("@/views/ResultsLibrary/AchievementLibrary/index.vue"),
+          redirect: "/schemeLibrary",
           children: [
             {
-              path: "/mainList",
-              name: "mainList",
+              path: "/schemeLibrary",
+              name: "schemeLibrary",
               component: () =>
-                import("@/views/ResultsLibrary/SchemeLibrary/MainList.vue"),
+                import("@/views/ResultsLibrary/AchievementLibrary/schemeLibrary.vue"),
             },
             {
-              path: "/mainListMore",
-              name: "mainListMore",
+              path: "/departmentScheme",
+              name: "departmentalScheme",
               component: () =>
-                import("@/views/ResultsLibrary/SchemeLibrary/MainListMore.vue"),
+                import("@/views/ResultsLibrary/AchievementLibrary/departmentScheme.vue"),
             },
             {
               path: "/schemeDetail",
               name: "schemeDetail",
               component: () =>
-                import("@/views/ResultsLibrary/SchemeLibrary/SchemeDetail.vue"),
+                import("@/views/ResultsLibrary/AchievementLibrary/SchemeDetail.vue"),
             },
           ],
         },
@@ -79,16 +79,16 @@ const router = vueRouter.createRouter({
           ]
         },
         {
-            path: "/customization",
-            name: "customization",
+            path: "/bidding-system",
+            name: "BiddingSystem",
             component: () =>
-              import("@/views/ResultsLibrary/WorkBox/customization.vue"),
+              import("@/views/ResultsLibrary/WorkBox/BiddingSystem.vue"),
         },
         {
             path: "/email-system",
             name: "email",
             component: () =>
-              import("@/views/ResultsLibrary/WorkBox/email-system.vue"),
+              import("@/views/ResultsLibrary/WorkBox/EmailSystem.vue"),
         },
         {
           path: "/processlist",
@@ -109,22 +109,22 @@ const router = vueRouter.createRouter({
           path: "/systemManagement",
           name: "systemManagement",
           component: () => import("@/views/SystemManagement/index.vue"),
-          // redirect: '/roleList',
+          redirect: '/userList',
           children: [
-            {
-              path: "/roleList",
-              name: "roleList",
-              component: () => import("@/views/SystemManagement/roleList.vue"),
-            },
             {
               path: "/userList",
               name: "userList",
               component: () => import("@/views/SystemManagement/userList.vue"),
             },
             {
-              path: "/save",
-              name: "save",
-              component: () => import("@/views/SystemManagement/save.vue"),
+              path: "/roleList",
+              name: "roleList",
+              component: () => import("@/views/SystemManagement/roleList.vue"),
+            },
+            {
+              path: "/security",
+              name: "security",
+              component: () => import("@/views/SystemManagement/security.vue"),
             },
           ],
         },
