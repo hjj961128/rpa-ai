@@ -40,7 +40,7 @@
               <el-button :icon="Search" @click="getProcessList('1')" type="primary"
               >查询
               </el-button>
-              <el-button :icon="Plus" type="primary" @click="choiceSource('0')"
+              <el-button :icon="Plus" type="primary" @click="choiceSource(0)"
               >增加流程
               </el-button>
               <el-button :icon="Refresh" type="primary" @click="clearForm">重置</el-button>
@@ -562,7 +562,7 @@ const choiceSource = (val) => {
   choiceSourceShow.value = true;
 
   if (val === 0) {
-    choiceSourceTitle.value = "添加流程";
+    choiceSourceTitle.value = "增加流程";
   } else {
     choiceSourceTitle.value = "编辑流程";
   }
