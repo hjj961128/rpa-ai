@@ -20,6 +20,12 @@ export default defineConfig({
     port: '5173',
     host: "0.0.0.0",
     // 本地跨域代理 https://cn.vitejs.dev/config/server-options.html#server-proxy
+    proxy:{
+      '/api':{
+        target:'http://127.0.0.1:8080',
+        changeOrigin:true
+      }
+    }
   },
   resolve: {
     alias: {
