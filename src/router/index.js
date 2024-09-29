@@ -79,13 +79,13 @@ const router = vueRouter.createRouter({
           ]
         },
         {
-            path: "/bidding-system",
+            path: "/biddingSystem",
             name: "BiddingSystem",
             component: () =>
               import("@/views/ResultsLibrary/WorkBox/BiddingSystem.vue"),
         },
         {
-            path: "/email-system",
+            path: "/emailSystem",
             name: "email",
             component: () =>
               import("@/views/ResultsLibrary/WorkBox/EmailSystem.vue"),
