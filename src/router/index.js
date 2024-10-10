@@ -44,7 +44,7 @@ const router = vueRouter.createRouter({
             },
             {
               path: "/departmentScheme",
-              name: "departmentalScheme",
+              name: "departmentScheme",
               component: () =>
                 import("@/views/ResultsLibrary/AchievementLibrary/departmentScheme.vue"),
             },

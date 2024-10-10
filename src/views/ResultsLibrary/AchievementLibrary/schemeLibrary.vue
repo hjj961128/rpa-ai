@@ -64,7 +64,7 @@ const goBack = () => {
 const handleOpen = (key, keyPath) => {};
 const handleClose = (key, keyPath) => {};
 const goDetail = (val) => {
-  router.push({ name: "mainListMore", query: { id: val } });
+  router.push({ name: "departmentScheme", query: { id: val } });
 };
 const userInfo = ref({
   roles: [],
