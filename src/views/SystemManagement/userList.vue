@@ -54,8 +54,10 @@
           </template>
         </el-table-column>
         <!-- <el-table-column prop="id" label="用户id" /> -->
-        <el-table-column prop="username" label="用户名称" />
-        <el-table-column prop="email" label="邮箱" />
+        <el-table-column prop="username" label="用户名称" show-overflow-tooltip/>
+        <el-table-column prop="phone_number" label="手机号" show-overflow-tooltip/>
+
+        <el-table-column prop="email" label="邮箱" show-overflow-tooltip/>
 
         <el-table-column prop="department.name" label="部门" />
         <!-- <el-table-column prop="permission" label="部门">
@@ -70,7 +72,7 @@
         </el-table-column>
         <el-table-column prop="comment" label="备注" />
 
-        <el-table-column prop="id" label="操作" width="120">
+        <el-table-column prop="id" label="操作" width="120" fixed="right">
           <template #default="scope">
             <!-- {{ scope.row.date }} -->
             <el-button
@@ -104,7 +106,7 @@
         style="margin-top: 10px; float: right"
       />
     </div>
-    <el-dialog v-model="dialogVisibleUser" :title="dialogTitle" width="500">
+    <el-dialog v-loading="dialogLoading" v-model="dialogVisibleUser" :title="dialogTitle" width="500">
       <el-form :model="addUserForm" label-width="auto" style="max-width: 600px">
         <el-form-item label="部门">
           <el-select v-model="addUserForm.department_id" placeholder="请选择部门">
@@ -118,6 +120,10 @@
         </el-form-item>
         <el-form-item label="用户名称">
           <el-input v-model="addUserForm.name" />
+        </el-form-item>
+
+        <el-form-item label="手机号">
+          <el-input v-model="addUserForm.phone_number" />
         </el-form-item>
 
         <el-form-item label="邮箱">
@@ -183,6 +189,8 @@ const addUserForm = ref({
   id: 0,
   department_id:'',
   name: "",
+  phone_number: "",
+  email: "",
   password: "",
   passwordAgain: "",
   status: true,
@@ -253,6 +261,7 @@ const addUser = (val, val2) => {
     addUserForm.value.status = val2.status == 0 ? true : false;
     addUserForm.value.comment = val2.comment;
     addUserForm.value.id = val2.id;
+    addUserForm.value.phone_number = val2.phone_number;
     addUserForm.value.email = val2.email;
     addUserForm.value.department_id = val2.department.id;
     addUserForm.value.roleList = editRoles.value
@@ -312,6 +321,7 @@ const addUserApi = () => {
     url: "/api/user",
     data: {
       username: addUserForm.value.name,
+      phone_number:  addUserForm.value.phone_number,
       email:  addUserForm.value.email,
       password: addUserForm.value.password,
       password_again: addUserForm.value.passwordAgain,
