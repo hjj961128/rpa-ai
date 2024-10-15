@@ -273,7 +273,7 @@ const addUserApi = () => {
     .then((res) => {
       ElMessage({
         showClose: true,
-        message: "新增用户成功",
+        message: "新增角色成功",
         type: "success",
       });
       dialogVisibleUser.value = false;
