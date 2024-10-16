@@ -539,10 +539,10 @@ const edit = (val) => {
     url: "/api/auth/mcenter-token",
   })
       .then((res) => {
-        sessionStorage.setItem("centerMtoken", res.data.data.token);
+        // sessionStorage.setItem("centerMtoken", res.data.data.token);
         router.push({
           name: "processCanvas",
-          query: {id: val.cloud_flow_id, processId: val.id},
+          query: {id: val.cloud_flow_id, processId: val.id,token:res.data.data.token},
         });
       })
       .catch((err) => {

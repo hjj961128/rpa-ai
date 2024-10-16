@@ -78,8 +78,8 @@ const goBack = () => {
   router.go(-1);
 };
 onMounted(() => {
-  const token = sessionStorage.getItem("centerMtoken");
-  iframe.value = `${iframeSrc}?token=${token}`;
+  // const token = sessionStorage.getItem("centerMtoken");
+  iframe.value = `${iframeSrc}?token=${route.query.token}`;
 });
 </script>
 <style lang="scss" scoped>
