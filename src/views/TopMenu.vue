@@ -42,19 +42,22 @@
       >
       <el-menu-item index="/systemManagement">系统管理</el-menu-item>
       <div class="userinfo">
-        <el-dropdown>
-          <span class="el-dropdown-link" v-if="userInfo">
-            {{ userInfo.username }}
+        <el-dropdown placement="bottom-start">
+          <span class="el-dropdown-link" v-if="userStore.userInfo">
+            {{ userStore.userInfo.nickname }}
             <el-icon class="el-icon--right">
               <arrow-down />
             </el-icon>
           </span>
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item @click="dialogVisible = true"
-                >修改密码</el-dropdown-item
-              >
-              <el-dropdown-item @click="goLogin">退出登陆</el-dropdown-item>
+              <el-dropdown-item>
+                <el-button @click="dialogVisible = true" link>修改密码</el-button>
+              </el-dropdown-item>
+
+              <el-dropdown-item >
+                <el-button @click="goLogin" link>退出登陆</el-button>
+              </el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
@@ -67,6 +70,9 @@
     width="500"
     style="text-align: left"
   >
+    <div style="text-align: center;margin-bottom: 10px;color: #e6a23c">
+      修改成功后将自动退出，重新登录
+    </div>
     <el-form
       :rules="rules"
       ref="passwordFormRef"
@@ -75,10 +81,10 @@
       style="max-width: 600px"
     >
       <el-form-item label="密码">
-        <el-input v-model="passwordForm.password" />
+        <el-input v-model="passwordForm.password" type="password" placeholder="请输入密码"/>
       </el-form-item>
       <el-form-item label="再次确认密码">
-        <el-input v-model="passwordForm.passwordAgain" />
+        <el-input v-model="passwordForm.passwordAgain" type="password" placeholder="请输入确认密码"/>
       </el-form-item>
     </el-form>
     <template #footer>
@@ -91,19 +97,23 @@
 </template>
 <script setup>
 import { onMounted, ref } from "vue";
+
+import { useUserStore } from '@/stores/modules/user'
+import { useTokenStore } from '@/stores/modules/auth'
+
+
 import request from "@/utils/request";
 // import router from "../router/index.js";
 import { ElMessage } from "element-plus";
 import { ArrowDown } from "@element-plus/icons-vue";
 function handleSelect(val) {}
 import { useRouter } from "vue-router";
-const router = useRouter();
 
+const router = useRouter();
+const tokenStore = useTokenStore()
 const goLogin = () => {
-  sessionStorage.removeItem("refresh_token");
-  sessionStorage.removeItem("Authorization");
-  sessionStorage.removeItem("userInfo");
-  router.push({ name: "login" });
+  tokenStore.setToken('')
+  router.push({path:'/login'});
 };
 const dialogVisible = ref(false);
 const passwordForm = ref({
@@ -140,12 +150,13 @@ const putPassword = () => {
     });
 };
 
-const userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
+// const userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
+const userStore = useUserStore()
 
 onMounted(() => {});
 
 const hasPermission = () => {
-  return userInfo.roles.indexOf("admin") !== -1;
+  return userStore.userInfo.roles?.indexOf("admin") !== -1;
 };
 </script>
 <style lang="scss" scoped>

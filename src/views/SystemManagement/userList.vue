@@ -54,7 +54,9 @@
           </template>
         </el-table-column>
         <!-- <el-table-column prop="id" label="用户id" /> -->
-        <el-table-column prop="username" label="用户名称" show-overflow-tooltip/>
+        <el-table-column prop="username" label="用户名" show-overflow-tooltip/>
+        <el-table-column prop="nickname" label="用户姓名名" show-overflow-tooltip/>
+
         <el-table-column prop="phone_number" label="手机号" show-overflow-tooltip/>
 
         <el-table-column prop="email" label="邮箱" show-overflow-tooltip/>
@@ -118,8 +120,12 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="用户名称">
-          <el-input v-model="addUserForm.name" />
+        <el-form-item label="用户名">
+          <el-input v-model="addUserForm.username" />
+        </el-form-item>
+
+        <el-form-item label="用户姓名">
+          <el-input v-model="addUserForm.nickname" />
         </el-form-item>
 
         <el-form-item label="手机号">
@@ -186,16 +192,6 @@ const form = reactive({
   page_size: 10,
 });
 const addUserForm = ref({
-  id: 0,
-  department_id:'',
-  name: "",
-  phone_number: "",
-  email: "",
-  password: "",
-  passwordAgain: "",
-  status: true,
-  comment: "",
-  roleList:[]
 });
 
 
@@ -257,7 +253,8 @@ const addUser = (val, val2) => {
       editRoles.value.push(item.id)
     });
     dialogTitle.value = "编辑用户";
-    addUserForm.value.name = val2.username;
+    addUserForm.value.username = val2.username;
+    addUserForm.value.nickname = val2.nickname;
     addUserForm.value.status = val2.status == 0 ? true : false;
     addUserForm.value.comment = val2.comment;
     addUserForm.value.id = val2.id;
@@ -320,7 +317,8 @@ const addUserApi = () => {
     method: "POST",
     url: "/api/user",
     data: {
-      username: addUserForm.value.name,
+      username: addUserForm.value.username,
+      nickname: addUserForm.value.nickname,
       phone_number:  addUserForm.value.phone_number,
       email:  addUserForm.value.email,
       password: addUserForm.value.password,

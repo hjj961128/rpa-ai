@@ -1,8 +1,9 @@
 import { createPinia } from 'pinia'
-import persist from 'pinia-plugin-persistedstate'
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 
-// app.use(createPinia().use(persist))
-const pinia=createPinia()
-pinia.use(persist)
+// pinia persist
+const pinia = createPinia()
+// 引入pin持久化
+pinia.use(piniaPluginPersistedstate)
+
 export default pinia
-export * from './user'

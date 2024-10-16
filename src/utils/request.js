@@ -1,22 +1,24 @@
 import axios from 'axios';
-import { ElMessage, ElMessageBox } from "element-plus";
-import router from "@/router/index.js";
-import {useRoute} from "vue-router";
-const route = useRoute();
+import { ElMessage } from "element-plus";
+
+
 const API_BASE_URL = ''
+
+
+
+import { useTokenStore } from '@/stores/modules/auth'
+
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
   timeout: 100000,
-  headers: {
-    'Authorization': `${sessionStorage.getItem('Authorization')}`
-  }
   // 其他axios配置选项
 });
  // 请求拦截器
  apiClient.interceptors.request.use(
   (config) => {
-    const accessToken = sessionStorage.getItem("Authorization");
+      const tokenStore = useTokenStore()
+    const accessToken = tokenStore.token;
     if (accessToken) {
       config.headers.Authorization = accessToken;
     }
@@ -32,8 +34,6 @@ apiClient.interceptors.response.use(
     return response
   },
   (error)=>{
-    console.log('1111111');
-    console.log(error.response);
     if (error.response) {
       // 401响应
       if (error.response.status === 401) {

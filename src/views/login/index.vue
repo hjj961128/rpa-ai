@@ -32,11 +32,11 @@
                 </template>
               </el-input>
             </el-form-item>
-            <el-form-item prop="praswood">
+            <el-form-item prop="password">
               <el-input
                 placeholder="请输入密码"
                 show-password
-                v-model="loginForm.praswood"
+                v-model="loginForm.password"
                 clearable
                 auto-complete="on"
                 @keyup.enter="onSubmit"
@@ -64,7 +64,7 @@
 </template>
 
 <script setup>
-import { useUserCounter } from "@/stores/user";
+
 import { ElMessage } from "element-plus";
 import { UserFilled } from "@element-plus/icons-vue";
 
@@ -74,17 +74,23 @@ import { reactive, watch, ref } from "vue";
 // import router from "@/router/index.js";
 import { useRouter } from "vue-router";
 
+import { useUserStore } from '@/stores/modules/user'
+
+import { useTokenStore } from '@/stores/modules/auth'
+
+
 const router = useRouter();
 import CryptoJS from "crypto-js";
 
-const userStore = useUserCounter();
+const userStore = useUserStore();
+const tokenStore = useTokenStore()
 const isLogin = true;
 // do not use same name with ref
 
 const loading = ref(false)
 const loginForm = reactive({
   name: "",
-  praswood: "",
+  password: "",
 });
 const loginFormRef = ref(null);
 const validateUsername = (rule, value, callback) => {
@@ -105,7 +111,7 @@ const validatePassword = (rule, value, callback) => {
 
 const rules = {
   name: [{ validator: validateUsername, trigger: "blur" }],
-  praswood: [{ validator: validatePassword, trigger: "blur" }],
+  password: [{ validator: validatePassword, trigger: "blur" }],
 };
 
 const redirect = ref(null);
@@ -152,12 +158,12 @@ function onSubmit() {
         url: "/api/auth/login",
         data: {
           username: loginForm.name,
-          password: Pandora(loginForm.praswood),
+          password: Pandora(loginForm.password),
         },
       })
         .then(async (res) => {
-          sessionStorage.setItem("Authorization", res.data.data.access_token);
-          sessionStorage.setItem("refresh_token", res.data.data.refresh_token);
+          tokenStore.setToken(res.data.data.access_token)
+          tokenStore.setRefreshToken(res.data.data.refresh_token);
           ElMessage({
             showClose: true,
             message: "登录成功",
@@ -165,9 +171,7 @@ function onSubmit() {
           });
 
           loading.value = false;
-          if (sessionStorage.getItem("Authorization")) {
-            await userStore.setUserInfo();
-          }
+          await userStore.setUserInfo();
           router.push({ path: redirect.value || "/", query: otherQuery.value });
         })
         .catch((err) => {
@@ -224,7 +228,7 @@ function onSubmit() {
 }
 .content-con {
   position: absolute;
-  background-color: rgba(255, 255, 255, 0.5); 
+  background-color: rgba(255, 255, 255, 0.5);
   padding: 50px;
   top: 50%;
   left: 50%;
