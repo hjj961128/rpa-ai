@@ -292,6 +292,7 @@ import request from "@/utils/request";
 import {ElMessage, ElMessageBox} from "element-plus";
 import {useRouter} from "vue-router";
 import {getVendorAPI} from "@/api/process";
+import { useUserStore } from '@/stores/modules/user'
 import {
   Check,
   Delete,
@@ -569,6 +570,9 @@ const choiceSource = (val) => {
 };
 
 const userInfo = ref({});
+const userStore = useUserStore()
+userInfo.value = userStore.userInfo
+
 const innerVisible = ref(false);
 const innerTitle = ref("创建新流程");
 
@@ -708,7 +712,7 @@ const getVendorList = async () => {
 
 const isSA = ref(false);
 
-userInfo.value = JSON.parse(sessionStorage.getItem("userInfo"));
+
 
 // 是否可操作上线下线
 const isOnline = (row) => {

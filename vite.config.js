@@ -22,8 +22,8 @@ export default defineConfig({
     // 本地跨域代理 https://cn.vitejs.dev/config/server-options.html#server-proxy
     proxy:{
       '/api':{
-        // target:'http://127.0.0.1:8080',
-        target:'http://172.28.144.125:8080',
+        target:'http://127.0.0.1:8080',
+        // target:'http://172.28.144.125:8080',
         changeOrigin:true
       }
     }

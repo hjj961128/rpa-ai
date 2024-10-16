@@ -53,6 +53,8 @@ import { ElMessage } from "element-plus";
 // import router from "../../../router/index.js";
 import request from "@/utils/request";
 import { useRouter } from "vue-router";
+import { useUserStore } from '@/stores/modules/user'
+
 
 const router = useRouter();
 const gohome = () => {
@@ -138,8 +140,8 @@ const queryprocessList = (val) => {
     });
 };
 onMounted(() => {
-  userInfo.value = JSON.parse(sessionStorage.getItem("userInfo"));
-  if (userInfo.value.roles.indexOf("admin") == -1) {
+  userInfo.value = useUserStore().userInfo
+  if (userInfo.value.roles.indexOf("admin") === -1) {
     //不是管理员
     queryDepartmentListParams.value.id = userInfo.value.department_id;
   } else {

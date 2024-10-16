@@ -25,6 +25,7 @@ import { onMounted, watch, ref } from "vue";
 import request from "@/utils/request";
 import { useRoute } from "vue-router";
 import { ElMessage } from "element-plus";
+import { useUserStore } from '@/stores/modules/user'
 
 const route = useRoute();
 
@@ -80,8 +81,9 @@ const queryDepartmentListid = () => {
     });
 };
 onMounted(() => {
-  userInfo.value = JSON.parse(sessionStorage.getItem("userInfo"));
-  if (userInfo.value.roles.indexOf("admin") == -1) {
+  userInfo.value = useUserStore().userInfo;
+  console.log(userInfo.value.roles.indexOf('admin'))
+  if (userInfo.value.roles.indexOf('admin') === -1) {
     //不是管理员
     // departmentList.value = [
     //   {

@@ -131,8 +131,17 @@ const putPassword = () => {
     },
   })
     .then((res) => {
+      console.log(res)
+      if(res.data.code === 0){
+        ElMessage({
+        showClose: true,
+        message: "修改成功，请重新登录",
+        type: "success",
+      });
+        goLogin()
+      }
       dialogVisible.value = false;
-      router.push({ name: "login" });
+
     })
     .catch((err) => {
       ElMessage({
