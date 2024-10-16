@@ -4,6 +4,9 @@ import {useUserStore} from '@/stores/modules/user'
 import {useTokenStore} from '@/stores/modules/auth'
 
 import * as vueRouter from 'vue-router';
+import nProgress from 'nprogress'
+import 'nprogress/nprogress.css'
+
 
 const router = vueRouter.createRouter({
     // history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -143,8 +146,13 @@ const router = vueRouter.createRouter({
 });
 
 const whiteList = ['/login']
+nProgress.configure({
+  showSpinner: false,
+  color: '#3370ff'
+})
 // 导航守卫
 router.beforeEach(async (to, from, next) => {
+    nProgress.start()
     window.document.title = to.meta.title == undefined ? 'RPA+AI工具箱' : to.meta.title
 
 
@@ -193,5 +201,9 @@ router.beforeEach(async (to, from, next) => {
 
 })
 
+// 全局后置钩子
+router.afterEach(() => {
+  nProgress.done(true)
+})
 
 export default router;
