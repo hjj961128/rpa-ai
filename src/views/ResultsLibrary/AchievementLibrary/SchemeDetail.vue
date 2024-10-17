@@ -795,6 +795,7 @@ const clickTask = (val) => {
           message: "任务已下发，客户端即将运行",
         });
         runModeVisible.value = false;
+        getTask();
       })
       .catch((err) => {
         ElMessage({
