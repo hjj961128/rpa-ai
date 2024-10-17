@@ -121,9 +121,8 @@
           </el-select>
         </el-form-item>
         <el-form-item label="用户名">
-          <el-input v-model="addUserForm.username" />
+          <el-input v-model="addUserForm.username" :disabled="isEditUser === '1'"/>
         </el-form-item>
-
         <el-form-item label="用户姓名">
           <el-input v-model="addUserForm.nickname" />
         </el-form-item>
@@ -357,7 +356,7 @@ const EditUserApi = () => {
       id: addUserForm.value.id,
     },
     data: {
-      username: addUserForm.value.name,
+      username: addUserForm.value.username,
       email:  addUserForm.value.email,
       password:
         addUserForm.value.password == "" ? null : addUserForm.value.password,
