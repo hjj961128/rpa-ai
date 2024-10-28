@@ -271,8 +271,14 @@
       :title="runModeTypeNum == '1' ? '手动执行' : '定时执行'"
       append-to-body
     >
-      <el-form :model="runModeForm" label-width="auto" style="max-width: 800px">
-        <el-form-item label="触发器名称" v-if="runModeTypeNum == '2'">
+      <el-form
+        ref="rulepRunModeFormRef"
+        :model="runModeForm"
+        :rules="runModeTypeNum == '1' ? manualRules : timingRules"
+        label-width="auto"
+        style="max-width: 800px"
+      >
+        <el-form-item label="触发器名称" v-if="runModeTypeNum == '2'" prop="tiggerName">
           <el-input
             v-model="runModeForm.tiggerName"
             placeholder="请输入触发器名称"
@@ -281,7 +287,7 @@
         <el-form-item label="流程名称">
           <el-input v-model="runModeForm.name" disabled />
         </el-form-item>
-        <el-form-item label="是否自动分配worker">
+        <el-form-item label="是否自动分配worker" prop="isWorker">
           <el-switch v-model="runModeForm.isWorker" />
         </el-form-item>
         <el-form-item label="worker名称" v-if="!runModeForm.isWorker">
@@ -467,6 +473,26 @@ import httpClient from "../../../utils/request.js";
 
 import request from "@/utils/request";
 import { useRouter } from "vue-router";
+
+const rulepRunModeFormRef = ref();
+const manualRules = {
+  // isWorker: [
+  //   {
+  //     required: true,
+  //     message: "请选择是否自动分配worker",
+  //     trigger: "blur",
+  //   },
+  // ],
+};
+const timingRules = {
+  tiggerName:[
+    {
+      required: true,
+      message: "请输入触发器名称",
+      trigger: "blur",
+    },
+  ],
+}
 
 const router = useRouter();
 const disabledDate = (time) => {
@@ -720,128 +746,135 @@ const handleTaskCurrentChange = (val) => {
 const cronExpression = ref("");
 const clickTask = (val) => {
   console.log(val);
-  if (runModeForm.value.choiceTime == "eDay") {
-    cronExpression.value =
-      "0" +
-      " " +
-      runModeForm.value.timeHM.substring(
-        runModeForm.value.timeHM.length - 2,
-        runModeForm.value.timeHM.length
-      ) +
-      " " +
-      runModeForm.value.timeHM.substring(0, 2) +
-      " " +
-      "*" +
-      " " +
-      "*" +
-      " " +
-      "?";
-  } else if (runModeForm.value.choiceTime == "eWeek") {
-    cronExpression.value =
-      "0" +
-      " " +
-      runModeForm.value.timeHM.substring(
-        runModeForm.value.timeHM.length - 2,
-        runModeForm.value.timeHM.length
-      ) +
-      " " +
-      runModeForm.value.timeHM.substring(0, 2) +
-      " " +
-      "?" +
-      " " +
-      "*" +
-      " " +
-      checkedWeeks.value.toString();
-  } else {
-    const timeTypeValue = ref("");
-    console.log(timeTypeValue.value);
-    console.log(runModeForm.value.timeType);
-    if (runModeForm.value.timeType == "monthlast") {
-      timeTypeValue.value = "L";
-    } else {
-      timeTypeValue.value = runModeForm.value.monthDay.toString();
+  rulepRunModeFormRef.value.validate((valid) => {
+    if (valid) {
+      if (runModeForm.value.choiceTime == "eDay") {
+        cronExpression.value =
+          "0" +
+          " " +
+          runModeForm.value.timeHM.substring(
+            runModeForm.value.timeHM.length - 2,
+            runModeForm.value.timeHM.length
+          ) +
+          " " +
+          runModeForm.value.timeHM.substring(0, 2) +
+          " " +
+          "*" +
+          " " +
+          "*" +
+          " " +
+          "?";
+      } else if (runModeForm.value.choiceTime == "eWeek") {
+        cronExpression.value =
+          "0" +
+          " " +
+          runModeForm.value.timeHM.substring(
+            runModeForm.value.timeHM.length - 2,
+            runModeForm.value.timeHM.length
+          ) +
+          " " +
+          runModeForm.value.timeHM.substring(0, 2) +
+          " " +
+          "?" +
+          " " +
+          "*" +
+          " " +
+          checkedWeeks.value.toString();
+      } else {
+        const timeTypeValue = ref("");
+        console.log(timeTypeValue.value);
+        console.log(runModeForm.value.timeType);
+        if (runModeForm.value.timeType == "monthlast") {
+          timeTypeValue.value = "L";
+        } else {
+          timeTypeValue.value = runModeForm.value.monthDay.toString();
+        }
+        cronExpression.value =
+          "0" +
+          " " +
+          runModeForm.value.timeHM.substring(
+            runModeForm.value.timeHM.length - 2,
+            runModeForm.value.timeHM.length
+          ) +
+          " " +
+          runModeForm.value.timeHM.substring(0, 2) +
+          " " +
+          timeTypeValue.value +
+          " " +
+          checkedMonth.value.toString() +
+          " " +
+          "?";
+      }
+      console.log(cronExpression.value);
+      if (val == "1") {
+        request({
+          method: "POST",
+          url: "/api/task",
+          data: {
+            process_id: route.query.id,
+            wr_worker_id: runModeForm.value.workerName,
+            automatic: runModeForm.value.isWorker,
+            file_params: ProcessParamsList.value,
+          },
+        })
+          .then((res) => {
+            ElMessage({
+              type: "success",
+              message: "任务已下发，客户端即将运行",
+            });
+            runModeVisible.value = false;
+            getTask();
+          })
+          .catch((err) => {
+            ElMessage({
+              showClose: true,
+              message: err,
+              type: "error",
+            });
+          });
+      } else {
+        request({
+          method: "POST",
+          url: "/api/trigger",
+          data: {
+            process_id: route.query.id,
+            name: runModeForm.value.tiggerName,
+            wr_work_id: runModeForm.value.workerName,
+            cron_expression: cronExpression.value,
+            work_start_time: new Date(startTime.value).toLocaleDateString(
+              "en-CA",
+              {
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+              }
+            ),
+            work_end_time: new Date(endTime.value).toLocaleDateString("en-CA", {
+              year: "numeric",
+              month: "2-digit",
+              day: "2-digit",
+            }),
+            automatic: runModeForm.value.isWorker,
+            params: ProcessParamsList.value,
+          },
+        })
+          .then((res) => {
+            ElMessage({
+              type: "success",
+              message: "任务已下发，客户端即将运行",
+            });
+            runModeVisible.value = false;
+          })
+          .catch((err) => {
+            ElMessage({
+              showClose: true,
+              message: err,
+              type: "error",
+            });
+          });
+      }
     }
-    cronExpression.value =
-      "0" +
-      " " +
-      runModeForm.value.timeHM.substring(
-        runModeForm.value.timeHM.length - 2,
-        runModeForm.value.timeHM.length
-      ) +
-      " " +
-      runModeForm.value.timeHM.substring(0, 2) +
-      " " +
-      timeTypeValue.value +
-      " " +
-      checkedMonth.value.toString() +
-      " " +
-      "?";
-  }
-  console.log(cronExpression.value);
-  if (val == "1") {
-    request({
-      method: "POST",
-      url: "/api/task",
-      data: {
-        process_id: route.query.id,
-        wr_worker_id: runModeForm.value.workerName,
-        automatic: runModeForm.value.isWorker,
-        file_params: ProcessParamsList.value,
-      },
-    })
-      .then((res) => {
-        ElMessage({
-          type: "success",
-          message: "任务已下发，客户端即将运行",
-        });
-        runModeVisible.value = false;
-        getTask();
-      })
-      .catch((err) => {
-        ElMessage({
-          showClose: true,
-          message: err,
-          type: "error",
-        });
-      });
-  } else {
-    request({
-      method: "POST",
-      url: "/api/trigger",
-      data: {
-        process_id: route.query.id,
-        name: runModeForm.value.tiggerName,
-        wr_work_id: runModeForm.value.workerName,
-        cron_expression: cronExpression.value,
-        work_start_time: new Date(startTime.value).toLocaleDateString("en-CA", {
-          year: "numeric",
-          month: "2-digit",
-          day: "2-digit",
-        }),
-        work_end_time: new Date(endTime.value).toLocaleDateString("en-CA", {
-          year: "numeric",
-          month: "2-digit",
-          day: "2-digit",
-        }),
-        automatic: runModeForm.value.isWorker,
-        params: ProcessParamsList.value,
-      },
-    })
-      .then((res) => {
-        ElMessage({
-          type: "success",
-          message: "任务已下发，客户端即将运行",
-        });
-        runModeVisible.value = false;
-      })
-      .catch((err) => {
-        ElMessage({
-          showClose: true,
-          message: err,
-          type: "error",
-        });
-      });
-  }
+  });
 };
 const processList = ref([]);
 const route = useRoute();
@@ -884,7 +917,8 @@ const onCanplay = (ev) => {
 };
 const videoUrl = ref(null);
 const getVideo = () => {
-  videoUrl.value = httpClient.defaults.baseURL + "/api/video?id=" + route.query.id;
+  videoUrl.value =
+    httpClient.defaults.baseURL + "/api/video?id=" + route.query.id;
   console.log(videoUrl.value);
 };
 const gohome = () => {

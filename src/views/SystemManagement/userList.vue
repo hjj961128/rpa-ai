@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 面包屑 -->
-    <div style="margin-bottom: 20px;">
+    <div style="margin-bottom: 20px">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item>
           <el-link type="primary" @click="gohome()">首页</el-link>
@@ -34,9 +34,9 @@
           </el-col>
           <el-col :span="12">
             <el-form-item style="text-align: right">
-              <el-button type="primary">停用</el-button>
+              <!-- <el-button type="primary">停用</el-button>
               <el-button type="primary">启用</el-button>
-              <el-button type="primary">删除</el-button>
+              <el-button type="primary">删除</el-button> -->
               <el-button type="primary" @click="addUser('0')"
                 >增加用户</el-button
               >
@@ -53,13 +53,20 @@
             {{ scope.$index + (form.page_num - 1) * form.page_size + 1 }}
           </template>
         </el-table-column>
-        <!-- <el-table-column prop="id" label="用户id" /> -->
-        <el-table-column prop="username" label="用户名" show-overflow-tooltip/>
-        <el-table-column prop="nickname" label="用户姓名名" show-overflow-tooltip/>
+        <el-table-column prop="username" label="用户名" show-overflow-tooltip />
+        <el-table-column
+          prop="nickname"
+          label="用户姓名"
+          show-overflow-tooltip
+        />
 
-        <el-table-column prop="phone_number" label="手机号" show-overflow-tooltip/>
+        <el-table-column
+          prop="phone_number"
+          label="手机号"
+          show-overflow-tooltip
+        />
 
-        <el-table-column prop="email" label="邮箱" show-overflow-tooltip/>
+        <el-table-column prop="email" label="邮箱" show-overflow-tooltip />
 
         <el-table-column prop="department.name" label="部门" />
         <!-- <el-table-column prop="permission" label="部门">
@@ -108,10 +115,24 @@
         style="margin-top: 10px; float: right"
       />
     </div>
-    <el-dialog v-loading="dialogLoading" v-model="dialogVisibleUser" :title="dialogTitle" width="500">
-      <el-form :model="addUserForm" label-width="auto" style="max-width: 600px">
-        <el-form-item label="部门">
-          <el-select v-model="addUserForm.department_id" placeholder="请选择部门">
+    <el-dialog
+      v-loading="dialogLoading"
+      v-model="dialogVisibleUser"
+      :title="dialogTitle"
+      width="500"
+    >
+      <el-form
+        ref="ruleFormRef"
+        :model="addUserForm"
+        :rules="rules"
+        label-width="auto"
+        style="max-width: 600px"
+      >
+        <el-form-item label="部门" prop="department_id">
+          <el-select
+            v-model="addUserForm.department_id"
+            placeholder="请选择部门"
+          >
             <el-option
               v-for="(item, Index) in departmentList"
               :key="Index"
@@ -120,22 +141,25 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="用户名">
-          <el-input v-model="addUserForm.username" :disabled="isEditUser === '1'"/>
+        <el-form-item label="用户名" prop="username">
+          <el-input
+            v-model="addUserForm.username"
+            :disabled="isEditUser === '1'"
+          />
         </el-form-item>
-        <el-form-item label="用户姓名">
+        <el-form-item label="用户姓名" prop="nickname">
           <el-input v-model="addUserForm.nickname" />
         </el-form-item>
 
-        <el-form-item label="手机号">
+        <el-form-item label="手机号" prop="phone_number">
           <el-input v-model="addUserForm.phone_number" />
         </el-form-item>
 
-        <el-form-item label="邮箱">
+        <el-form-item label="邮箱" prop="email">
           <el-input v-model="addUserForm.email" />
         </el-form-item>
 
-        <el-form-item label="角色">
+        <el-form-item label="角色" prop="roleList">
           <el-select
             multiple
             collapse-tags
@@ -150,13 +174,13 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="用户密码">
-          <el-input v-model="addUserForm.password" show-password/>
+        <el-form-item label="用户密码" prop="password">
+          <el-input v-model="addUserForm.password" show-password />
         </el-form-item>
-        <el-form-item label="再次确认密码">
-          <el-input v-model="addUserForm.passwordAgain" show-password/>
+        <el-form-item label="再次确认密码" prop="passwordAgain">
+          <el-input v-model="addUserForm.passwordAgain" show-password />
         </el-form-item>
-        <el-form-item label="是否开启">
+        <el-form-item label="是否开启" prop="status">
           <el-switch v-model="addUserForm.status" />
         </el-form-item>
         <el-form-item label="备注">
@@ -166,10 +190,10 @@
           <el-button
             type="primary"
             v-if="isEditUser == '0'"
-            @click="addUserApi()"
+            @click="addUserApi(ruleFormRef)"
             >新增</el-button
           >
-          <el-button type="primary" v-else @click="EditUserApi()"
+          <el-button type="primary" v-else @click="EditUserApi(ruleFormRef)"
             >更新</el-button
           >
           <el-button @click="dialogVisibleUser = false">取消</el-button>
@@ -183,6 +207,7 @@ import { onMounted, reactive, ref } from "vue";
 import request from "@/utils/request";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { useRouter } from "vue-router";
+const ruleFormRef = ref();
 
 const router = useRouter();
 const form = reactive({
@@ -190,10 +215,75 @@ const form = reactive({
   page_num: 1,
   page_size: 10,
 });
-const addUserForm = ref({
-});
-
-
+const addUserForm = ref({});
+const rules = {
+  department_id: [
+    { required: true, message: "请选择一个部门", trigger: "change" },
+  ],
+  username: [
+    {
+      required: true,
+      message: "请输入用户名",
+      trigger: "blur",
+    },
+  ],
+  nickname: [
+    {
+      required: true,
+      message: "请输入用户姓名",
+      trigger: "blur",
+    },
+  ],
+  phone_number: [
+    {
+      required: true,
+      message: "手机号",
+      trigger: "blur",
+    },
+  ],
+  email: [
+    {
+      required: true,
+      message: "请输入邮箱",
+      trigger: "blur",
+    },
+  ],
+  roleList: [
+    {
+      required: true,
+      message: "请选择角色",
+      trigger: "change",
+    },
+  ],
+  password: [
+    {
+      required: true,
+      message: "请输入用户密码",
+      trigger: "blur",
+    },
+  ],
+  password: [
+    {
+      required: true,
+      message: "请输入用户密码",
+      trigger: "blur",
+    },
+  ],
+  passwordAgain: [
+    {
+      required: true,
+      message: "请再次确认密码",
+      trigger: "blur",
+    },
+  ],
+  status: [
+    {
+      required: true,
+      message: "请确认是否开启",
+      trigger: "change",
+    },
+  ],
+};
 const statusList = ref({
   0: "启用",
   1: "停用",
@@ -201,7 +291,6 @@ const statusList = ref({
 
 const tableData = ref([]);
 const total = ref(0);
-
 
 // 查询用户列表
 const getUserList = (val) => {
@@ -224,7 +313,7 @@ const getUserList = (val) => {
     .catch((err) => {
       ElMessage({
         showClose: true,
-       message: err,
+        message: err,
         type: "error",
       });
     });
@@ -237,7 +326,7 @@ const dialogTitle = ref("新增用户");
 const isEditUser = ref("0");
 
 //新增/编辑用户弹窗
-const editRoles = ref([])
+const editRoles = ref([]);
 
 const addUser = (val, val2) => {
   dialogVisibleUser.value = true;
@@ -248,8 +337,8 @@ const addUser = (val, val2) => {
     dialogTitle.value = "新增用户";
   } else if (val === "1") {
     //编辑
-    val2.role.forEach(item => {
-      editRoles.value.push(item.id)
+    val2.role.forEach((item) => {
+      editRoles.value.push(item.id);
     });
     dialogTitle.value = "编辑用户";
     addUserForm.value.username = val2.username;
@@ -260,12 +349,12 @@ const addUser = (val, val2) => {
     addUserForm.value.phone_number = val2.phone_number;
     addUserForm.value.email = val2.email;
     addUserForm.value.department_id = val2.department.id;
-    addUserForm.value.roleList = editRoles.value
+    addUserForm.value.roleList = editRoles.value;
   }
 };
 
 //查询角色/api/role
-const roleList = ref([])
+const roleList = ref([]);
 
 const queryRoleList = () => {
   request({
@@ -281,7 +370,7 @@ const queryRoleList = () => {
     .catch((err) => {
       ElMessage({
         showClose: true,
-       message: err,
+        message: err,
         type: "error",
       });
     });
@@ -304,7 +393,7 @@ const queryDepartmentList = () => {
     .catch((err) => {
       ElMessage({
         showClose: true,
-       message: err,
+        message: err,
         type: "error",
       });
     });
@@ -312,39 +401,43 @@ const queryDepartmentList = () => {
 
 //新增用户接口
 const addUserApi = () => {
-  request({
-    method: "POST",
-    url: "/api/user",
-    data: {
-      username: addUserForm.value.username,
-      nickname: addUserForm.value.nickname,
-      phone_number:  addUserForm.value.phone_number,
-      email:  addUserForm.value.email,
-      password: addUserForm.value.password,
-      password_again: addUserForm.value.passwordAgain,
-      permission: addUserForm.value.permission,
-      status: addUserForm.value.status == true ? 0 : 1,
-      comment: addUserForm.value.comment,
-      department_id: addUserForm.value.department_id * 1,
-      role_ids: addUserForm.value.roleList
-    },
-  })
-    .then((res) => {
-      ElMessage({
-        showClose: true,
-        message: "新增用户成功",
-        type: "success",
-      });
-      dialogVisibleUser.value = false;
-      getUserList();
-    })
-    .catch((err) => {
-      ElMessage({
-        showClose: true,
-       message: err,
-        type: "error",
-      });
-    });
+  ruleFormRef.value.validate((valid) => {
+    if (valid) {
+      request({
+        method: "POST",
+        url: "/api/user",
+        data: {
+          username: addUserForm.value.username,
+          nickname: addUserForm.value.nickname,
+          phone_number: addUserForm.value.phone_number,
+          email: addUserForm.value.email,
+          password: addUserForm.value.password,
+          password_again: addUserForm.value.passwordAgain,
+          permission: addUserForm.value.permission,
+          status: addUserForm.value.status == true ? 0 : 1,
+          comment: addUserForm.value.comment,
+          department_id: addUserForm.value.department_id * 1,
+          role_ids: addUserForm.value.roleList,
+        },
+      })
+        .then((res) => {
+          ElMessage({
+            showClose: true,
+            message: "新增用户成功",
+            type: "success",
+          });
+          dialogVisibleUser.value = false;
+          getUserList();
+        })
+        .catch((err) => {
+          ElMessage({
+            showClose: true,
+            message: "新增用户失败",
+            type: "error",
+          });
+        });
+    }
+  });
 };
 
 //编辑用户接口
@@ -357,7 +450,7 @@ const EditUserApi = () => {
     },
     data: {
       username: addUserForm.value.username,
-      email:  addUserForm.value.email,
+      email: addUserForm.value.email,
       password:
         addUserForm.value.password == "" ? null : addUserForm.value.password,
       password_again:
@@ -382,7 +475,7 @@ const EditUserApi = () => {
     .catch((err) => {
       ElMessage({
         showClose: true,
-       message: err,
+        message: err,
         type: "error",
       });
     });
@@ -440,7 +533,6 @@ onMounted(() => {
   getUserList();
   queryRoleList();
 });
-
 </script>
 <style lang="less" scoped>
 .top-search {

@@ -52,10 +52,12 @@
           <template #dropdown>
             <el-dropdown-menu>
               <el-dropdown-item>
-                <el-button @click="dialogVisible = true" link>修改密码</el-button>
+                <el-button @click="dialogVisible = true" link
+                  >修改密码</el-button
+                >
               </el-dropdown-item>
 
-              <el-dropdown-item >
+              <el-dropdown-item>
                 <el-button @click="goLogin" link>退出登陆</el-button>
               </el-dropdown-item>
             </el-dropdown-menu>
@@ -70,21 +72,29 @@
     width="500"
     style="text-align: left"
   >
-    <div style="text-align: center;margin-bottom: 10px;color: #e6a23c">
+    <div style="text-align: center; margin-bottom: 10px; color: #e6a23c">
       修改成功后将自动退出，重新登录
     </div>
     <el-form
-      :rules="rules"
       ref="passwordFormRef"
       :model="passwordForm"
+      :rules="rules"
       label-width="auto"
       style="max-width: 600px"
     >
-      <el-form-item label="密码">
-        <el-input v-model="passwordForm.password" type="password" placeholder="请输入密码"/>
+      <el-form-item label="密码" prop="password">
+        <el-input
+          v-model="passwordForm.password"
+          type="password"
+          placeholder="请输入密码"
+        />
       </el-form-item>
-      <el-form-item label="再次确认密码">
-        <el-input v-model="passwordForm.passwordAgain" type="password" placeholder="请输入确认密码"/>
+      <el-form-item label="再次确认密码" prop="passwordAgain">
+        <el-input
+          v-model="passwordForm.passwordAgain"
+          type="password"
+          placeholder="请输入确认密码"
+        />
       </el-form-item>
     </el-form>
     <template #footer>
@@ -98,9 +108,8 @@
 <script setup>
 import { onMounted, ref } from "vue";
 
-import { useUserStore } from '@/stores/modules/user'
-import { useTokenStore } from '@/stores/modules/auth'
-
+import { useUserStore } from "@/stores/modules/user";
+import { useTokenStore } from "@/stores/modules/auth";
 
 import request from "@/utils/request";
 // import router from "../router/index.js";
@@ -108,12 +117,33 @@ import { ElMessage } from "element-plus";
 import { ArrowDown } from "@element-plus/icons-vue";
 function handleSelect(val) {}
 import { useRouter } from "vue-router";
+const passwordFormRef = ref();
+const validatePassword = (rule, value, callback) => {
+  if (value === "") {
+    callback(new Error("请输入密码"));
+  } else {
+    callback();
+  }
+};
+const validatePasswordAgain = (rule, value, callback) => {
+  if (value === "") {
+    callback(new Error("请再次输入密码"));
+  } else {
+    callback();
+  }
+};
 
+const rules = {
+  password: [{ required: true, message: "请输入密码", trigger: "blur" }],
+  passwordAgain: [
+    { required: true, message: "请再次输入密码", trigger: "blur" },
+  ],
+};
 const router = useRouter();
-const tokenStore = useTokenStore()
+const tokenStore = useTokenStore();
 const goLogin = () => {
-  tokenStore.setToken('')
-  router.push({path:'/login'});
+  tokenStore.setToken("");
+  router.push({ path: "/login" });
 };
 const dialogVisible = ref(false);
 const passwordForm = ref({
@@ -122,45 +152,48 @@ const passwordForm = ref({
 });
 // 修改密码putPassword
 const putPassword = () => {
-  request({
-    method: "PUT",
-    url: "/api/auth/reset-password",
-    data: {
-      password: passwordForm.value.password,
-      password_again: passwordForm.value.passwordAgain,
-    },
-  })
-    .then((res) => {
-      console.log(res)
-      if(res.data.code === 0){
-        ElMessage({
-        showClose: true,
-        message: "修改成功，请重新登录",
-        type: "success",
-      });
-        goLogin()
-      }
-      dialogVisible.value = false;
-
-    })
-    .catch((err) => {
-      ElMessage({
-        showClose: true,
-        message: err,
-        type: "error",
-      });
-    })
-    .catch((err) => {
-      ElMessage({
-        showClose: true,
-        message: err,
-        type: "error",
-      });
-    });
+  passwordFormRef.value.validate((valid) => {
+    if (valid) {
+      request({
+        method: "PUT",
+        url: "/api/auth/reset-password",
+        data: {
+          password: passwordForm.value.password,
+          password_again: passwordForm.value.passwordAgain,
+        },
+      })
+        .then((res) => {
+          console.log(res);
+          if (res.data.code === 0) {
+            ElMessage({
+              showClose: true,
+              message: "修改成功，请重新登录",
+              type: "success",
+            });
+            goLogin();
+          }
+          dialogVisible.value = false;
+        })
+        .catch((err) => {
+          ElMessage({
+            showClose: true,
+            message: err,
+            type: "error",
+          });
+        })
+        .catch((err) => {
+          ElMessage({
+            showClose: true,
+            message: err,
+            type: "error",
+          });
+        });
+    }
+  });
 };
 
 // const userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
-const userStore = useUserStore()
+const userStore = useUserStore();
 
 onMounted(() => {});
 

@@ -7,12 +7,8 @@
           <el-link type="primary" @click="gohome()">首页</el-link>
         </el-breadcrumb-item>
         <el-breadcrumb-item>
-          <el-link type="primary" @click="goBack()"
-          >上一页
-          </el-link
-          >
-        </el-breadcrumb-item
-        >
+          <el-link type="primary" @click="goBack()">上一页 </el-link>
+        </el-breadcrumb-item>
       </el-breadcrumb>
     </div>
     <div class="top-search">
@@ -20,31 +16,35 @@
         <el-row :gutter="24">
           <el-col :span="6">
             <el-form-item label="流程名称">
-              <el-input v-model="searchForm.name" clearable/>
+              <el-input v-model="searchForm.name" clearable />
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="创建时间">
               <el-date-picker
-                  v-model="searchForm.dateValues"
-                  type="daterange"
-                  range-separator="至"
-                  start-placeholder="开始时间"
-                  end-placeholder="结束时间"
-                  clearable
+                v-model="searchForm.dateValues"
+                type="daterange"
+                range-separator="至"
+                start-placeholder="开始时间"
+                end-placeholder="结束时间"
+                clearable
               />
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item style="width: 100%; text-align: right">
-              <el-button :icon="Search" @click="getProcessList('1')" type="primary"
-              >查询
+              <el-button
+                :icon="Search"
+                @click="getProcessList('1')"
+                type="primary"
+                >查询
               </el-button>
               <el-button :icon="Plus" type="primary" @click="choiceSource(0)"
-              >增加流程
+                >增加流程
               </el-button>
-              <el-button :icon="Refresh" type="primary" @click="clearForm">重置</el-button>
-
+              <el-button :icon="Refresh" type="primary" @click="clearForm"
+                >重置</el-button
+              >
             </el-form-item>
           </el-col>
         </el-row>
@@ -52,10 +52,10 @@
     </div>
     <div class="table">
       <el-table
-          ref="multipleTableRef"
-          :data="tableData"
-          style="width: 100%"
-          :header-cell-style="{ textAlign: 'center' }"
+        ref="multipleTableRef"
+        :data="tableData"
+        style="width: 100%"
+        :header-cell-style="{ textAlign: 'center' }"
       >
         <!-- <el-table-column type="selection" width="55" /> -->
         <el-table-column type="index" label="序号" width="65" align="center">
@@ -68,7 +68,7 @@
           </template>
         </el-table-column>
         <!-- <el-table-column width="100" prop="id" label="流程号" /> -->
-        <el-table-column prop="name" label="流程名称" align="center"/>
+        <el-table-column prop="name" label="流程名称" align="center" />
         <el-table-column prop="online" label="状态" align="center">
           <template #default="{ row }">
             <div>
@@ -77,7 +77,7 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="user.username" label="创建人" align="center"/>
+        <el-table-column prop="user.username" label="创建人" align="center" />
 
         <el-table-column prop="source" label="流程来源" align="center">
           <template #default="{ row }">
@@ -92,40 +92,40 @@
         <el-table-column label="操作" width="320" align="center">
           <template #default="{ row }">
             <el-button
-                @click="edit(row)"
-                key="primary"
-                type="primary"
-                link
-                :disabled="row.source !==0"
+              @click="edit(row)"
+              key="primary"
+              type="primary"
+              link
+              :disabled="row.source !== 0"
             >
               编辑画布
             </el-button>
             <el-button
-                key="success"
-                type="success"
-                link
-                v-if="row.online == false"
-                @click="onlineDialog(row, '0')"
-                :disabled="!isOnline(row)"
+              key="success"
+              type="success"
+              link
+              v-if="row.online == false"
+              @click="onlineDialog(row, '0')"
+              :disabled="!isOnline(row)"
             >
               上线
             </el-button>
             <el-button
-                key="info"
-                type="info"
-                link
-                v-else
-                :disabled="!isOnline(row)"
-                @click="prossDown(row)"
+              key="info"
+              type="info"
+              link
+              v-else
+              :disabled="!isOnline(row)"
+              @click="prossDown(row)"
             >
               下线
             </el-button>
             <el-button
-                :disabled="row.online == true ? true : false"
-                key="danger"
-                type="danger"
-                @click="delProcess(row)"
-                link
+              :disabled="row.online == true ? true : false"
+              key="danger"
+              type="danger"
+              @click="delProcess(row)"
+              link
             >
               删除
             </el-button>
@@ -133,65 +133,67 @@
         </el-table-column>
       </el-table>
       <el-pagination
-          v-model:current-page="searchForm.page_num"
-          v-model:page-size="searchForm.page_size"
-          :page-sizes="[10, 20, 50, 100]"
-          layout="total, sizes, prev, pager, next"
-          :total="total"
-          background
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          style="margin-top: 10px; float: right"
+        v-model:current-page="searchForm.page_num"
+        v-model:page-size="searchForm.page_size"
+        :page-sizes="[10, 20, 50, 100]"
+        layout="total, sizes, prev, pager, next"
+        :total="total"
+        background
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        style="margin-top: 10px; float: right"
       />
     </div>
 
     <!-- 选择是新建还是第三方 -->
     <el-dialog
-        v-model="choiceSourceShow"
-        :title="choiceSourceTitle"
-        width="800"
+      v-model="choiceSourceShow"
+      :title="choiceSourceTitle"
+      width="800"
     >
       <div class="onebox">
         <div class="left_box" @click="isNew(0)">
           <div class="boxboder">
-            <img src="../../assets/images/new.png" alt=""/>
+            <img src="../../assets/images/new.png" alt="" />
             <div class="text">创建新流程</div>
           </div>
         </div>
         <div class="right_box" @click="isNew(1)">
           <div class="boxboder">
-            <img src="../../assets/images/import.png" alt=""/>
+            <img src="../../assets/images/import.png" alt="" />
             <div class="text">第三方流程接入</div>
           </div>
         </div>
       </div>
       <el-dialog
-          v-model="innerVisible"
-          width="500"
-          :title="innerTitle"
-          append-to-body
+        v-model="innerVisible"
+        width="500"
+        :title="innerTitle"
+        append-to-body
       >
         <el-form
-            :model="processForm"
-            label-width="auto"
-            style="max-width: 600px"
+          ref="rulepProcessFormRef"
+          :model="processForm"
+          :rules="innerTitle == '创建新流程' ? processrules : threeProcessrules"
+          label-width="auto"
+          style="max-width: 600px"
         >
-          <el-form-item label="部门">
+          <el-form-item label="部门" prop="depart">
             <el-select
-                v-model="processForm.depart"
-                placeholder="请选择部门"
-                :disabled="!isSA"
+              v-model="processForm.depart"
+              placeholder="请选择部门"
+              :disabled="!isSA"
             >
               <el-option
-                  v-for="(item, Index) in departmentList"
-                  :key="Index"
-                  :label="item.name"
-                  :value="item.id"
+                v-for="(item, Index) in departmentList"
+                :key="Index"
+                :label="item.name"
+                :value="item.id"
               />
             </el-select>
           </el-form-item>
-          <el-form-item label="流程名称">
-            <el-input v-model="processForm.name"/>
+          <el-form-item label="流程名称" prop="name">
+            <el-input v-model="processForm.name" />
           </el-form-item>
           <!-- <el-form-item label="流程版本号">
             <el-input v-model="processForm.version" />
@@ -207,31 +209,26 @@
           <!--          </el-form-item>-->
           <!--接入第三方流程-->
           <template v-if="processSource !== 0">
-
-
-            <el-form-item label="所属厂家">
-              <el-select
-                  v-model="processForm.vendor"
-                  placeholder="请选择厂家"
-              >
+            <el-form-item label="所属厂家" prop="vendor">
+              <el-select v-model="processForm.vendor" placeholder="请选择厂家">
                 <el-option
-                    v-for="(item, Index) in vendorOptions"
-                    :key="Index"
-                    :label="item.name"
-                    :value="item.name"
+                  v-for="(item, Index) in vendorOptions"
+                  :key="Index"
+                  :label="item.name"
+                  :value="item.name"
                 />
               </el-select>
             </el-form-item>
 
-            <el-form-item label="文件上传">
+            <el-form-item label="文件上传" prop="fileList">
               <el-upload
-                  v-model:file-list="fileList"
-                  class="upload-demo"
-                  :limit="1"
-                  :auto-upload="false"
-                  action="#"
-                  accept=".zip"
-                  :on-remove="handleRemove"
+                v-model:file-list="processForm.fileList"
+                class="upload-demo"
+                :limit="1"
+                :auto-upload="false"
+                action="#"
+                accept=".zip"
+                :on-remove="handleRemove"
               >
                 <el-button type="primary">上传</el-button>
                 <template #tip>
@@ -241,16 +238,15 @@
             </el-form-item>
           </template>
 
-
           <el-form-item>
             <el-button
-                type="primary"
-                v-if="processSource === 0"
-                @click="addProcessApi()"
-            >创建
+              type="primary"
+              v-if="processSource === 0"
+              @click="addProcessApi('0')"
+              >创建
             </el-button>
-            <el-button type="primary" v-else @click="addProcessApi()"
-            >接入
+            <el-button type="primary" v-else @click="addProcessApi('1')"
+              >接入
             </el-button>
             <el-button @click="innerVisible = false">取消</el-button>
           </el-form-item>
@@ -259,23 +255,23 @@
     </el-dialog>
     <!-- 上线 -->
     <el-dialog
-        v-model="onLineVisible"
-        width="500"
-        title="流程上线"
-        append-to-body
+      v-model="onLineVisible"
+      width="500"
+      title="流程上线"
+      append-to-body
     >
       <el-form :model="onlinesForm" label-width="auto" style="max-width: 600px">
         <el-form-item label="流程名称">
-          <el-input v-model="onlinesForm.name" disabled/>
+          <el-input v-model="onlinesForm.name" disabled />
         </el-form-item>
         <el-form-item label="流程简介">
           <el-input
-              type="textarea"
-              v-model="onlinesForm.process_introduction"
+            type="textarea"
+            v-model="onlinesForm.process_introduction"
           />
         </el-form-item>
         <el-form-item label="涉及业务系统">
-          <el-input v-model="onlinesForm.business_system"/>
+          <el-input v-model="onlinesForm.business_system" />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="clickOnline()">上线</el-button>
@@ -286,13 +282,13 @@
   </div>
 </template>
 <script setup>
-import {onMounted, reactive, ref} from "vue";
+import { onMounted, reactive, ref } from "vue";
 import request from "@/utils/request";
 // import router from "../../router/index.js";
-import {ElMessage, ElMessageBox} from "element-plus";
-import {useRouter} from "vue-router";
-import {getVendorAPI} from "@/api/process";
-import { useUserStore } from '@/stores/modules/user'
+import { ElMessage, ElMessageBox } from "element-plus";
+import { useRouter } from "vue-router";
+import { getVendorAPI } from "@/api/process";
+import { useUserStore } from "@/stores/modules/user";
 import {
   Check,
   Delete,
@@ -302,8 +298,43 @@ import {
   Search,
   Refresh,
   Star,
-} from '@element-plus/icons-vue'
+} from "@element-plus/icons-vue";
 
+const rulepProcessFormRef = ref();
+const processrules = {
+  name: [
+    {
+      required: true,
+      message: "请输入流程名称",
+      trigger: "blur",
+    },
+  ],
+  depart: [{ required: true, message: "请选择一个部门", trigger: "blur" }],
+};
+const threeProcessrules = {
+  name: [
+    {
+      required: true,
+      message: "请输入流程名称",
+      trigger: "blur",
+    },
+  ],
+  depart: [{ required: true, message: "请选择一个部门", trigger: "blur" }],
+  vendor: [
+    {
+      required: true,
+      message: "请选择厂家",
+      trigger: "blur",
+    },
+  ],
+  fileList: [
+    {
+      required: true,
+      message: "请选择文件夹",
+      trigger: "change",
+    },
+  ],
+};
 const router = useRouter();
 
 const fileList = ref([]);
@@ -319,19 +350,19 @@ const total = ref(0);
 // 查询流程列表
 const paramsData = ref({});
 const getProcessList = (val) => {
-  paramsData.value = {}
+  paramsData.value = {};
   if (val === "1") {
     paramsData.value.page_num = searchForm.value.page_num;
     paramsData.value.page_size = searchForm.value.page_size;
     paramsData.value.name = searchForm.value.name;
     paramsData.value.start_time =
-        searchForm.value.dateValues.length > 0
-            ? searchForm.value.dateValues[0]
-            : null;
+      searchForm.value.dateValues.length > 0
+        ? searchForm.value.dateValues[0]
+        : null;
     paramsData.value.end_time =
-        searchForm.value.dateValues.length > 0
-            ? searchForm.value.dateValues[1]
-            : null;
+      searchForm.value.dateValues.length > 0
+        ? searchForm.value.dateValues[1]
+        : null;
   } else {
     paramsData.value.page_num = searchForm.value.page_num;
     paramsData.value.page_size = searchForm.value.page_size;
@@ -339,26 +370,26 @@ const getProcessList = (val) => {
 
   // 如果是admin即可获取所有部门 否则只获取自己的部门
   paramsData.value.department_id = isSA.value
-      ? null
-      : userInfo.value.department_id;
+    ? null
+    : userInfo.value.department_id;
 
   request({
     method: "GET",
     url: "/api/process",
     params: paramsData.value,
   })
-      .then((res) => {
-        tableData.value = res.data.data.list;
-        total.value = res.data.data.total;
-      })
-      .catch((err) => {
-        console.log(err);
-        ElMessage({
-          showClose: true,
-          message: err,
-          type: "error",
-        });
+    .then((res) => {
+      tableData.value = res.data.data.list;
+      total.value = res.data.data.total;
+    })
+    .catch((err) => {
+      console.log(err);
+      ElMessage({
+        showClose: true,
+        message: err,
+        type: "error",
       });
+    });
 };
 //重置
 const clearForm = () => {
@@ -371,18 +402,16 @@ const onlinesForm = ref({});
 const onLineVisible = ref(false);
 const onlineThisProcess = ref(null);
 const onlineDialog = (val, val2) => {
-
   // 如果是新建的
   if (val.source === 0) {
     //判断有没有流程画布id
     if (!val.cloud_flow_id) {
       ElMessage({
         type: "error",
-        message: "请先编辑流程画布，发布后，方可上线"
-      })
-      return
+        message: "请先编辑流程画布，发布后，方可上线",
+      });
+      return;
     }
-
   } else {
     //如果不是新建的判断有没有流程文件
     if (!val.file_url) {
@@ -390,9 +419,8 @@ const onlineDialog = (val, val2) => {
         type: "error",
         message: "请先上传流程文件",
       });
-      return
+      return;
     }
-
   }
 
   // // 如果流程是新建
@@ -435,36 +463,36 @@ const prossDown = (val) => {
     cancelButtonText: "取消",
     type: "warning",
   })
-      .then(() => {
-        request({
-          method: "POST",
-          url: "/api/process/online",
-          data: {
-            id: val.id,
-            online: false,
-          },
-        })
-            .then((res) => {
-              ElMessage({
-                type: "success",
-                message: "流程下线成功",
-              });
-              getProcessList();
-            })
-            .catch((err) => {
-              ElMessage({
-                showClose: true,
-                message: err,
-                type: "error",
-              });
-            });
+    .then(() => {
+      request({
+        method: "POST",
+        url: "/api/process/online",
+        data: {
+          id: val.id,
+          online: false,
+        },
       })
-      .catch(() => {
-        ElMessage({
-          type: "info",
-          message: "取消下线",
+        .then((res) => {
+          ElMessage({
+            type: "success",
+            message: "流程下线成功",
+          });
+          getProcessList();
+        })
+        .catch((err) => {
+          ElMessage({
+            showClose: true,
+            message: err,
+            type: "error",
+          });
         });
+    })
+    .catch(() => {
+      ElMessage({
+        type: "info",
+        message: "取消下线",
       });
+    });
 };
 //上线
 const clickOnline = () => {
@@ -478,22 +506,22 @@ const clickOnline = () => {
       business_system: onlinesForm.value.business_system,
     },
   })
-      .then((res) => {
-        onLineVisible.value = false;
-        getProcessList();
-        ElMessage({
-          showClose: true,
-          message: "上线成功",
-          type: "success",
-        });
-      })
-      .catch((err) => {
-        ElMessage({
-          showClose: true,
-          message: err,
-          type: "error",
-        });
+    .then((res) => {
+      onLineVisible.value = false;
+      getProcessList();
+      ElMessage({
+        showClose: true,
+        message: "上线成功",
+        type: "success",
       });
+    })
+    .catch((err) => {
+      ElMessage({
+        showClose: true,
+        message: err,
+        type: "error",
+      });
+    });
 };
 //上线/下线⬆️
 //删除流程
@@ -503,55 +531,59 @@ const delProcess = (val) => {
     cancelButtonText: "取消",
     type: "warning",
   })
-      .then(() => {
-        request({
-          method: "DELETE",
-          url: "/api/process",
-          params: {
-            id: val.id,
-          },
-        })
-            .then((res) => {
-              ElMessage({
-                type: "success",
-                message: "流程删除成功",
-              });
-              getProcessList();
-            })
-            .catch((err) => {
-              ElMessage({
-                showClose: true,
-                message: err,
-                type: "error",
-              });
-            });
+    .then(() => {
+      request({
+        method: "DELETE",
+        url: "/api/process",
+        params: {
+          id: val.id,
+        },
       })
-      .catch(() => {
-        ElMessage({
-          type: "info",
-          message: "取消下线",
+        .then((res) => {
+          ElMessage({
+            type: "success",
+            message: "流程删除成功",
+          });
+          getProcessList();
+        })
+        .catch((err) => {
+          ElMessage({
+            showClose: true,
+            message: err,
+            type: "error",
+          });
         });
+    })
+    .catch(() => {
+      ElMessage({
+        type: "info",
+        message: "取消下线",
       });
+    });
 };
 const edit = (val) => {
   request({
     method: "GET",
     url: "/api/auth/mcenter-token",
   })
-      .then((res) => {
-        // sessionStorage.setItem("centerMtoken", res.data.data.token);
-        router.push({
-          name: "processCanvas",
-          query: {id: val.cloud_flow_id, processId: val.id,token:res.data.data.token},
-        });
-      })
-      .catch((err) => {
-        ElMessage({
-          showClose: true,
-          message: err,
-          type: "error",
-        });
+    .then((res) => {
+      // sessionStorage.setItem("centerMtoken", res.data.data.token);
+      router.push({
+        name: "processCanvas",
+        query: {
+          id: val.cloud_flow_id,
+          processId: val.id,
+          token: res.data.data.token,
+        },
       });
+    })
+    .catch((err) => {
+      ElMessage({
+        showClose: true,
+        message: err,
+        type: "error",
+      });
+    });
 };
 const choiceSourceShow = ref(false);
 const choiceSourceTitle = ref("新增流程");
@@ -559,7 +591,7 @@ const choiceSourceTitle = ref("新增流程");
 const choiceSource = (val) => {
   // processForm.value.depart = ref(departmentList.value[0].id)
   processForm.value.name = "";
-  fileList.value = [];
+  processForm.fileList.value = [];
   choiceSourceShow.value = true;
 
   if (val === 0) {
@@ -570,25 +602,26 @@ const choiceSource = (val) => {
 };
 
 const userInfo = ref({});
-const userStore = useUserStore()
-userInfo.value = userStore.userInfo
+const userStore = useUserStore();
+userInfo.value = userStore.userInfo;
 
 const innerVisible = ref(false);
 const innerTitle = ref("创建新流程");
 
 // 流程来源 0 新建 1 上传
-const processSource = ref(0)
+const processSource = ref(0);
 // 流程表单
 const processForm = ref({
   name: "",
   // version: "",
+  fileList:[],
   status: "",
   depart: userInfo.value.department_id,
   new_process_file_source: 0,
 });
 //选择是第三方还是新建
 const isNew = (val) => {
-  processSource.value = val
+  processSource.value = val;
   innerVisible.value = true;
   if (val == "0") {
     innerTitle.value = "创建新流程";
@@ -598,65 +631,66 @@ const isNew = (val) => {
 };
 // 新增流程
 const addProcessApi = (val) => {
-  const formdata = new FormData();
+  rulepProcessFormRef.value.validate((valid) => {
+    if (valid) {
+      const formdata = new FormData();
 
-
-  // 接入第三方厂家流程
-  if (processSource.value === 1) {
-    formdata.append("vendor", processForm.value.vendor);
-    fileList.value.forEach((ele) => {
-      if (ele.status === "ready") {
-        formdata.append("file", ele.raw);
-      }
-    });
-
-  }
-
-  formdata.append("department_id", processForm.value.depart);
-  formdata.append("name", processForm.value.name);
-  formdata.append("source", parseInt(processSource.value));
-
-
-  request({
-    method: "POST",
-    url: "/api/process",
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-    data: formdata,
-  })
-      .then((res) => {
-        ElMessage({
-          showClose: true,
-          message: "新增成功",
-          type: "success",
+      // 接入第三方厂家流程
+      if (processSource.value === 1) {
+        formdata.append("vendor", processForm.value.vendor);
+        processForm.fileList.value.forEach((ele) => {
+          if (ele.status === "ready") {
+            formdata.append("file", ele.raw);
+          }
         });
-        choiceSourceShow.value = false;
-        innerVisible.value = false;
-        console.log(res, "res");
+      }
 
-        if (processSource.value === 0) {
+      formdata.append("department_id", processForm.value.depart);
+      formdata.append("name", processForm.value.name);
+      formdata.append("source", parseInt(processSource.value));
+
+      request({
+        method: "POST",
+        url: "/api/process",
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        data: formdata,
+      })
+        .then((res) => {
           ElMessage({
             showClose: true,
-            message: "正在打开流程画布......",
+            message: "新增成功",
             type: "success",
           });
-          edit(res.data.data.process);
-        }
+          choiceSourceShow.value = false;
+          innerVisible.value = false;
+          console.log(res, "res");
 
-        getProcessList();
-      })
-      .catch((err) => {
-        ElMessage({
-          showClose: true,
-          message: err,
-          type: "error",
+          if (processSource.value === 0) {
+            ElMessage({
+              showClose: true,
+              message: "正在打开流程画布......",
+              type: "success",
+            });
+            edit(res.data.data.process);
+          }
+
+          getProcessList();
+        })
+        .catch((err) => {
+          ElMessage({
+            showClose: true,
+            message: err,
+            type: "error",
+          });
         });
-      });
+    }
+  });
 };
 
 const handleRemove = (file, uploadFiles) => {
-  fileList.value = uploadFiles;
+  processForm.fileList.value = uploadFiles;
 };
 
 const handleSizeChange = (val) => {
@@ -679,27 +713,26 @@ const queryDepartmentList = () => {
     url: "/api/department",
     params: queryDepartmentListParams.value,
   })
-      .then((res) => {
-        departmentList.value = res.data.data.list;
-      })
-      .catch((err) => {
-        ElMessage({
-          showClose: true,
-          message: err,
-          type: "error",
-        });
+    .then((res) => {
+      departmentList.value = res.data.data.list;
+    })
+    .catch((err) => {
+      ElMessage({
+        showClose: true,
+        message: err,
+        type: "error",
       });
+    });
 };
 
 //获取第三方厂家列表
-const vendorOptions = ref([])
+const vendorOptions = ref([]);
 const getVendorList = async () => {
   try {
-    const res = await getVendorAPI()
+    const res = await getVendorAPI();
     if (res.data.code === 0) {
-      vendorOptions.value = res.data.data.list
+      vendorOptions.value = res.data.data.list;
     }
-
   } catch (e) {
     ElMessage({
       showClose: true,
@@ -707,12 +740,9 @@ const getVendorList = async () => {
       type: "error",
     });
   }
-
-}
+};
 
 const isSA = ref(false);
-
-
 
 // 是否可操作上线下线
 const isOnline = (row) => {
@@ -741,7 +771,7 @@ onMounted(() => {
   }
   processForm.value.depart = userInfo.value.department_id;
   getProcessList();
-  getVendorList()
+  getVendorList();
 });
 </script>
 <style lang="less" scoped>
