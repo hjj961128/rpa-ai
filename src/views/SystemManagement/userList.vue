@@ -180,7 +180,7 @@
         <el-form-item label="再次确认密码" prop="passwordAgain">
           <el-input v-model="addUserForm.passwordAgain" show-password />
         </el-form-item>
-        <el-form-item label="是否开启" prop="status">
+        <el-form-item label="是否开启">
           <el-switch v-model="addUserForm.status" />
         </el-form-item>
         <el-form-item label="备注">
@@ -240,6 +240,7 @@ const rules = {
       message: "手机号",
       trigger: "blur",
     },
+    { min: 11, max: 11, message: '请输入正确的手机号', trigger: 'blur' }
   ],
   email: [
     {
@@ -247,6 +248,7 @@ const rules = {
       message: "请输入邮箱",
       trigger: "blur",
     },
+    { type: 'email', message: '请输入有效的邮箱地址', trigger: 'blur' }
   ],
   roleList: [
     {
@@ -274,13 +276,6 @@ const rules = {
       required: true,
       message: "请再次确认密码",
       trigger: "blur",
-    },
-  ],
-  status: [
-    {
-      required: true,
-      message: "请确认是否开启",
-      trigger: "change",
     },
   ],
 };
@@ -432,7 +427,7 @@ const addUserApi = () => {
         .catch((err) => {
           ElMessage({
             showClose: true,
-            message: "新增用户失败",
+            message: err[0].msg,
             type: "error",
           });
         });
@@ -460,6 +455,7 @@ const EditUserApi = () => {
       role_ids: addUserForm.value.roleList,
       status: addUserForm.value.status == true ? 0 : 1,
       comment: addUserForm.value.comment,
+      phone_number: addUserForm.value.phone_number
     },
   })
     .then((res) => {
@@ -475,7 +471,7 @@ const EditUserApi = () => {
     .catch((err) => {
       ElMessage({
         showClose: true,
-        message: err,
+        message: err[0].msg,
         type: "error",
       });
     });

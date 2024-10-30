@@ -220,9 +220,9 @@
               </el-select>
             </el-form-item>
 
-            <el-form-item label="文件上传" prop="fileList">
+            <el-form-item label="文件上传">
               <el-upload
-                v-model:file-list="processForm.fileList"
+                v-model:file-list="fileList"
                 class="upload-demo"
                 :limit="1"
                 :auto-upload="false"
@@ -327,13 +327,13 @@ const threeProcessrules = {
       trigger: "blur",
     },
   ],
-  fileList: [
-    {
-      required: true,
-      message: "请选择文件夹",
-      trigger: "change",
-    },
-  ],
+  // fileList: [
+  //   {
+  //     required: true,
+  //     message: "请选择文件夹",
+  //     trigger: "change",
+  //   },
+  // ],
 };
 const router = useRouter();
 
@@ -591,7 +591,7 @@ const choiceSourceTitle = ref("新增流程");
 const choiceSource = (val) => {
   // processForm.value.depart = ref(departmentList.value[0].id)
   processForm.value.name = "";
-  processForm.fileList.value = [];
+  fileList.value = [];
   choiceSourceShow.value = true;
 
   if (val === 0) {
@@ -638,7 +638,7 @@ const addProcessApi = (val) => {
       // 接入第三方厂家流程
       if (processSource.value === 1) {
         formdata.append("vendor", processForm.value.vendor);
-        processForm.fileList.value.forEach((ele) => {
+        fileList.value.forEach((ele) => {
           if (ele.status === "ready") {
             formdata.append("file", ele.raw);
           }
@@ -690,7 +690,7 @@ const addProcessApi = (val) => {
 };
 
 const handleRemove = (file, uploadFiles) => {
-  processForm.fileList.value = uploadFiles;
+  fileList.value = uploadFiles;
 };
 
 const handleSizeChange = (val) => {
