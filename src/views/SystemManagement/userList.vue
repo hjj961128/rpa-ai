@@ -499,7 +499,12 @@ const delUser = (val) => {
         });
         dialogVisibleUser.value = false;
         getUserList();
+      }).catch((err)=>{
+        ElMessage({
+        type: "error",
+        message: err,
       });
+      })
     })
     .catch(() => {
       ElMessage({

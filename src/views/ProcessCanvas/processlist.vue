@@ -557,7 +557,7 @@ const delProcess = (val) => {
     .catch(() => {
       ElMessage({
         type: "info",
-        message: "取消下线",
+        message: "取消删除",
       });
     });
 };
@@ -614,7 +614,7 @@ const processSource = ref(0);
 const processForm = ref({
   name: "",
   // version: "",
-  fileList:[],
+  fileList: [],
   status: "",
   depart: userInfo.value.department_id,
   new_process_file_source: 0,
@@ -633,58 +633,67 @@ const isNew = (val) => {
 const addProcessApi = (val) => {
   rulepProcessFormRef.value.validate((valid) => {
     if (valid) {
-      const formdata = new FormData();
+      console.log(fileList.value);
+      if (fileList.value.length <= 0 && processSource.value === 1) {
+        ElMessage({
+              showClose: true,
+              message: "请选择文件夹",
+              type: "error",
+            });
+      } else {
+        const formdata = new FormData();
 
-      // 接入第三方厂家流程
-      if (processSource.value === 1) {
-        formdata.append("vendor", processForm.value.vendor);
-        fileList.value.forEach((ele) => {
-          if (ele.status === "ready") {
-            formdata.append("file", ele.raw);
-          }
-        });
-      }
-
-      formdata.append("department_id", processForm.value.depart);
-      formdata.append("name", processForm.value.name);
-      formdata.append("source", parseInt(processSource.value));
-
-      request({
-        method: "POST",
-        url: "/api/process",
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        data: formdata,
-      })
-        .then((res) => {
-          ElMessage({
-            showClose: true,
-            message: "新增成功",
-            type: "success",
+        // 接入第三方厂家流程
+        if (processSource.value === 1) {
+          formdata.append("vendor", processForm.value.vendor);
+          fileList.value.forEach((ele) => {
+            if (ele.status === "ready") {
+              formdata.append("file", ele.raw);
+            }
           });
-          choiceSourceShow.value = false;
-          innerVisible.value = false;
-          console.log(res, "res");
+        }
 
-          if (processSource.value === 0) {
+        formdata.append("department_id", processForm.value.depart);
+        formdata.append("name", processForm.value.name);
+        formdata.append("source", parseInt(processSource.value));
+
+        request({
+          method: "POST",
+          url: "/api/process",
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          data: formdata,
+        })
+          .then((res) => {
             ElMessage({
               showClose: true,
-              message: "正在打开流程画布......",
+              message: "新增成功",
               type: "success",
             });
-            edit(res.data.data.process);
-          }
+            choiceSourceShow.value = false;
+            innerVisible.value = false;
+            console.log(res, "res");
 
-          getProcessList();
-        })
-        .catch((err) => {
-          ElMessage({
-            showClose: true,
-            message: err,
-            type: "error",
+            if (processSource.value === 0) {
+              ElMessage({
+                showClose: true,
+                message: "正在打开流程画布......",
+                type: "success",
+              });
+              edit(res.data.data.process);
+            }
+
+            getProcessList();
+          })
+          .catch((err) => {
+            ElMessage({
+              showClose: true,
+              message: err,
+              type: "error",
+            });
           });
-        });
+      }
     }
   });
 };
