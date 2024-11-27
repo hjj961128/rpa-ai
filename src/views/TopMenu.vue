@@ -71,6 +71,7 @@
     title="修改密码"
     width="500"
     style="text-align: left"
+    @closed="handleClose"
   >
     <div style="text-align: center; margin-bottom: 10px; color: #e6a23c">
       修改成功后将自动退出，重新登录
@@ -99,7 +100,7 @@
     </el-form>
     <template #footer>
       <div class="dialog-footer">
-        <el-button @click="dialogVisible = false">取消</el-button>
+        <el-button @click="handleClose">取消</el-button>
         <el-button type="primary" @click="putPassword()"> 确认修改 </el-button>
       </div>
     </template>
@@ -191,6 +192,11 @@ const putPassword = () => {
     }
   });
 };
+
+const handleClose = () =>{
+  passwordFormRef.value.resetFields()
+  dialogVisible.value = false
+}
 
 // const userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
 const userStore = useUserStore();

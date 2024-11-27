@@ -170,6 +170,7 @@
         width="500"
         :title="innerTitle"
         append-to-body
+        @closed="handleClose"
       >
         <el-form
           ref="rulepProcessFormRef"
@@ -248,7 +249,7 @@
             <el-button type="primary" v-else @click="addProcessApi('1')"
               >接入
             </el-button>
-            <el-button @click="innerVisible = false">取消</el-button>
+            <el-button @click="handleClose">取消</el-button>
           </el-form-item>
         </el-form>
       </el-dialog>
@@ -767,6 +768,10 @@ const gohome = () => {
 const goBack = () => {
   router.go(-1);
 };
+const handleClose = () =>{
+  rulepProcessFormRef.value.resetFields()
+  innerVisible.value = false
+}
 onMounted(() => {
   queryDepartmentList();
 

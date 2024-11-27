@@ -270,6 +270,7 @@
       width="800"
       :title="runModeTypeNum == '1' ? '手动执行' : '定时执行'"
       append-to-body
+      @closed="handleClose"
     >
       <el-form
         ref="rulepRunModeFormRef"
@@ -457,7 +458,7 @@
           <el-button type="primary" @click="clickTask(runModeTypeNum)"
             >运行</el-button
           >
-          <el-button @click="runModeVisible = false">取消</el-button>
+          <el-button @click="handleClose">取消</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -927,6 +928,10 @@ const gohome = () => {
 const goBack = () => {
   router.go(-1);
 };
+const handleClose = () =>{
+  rulepRunModeFormRef.value.resetFields()
+  runModeVisible.value = false
+}
 onMounted(() => {
   getProcessList();
   getWorkerList();
