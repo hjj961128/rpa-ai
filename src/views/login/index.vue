@@ -7,7 +7,7 @@
       </el-col>
       <el-col :span="12" class="right-con">
         <div class="content-con">
-          <div class="login-title">{{ isLogin ? "RPA+AI工具箱" : "重置密码" }} <span style="font-size:16px;color:#9195a3"></span></div>
+          <div class="login-title">{{ isLogin ? "用户登陆" : "重置密码" }} <span style="font-size:16px;color:#9195a3"></span></div>
           <el-form
             :model="loginForm"
             :rules="rules"
@@ -19,35 +19,27 @@
             <el-form-item prop="name">
               <el-input
                 placeholder="请输入用户名"
+                :prefix-icon="User"
                 v-model="loginForm.name"
                 clearable
                 auto-complete="on"
-                style="height: 60px;"
+                style="height: 42px;width:428px"
                 class="custom-input"
               >
-                <template #prefix>
-                  <el-icon class="el-input__icon">
-                    <user />
-                  </el-icon>
-                </template>
               </el-input>
             </el-form-item>
             <el-form-item prop="password">
               <el-input
                 placeholder="请输入密码"
+                :prefix-icon="Lock"
                 show-password
                 v-model="loginForm.password"
                 clearable
                 auto-complete="on"
                 @keyup.enter="onSubmit"
-                style="height: 60px;"
+                style="height: 42px;width:428px"
                 class="custom-input"
               >
-                <template #prefix>
-                  <el-icon class="el-input__icon">
-                    <lock />
-                  </el-icon>
-                </template>
               </el-input>
             </el-form-item>
             <!-- <div class="forget" @click="fogetpro"> 忘记密码？</div> -->
@@ -66,8 +58,7 @@
 <script setup>
 
 import { ElMessage } from "element-plus";
-import { UserFilled } from "@element-plus/icons-vue";
-
+import { User ,Lock} from '@element-plus/icons-vue'
 import request from "@/utils/request";
 import { useRoute } from "vue-router";
 import { reactive, watch, ref } from "vue";
@@ -195,7 +186,7 @@ function onSubmit() {
 .login-container {
   width: 100vw;
   height: 100vh;
-  background-image: url('../../assets/images/login.jpg');
+  background-image: url('../../assets/images/login.png');
   /* 替换为你的图片路径 */
   background-size: cover;
   /* 背景图片覆盖整个元素 */
@@ -228,18 +219,17 @@ function onSubmit() {
 }
 .content-con {
   position: absolute;
-  background-color: rgba(255, 255, 255, 0.5);
-  padding: 50px;
+  width: 587px;
+  height: 454px;
+  // background-color: rgba(255, 255, 255, 0.5);
+  background: url('../../assets/images/longFrom.png') 100% no-repeat;
+  background-size: 100% 100%;
+  justify-content: flex-center;
+  padding: 80px;
   top: 50%;
   left: 50%;
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
-  width: 400px;
-  border-radius: 20px;
-  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.2);
-  .el-input__wrapper{
-    box-shadow: none !important;
-  }
 }
 .forget {
   font-size: 16px;
@@ -249,15 +239,13 @@ function onSubmit() {
   cursor: pointer;
 }
 .btn-login {
-  width: 387px;
+  width: 428px;
   height: 56px;
   background: #4E6EF2;
   color: #fff;
   /* border-radius: 56px; */
   margin-top: 20px;
   font-size: 20px;
-}
-.custom-input .el-input__inner {
-  font-size: 16px; /* 设置字体大小为16px */
+  display: inline-block;
 }
 </style>

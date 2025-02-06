@@ -27,7 +27,14 @@ import { useRoute } from "vue-router";
 import { ElMessage } from "element-plus";
 import { useUserStore } from '@/stores/modules/user'
 
+
 const route = useRoute();
+// 监听路由对象的变化
+watch(() => route.params, (newParams, oldParams) => {
+      // 当路由参数发生变化时，这里会被调用
+      console.log('路由参数变化了', newParams, oldParams);
+      // 在这里执行页面的更新逻辑
+});
 
 const userInfo = ref({
   roles: [],

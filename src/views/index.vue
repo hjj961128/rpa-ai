@@ -4,7 +4,7 @@
       <el-header>
         <TopMenu></TopMenu>
       </el-header>
-      <el-container>
+      <el-container class="bodys_all">
         <!-- <el-aside width="200px">菜单栏</el-aside> -->
         <el-main>
           <RouterView></RouterView>
@@ -18,8 +18,20 @@ import { RouterView } from 'vue-router'
 import TopMenu from './TopMenu.vue'
 </script>
 <style lang="less" scoped >
+.common-layout{
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  .bodys_all{
+    width: 100%;
+    height: calc(100vh - 66px);
+    display: flex;
+    background-color: #F5F7FA;
+  }
+}
 .el-header{
   width: 100%;
+  height: 66px;
   padding: 0;
   margin: 0 auto;
   text-align: center;
@@ -29,15 +41,17 @@ import TopMenu from './TopMenu.vue'
 }
 .el-menu-demo {
   width: 100%;
-  display: flex;
-  justify-content: center;
+  // display: flex;
+  // justify-content: center;
 }
 /* 水平时，去除底部白边。 */
 .el-menu.el-menu--horizontal {
   border-bottom: 0;
 }
 .el-menu-item{
-  width: 120px;
+  width: 150px;
+  text-align: center;
+  color: #079B79;
 }
 .el-aside{
   height: 100vh;

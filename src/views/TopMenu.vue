@@ -6,34 +6,37 @@
       class="el-menu-demo"
       mode="horizontal"
       background-color="transparent"
-      active-text-color="#1890FF"
+      active-text-color="#079B79"
       @select="handleSelect"
+      
     >
       <el-menu-item index="/home">首页</el-menu-item>
       <el-sub-menu index="2" popper-class="test">
-        <template #title>成果库</template>
+        <template #title>
+          <div class="submenu-title">成果库</div>
+        </template>
         <el-menu-item
           style="
             border-bottom: 2px solid #fff;
-            height: 60px;
-            line-height: 60px;
+            height: 66px;
+            line-height: 66px;
             color: #fff;
             text-align: center;
             font-size: 16px;
           "
           index="/schemeLibrary"
-          >方案库</el-menu-item
+          ><div class="submenu-title">方案库</div></el-menu-item
         >
         <el-menu-item
           style="
-            height: 60px;
-            line-height: 60px;
+            height: 66px;
+            line-height: 66px;
             color: #fff;
             text-align: center;
             font-size: 16px;
           "
           index="/workBoxIndex"
-          >工具箱</el-menu-item
+          ><div class="submenu-title">工具箱</div></el-menu-item
         >
       </el-sub-menu>
       <el-menu-item index="/processlist">流程画布</el-menu-item>
@@ -193,10 +196,10 @@ const putPassword = () => {
   });
 };
 
-const handleClose = () =>{
-  passwordFormRef.value.resetFields()
-  dialogVisible.value = false
-}
+const handleClose = () => {
+  passwordFormRef.value.resetFields();
+  dialogVisible.value = false;
+};
 
 // const userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
 const userStore = useUserStore();
@@ -210,6 +213,7 @@ const hasPermission = () => {
 <style lang="scss" scoped>
 .el-menu {
   text-align: center;
+  height: 66px !important;
 }
 .el-menu-demo {
   width: 100%;
@@ -225,13 +229,43 @@ const hasPermission = () => {
 .el-menu-item,
 .el-sub-menu .el-sub-menu__title {
   width: 150px;
-  color: #fff;
-  font-size: 20px;
-  font-weight: 700;
+  font-family: AlibabaPuHuiTiR;
+  font-size: 18px;
+  color: #323233;
+  line-height: 25px;
+  text-align: center;
+  font-style: normal;
 }
 
 .el-menu-item.is-active {
-  background-color: rgba(0, 0, 0, 0.2);
+  width: 150px;
+  font-family: AlibabaPuHuiTiB !important;
+  font-size: 18px !important;
+  color: #079b79 !important;
+  line-height: 25px !important;
+  text-align: center !important;
+  font-style: normal !important;
+}
+.el-menu-item:hover {
+  background-color: rgba($color: #000000, $alpha: 0.2) !important; /* 鼠标悬停时的背景颜色 */
+  color: #079b79 !important; /* 鼠标悬停时的文字颜色 */
+}
+.submenu-title {
+    height: 100%;
+    width: 100%;
+    display: flex; /* 使用Flexbox布局 */
+    align-items: center; /* 垂直居中 */
+    justify-content: center; /* 水平居中 */
+    width: 150px !important;
+    font-family: AlibabaPuHuiTiR !important;
+    font-size: 18px !important;
+    color: #323233 !important;
+    line-height: 25px !important;
+    text-align: center !important;
+    font-style: normal !important;
+}
+.submenu-title:hover{
+  color: #079b79 !important;
 }
 .userinfo {
   position: absolute;
@@ -243,8 +277,8 @@ const hasPermission = () => {
   font-size: 18px;
 }
 .el-dropdown {
-  height: 60px;
-  line-height: 60px;
+  height: 66px;
+  line-height: 66px;
 }
 .example-showcase .el-dropdown-link {
   cursor: pointer;
