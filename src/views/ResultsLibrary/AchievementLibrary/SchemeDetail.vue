@@ -1,19 +1,20 @@
 <template>
-  <div>
-    <!-- 面包屑 -->
-    <div style="margin: 20px">
-      <el-breadcrumb separator="/">
-        <el-breadcrumb-item>
-          <el-link type="primary" @click="gohome()">首页</el-link>
-        </el-breadcrumb-item>
-        <el-breadcrumb-item>
-          <el-link type="primary" @click="goBack()"
-            >上一页</el-link
-          ></el-breadcrumb-item
-        >
-      </el-breadcrumb>
-    </div>
-    <div class="top">
+  <div class="main_page">
+    <div class="main">
+      <!-- 面包屑 -->
+      <div class="breadclass">
+        <el-breadcrumb separator="/">
+          <el-breadcrumb-item>
+            <el-link type="primary" @click="gohome()">首页</el-link>
+          </el-breadcrumb-item>
+          <el-breadcrumb-item>
+            <el-link type="primary" @click="goBack()"
+              >上一页</el-link
+            ></el-breadcrumb-item
+          >
+        </el-breadcrumb>
+      </div>
+      <!-- <div class="top">
       <div class="title1">业务亮点</div>
       <el-row :gutter="20">
         <el-col :span="5" :offset="2">
@@ -50,70 +51,76 @@
           </div>
         </el-col>
       </el-row>
-    </div>
-    <div class="center">
-      <div class="title1">{{ processList.name }}</div>
-      <div class="centerview">
-        <div class="left">
-          <!-- <img src="../../../assets/images/u45.png" alt="" />
+    </div> -->
+      <div class="bottom_c">
+        <div class="center">
+          <div class="title1">
+            <img src="../../../assets/images/titlel.png" alt="" />
+            {{ processList.name }}
+            <img src="../../../assets/images/titler.png" alt="" />
+          </div>
+          <div></div>
+          <div class="centerview">
+            <div class="left">
+              <!-- <img src="../../../assets/images/u45.png" alt="" />
            -->
-          <vue3VideoPlay
-            v-if="videoUrl"
-            width="100%"
-            title="视屏演示"
-            :src="videoUrl"
-            @play="onPlay"
-            @pause="onPause"
-            @timeupdate="onTimeupdate"
-            @canplay="onCanplay"
-          />
-          <img v-else src="../../../assets/images/u45.png" alt="" />
+              <vue3VideoPlay
+                v-if="videoUrl"
+                width="100%"
+                title="视屏演示"
+                :src="videoUrl"
+                @play="onPlay"
+                @pause="onPause"
+                @timeupdate="onTimeupdate"
+                @canplay="onCanplay"
+              />
+              <img v-else src="../../../assets/images/u45.png" alt="" />
 
-          <!-- :poster="options.poster"
+              <!-- :poster="options.poster"
             @play="onPlay"
             @pause="onPause"
             @timeupdate="onTimeupdate"
             @canplay="onCanplay" -->
-        </div>
-        <div class="right">
-          <div class="show" v-if="processList.process_introduction">
-            <div class="showTitle">简介</div>
-            <div class="showDetail">
-              {{ processList.process_introduction }}
             </div>
-            <div class="showui">
-              {{ processList.effectARR }}
-              <!-- {{ processList.effect.split(".") }} -->
-              <ul>
-                <!-- <li v-for="(item,index) in processList.effectARR" :key="index">{{ item }}</li> -->
-                <!-- <li>每日人工处理该业务需5小时，RPA执行仅需1小时</li>
+            <div class="right">
+              <div class="show" v-if="processList.process_introduction">
+                <div class="showTitle">简介</div>
+                <div class="showDetail">
+                  {{ processList.process_introduction }}
+                </div>
+                <div class="showui">
+                  {{ processList.effectARR }}
+                  <!-- {{ processList.effect.split(".") }} -->
+                  <ul>
+                    <!-- <li v-for="(item,index) in processList.effectARR" :key="index">{{ item }}</li> -->
+                    <!-- <li>每日人工处理该业务需5小时，RPA执行仅需1小时</li>
                 <li>提升4倍工作效率</li>
                 <li>核对正确率提高至100%</li> -->
-              </ul>
-            </div>
-          </div>
-          <div class="show" v-if="processList.business_system">
-            <div class="showTitle">涉及业务系统</div>
-            <div class="showDetail">{{ processList.business_system }}</div>
-            <div class="showui"></div>
-          </div>
-          <div class="show" v-if="processList.full_file_url">
-            <div class="showTitle">流程文件</div>
-            <!-- <el-link type="primary">{{
+                  </ul>
+                </div>
+              </div>
+              <div class="show" v-if="processList.business_system">
+                <div class="showTitle">涉及业务系统</div>
+                <div class="showDetail">{{ processList.business_system }}</div>
+                <div class="showui"></div>
+              </div>
+              <div class="show" v-if="processList.full_file_url">
+                <div class="showTitle">流程文件</div>
+                <!-- <el-link type="primary">{{
               processList.file_url
                 ? processList.full_file_url
                 : "https://www.baidu.com/"
             }}</el-link> -->
-            <a :href="processList.full_file_url">下载</a>
-          </div>
-          <div class="show">
-            <div class="showTitle">执行方式</div>
-            <el-button @click="runModeType('1')" plain>手动执行</el-button>
-            <el-button @click="runModeType('2')" type="primary" plain
-              >定时执行</el-button
-            >
-          </div>
-          <!-- <div class="show">
+                <a :href="processList.full_file_url">下载</a>
+              </div>
+              <div class="show">
+                <div class="showTitle">执行方式</div>
+                <el-button @click="runModeType('1')" plain>手动执行</el-button>
+                <el-button @click="runModeType('2')" type="primary"
+                  >定时执行</el-button
+                >
+              </div>
+              <!-- <div class="show">
             <div class="showTitle">执行记录</div>
             <div class="showDetail">
               <el-table
@@ -184,284 +191,304 @@
 
             </div>
           </div> -->
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-    <div class="bottom">
-      <div class="title1">执行记录</div>
-      <div class="card">
-        <el-table
-          :data="taskStatusList"
-          show-overflow-tooltip
-          style="width: 100%"
-          class="table-with-bg"
-        >
-          <!-- <el-table-column prop="task_no" label="任务编号" /> -->
-          <el-table-column
-            prop="wr_worker_name"
-            label="客户端名称"
-            min-width="100"
-          />
-          <el-table-column prop="task_status" label="任务状态" min-width="100">
-            <template #default="{ row }">
-              <div>
-                {{
-                  row.task_status == "0"
-                    ? "待运行"
-                    : row.task_status == "1"
-                    ? "运行中"
-                    : row.task_status == "2"
-                    ? "已取消"
-                    : row.task_status == "3"
-                    ? "成功"
-                    : row.task_status == "4"
-                    ? "失败"
-                    : "异常"
-                }}
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column prop="automatic" label="自动分配" min-width="100">
-            <template #default="{ row }">
-              <div>
-                {{ row.automatic === "0" ? "否" : "是" }}
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column prop="work_way" label="运行方式" min-width="100" />
-          <el-table-column prop="run_time" label="运行时长" min-width="100">
-            <template #default="{ row }">
-              <div>{{ secondsToHMS(row.run_time) }}</div>
-            </template>
-          </el-table-column>
-          <el-table-column
-            prop="run_result_reason"
-            label="运行详情"
-            min-width="100"
-          />
-
-          <el-table-column prop="start_time" label="开始时间" min-width="100" />
-          <el-table-column prop="end_time" label="结束时间" min-width="100" />
-
-          <el-table-column prop="created_at" label="创建时间" min-width="100">
-            <template #default="{ row }">
-              <div>{{ new Date(row.created_at).toLocaleString() }}</div>
-            </template>
-          </el-table-column>
-          <!-- <el-table-column prop="annotation" label="备注" /> -->
-        </el-table>
-
-        <el-pagination
-          :background="true"
-          :current-page="taskPage.page_num"
-          :page-size="taskPage.page_size"
-          :page-sizes="[10, 25, 50, 100]"
-          :total="taskPage.total"
-          layout="total, sizes, prev, pager, next, jumper"
-          size="mini"
-          @size-change="handleTaskSizeChange"
-          @current-change="handleTaskCurrentChange"
-          style="margin-top: 10px; float: right"
-        ></el-pagination>
-      </div>
-    </div>
-    <el-dialog
-      v-model="runModeVisible"
-      width="800"
-      :title="runModeTypeNum == '1' ? '手动执行' : '定时执行'"
-      append-to-body
-      @closed="handleClose"
-    >
-      <el-form
-        ref="rulepRunModeFormRef"
-        :model="runModeForm"
-        :rules="runModeTypeNum == '1' ? manualRules : timingRules"
-        label-width="auto"
-        style="max-width: 800px"
-      >
-        <el-form-item label="触发器名称" v-if="runModeTypeNum == '2'" prop="tiggerName">
-          <el-input
-            v-model="runModeForm.tiggerName"
-            placeholder="请输入触发器名称"
-          />
-        </el-form-item>
-        <el-form-item label="流程名称">
-          <el-input v-model="runModeForm.name" disabled />
-        </el-form-item>
-        <el-form-item label="是否自动分配worker" prop="isWorker">
-          <el-switch v-model="runModeForm.isWorker" />
-        </el-form-item>
-        <el-form-item label="worker名称" v-if="!runModeForm.isWorker">
-          <el-select
-            v-model="runModeForm.workerName"
-            placeholder="请选择worker名称"
-          >
-            <el-option
-              v-for="(item, Index) in taskList"
-              :key="Index"
-              :label="
-                item.wrWorkerName +
-                ' (' +
-                item.online +
-                ') ' +
-                '待运行' +
-                '(' +
-                item.willRun +
-                ')'
-              "
-              :value="item.wrWorkerId"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="配置参数" v-if="ProcessParamsList.length > 2">
+        <div class="bottom">
+          <div class="title1">
+            <img src="../../../assets/images/titlel.png" alt="" />
+            执行记录
+            <img src="../../../assets/images/titler.png" alt="" />
+          </div>
+        <div class="card">
           <el-table
-            :data="ProcessParamsList.filter((item) => item.show !== false)"
+            :data="taskStatusList"
             show-overflow-tooltip
-            border
             style="width: 100%"
+            class="table-with-bg"
           >
-            <el-table-column prop="key" label="参数名" />
-            <el-table-column prop="showType" label="参数类型" width="90" />
-            <el-table-column prop="value" label="参数值">
+            <!-- <el-table-column prop="task_no" label="任务编号" /> -->
+            <el-table-column
+              prop="wr_worker_name"
+              label="客户端名称"
+              min-width="100"
+            />
+            <el-table-column
+              prop="task_status"
+              label="任务状态"
+              min-width="100"
+            >
               <template #default="{ row }">
-                <el-input
-                  style="width: 100%"
-                  v-model="row.value"
-                  controls-position="right"
-                ></el-input>
+                <div>
+                  {{
+                    row.task_status == "0"
+                      ? "待运行"
+                      : row.task_status == "1"
+                      ? "运行中"
+                      : row.task_status == "2"
+                      ? "已取消"
+                      : row.task_status == "3"
+                      ? "成功"
+                      : row.task_status == "4"
+                      ? "失败"
+                      : "异常"
+                  }}
+                </div>
               </template>
             </el-table-column>
-            <el-table-column prop="annotation" label="备注" />
-          </el-table>
-        </el-form-item>
-        <el-form-item label="执行频率" v-if="runModeTypeNum == '2'">
-          <el-radio-group v-model="runModeForm.choiceTime">
-            <el-radio-button label="每日" value="eDay"> </el-radio-button>
-            <el-radio-button label="每周" value="eWeek" />
-            <el-radio-button label="每月" value="eMonth" />
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label=" " v-if="runModeTypeNum == '2'">
-          <el-card style="padding: 0px 20px">
-            <p class="cardTitle">执行方式</p>
-            <div v-if="runModeForm.choiceTime == 'eWeek'">
-              <el-checkbox
-                v-model="checkAllWeeks"
-                :indeterminate="isIndeterminate"
-                @change="handleCheckAllChange"
-              >
-                全选
-              </el-checkbox>
-              <el-checkbox-group
-                v-model="checkedWeeks"
-                @change="handleCheckedCitiesChange"
-              >
-                <el-checkbox
-                  v-for="week in weekList"
-                  :key="week.label"
-                  :label="week.value"
-                  :value="week.label"
-                >
-                  {{ week.value }}
-                </el-checkbox>
-              </el-checkbox-group>
-            </div>
-            <div v-if="runModeForm.choiceTime == 'eMonth'">
-              <el-checkbox
-                v-model="checkAllMonth"
-                :indeterminate="isIndeterminateMonth"
-                @change="handleCheckAllChangeMonth"
-              >
-                全选
-              </el-checkbox>
-              <el-checkbox-group
-                v-model="checkedMonth"
-                @change="handleCheckedMonthChange"
-              >
-                <el-checkbox
-                  v-for="month in MonthList"
-                  :key="month"
-                  :label="month"
-                  :value="month"
-                >
-                  {{ month }}月
-                </el-checkbox>
-              </el-checkbox-group>
-              <p class="cardTitle">指定日</p>
-              <el-radio-group v-model="runModeForm.timeType">
-                <el-radio value="dayday" size="large">按日</el-radio>
-                <el-radio value="monthlast" size="large">当月最后一天</el-radio>
-              </el-radio-group>
-              <div v-if="runModeForm.timeType == 'dayday'">
-                当月第
-                <el-select
-                  v-model="runModeForm.monthDay"
-                  multiple
-                  placeholder="请选择"
-                  style="width: 240px"
-                >
-                  <el-option
-                    v-for="item in montDayList"
-                    :key="item"
-                    :label="item"
-                    :value="item"
-                  />
-                </el-select>
-                日
-              </div>
-            </div>
+            <el-table-column prop="automatic" label="自动分配" min-width="100">
+              <template #default="{ row }">
+                <div>
+                  {{ row.automatic === "0" ? "否" : "是" }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="work_way" label="运行方式" min-width="100" />
+            <el-table-column prop="run_time" label="运行时长" min-width="100">
+              <template #default="{ row }">
+                <div>{{ secondsToHMS(row.run_time) }}</div>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="run_result_reason"
+              label="运行详情"
+              min-width="100"
+            />
 
-            <div>
-              在&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <el-time-picker
-                v-model="runModeForm.timeHM"
-                placeholder="选择时间"
-                format="HH:mm"
-                value-format="HH:mm"
-              />
-              执行
-            </div>
-          </el-card>
-        </el-form-item>
-        <el-form-item label="触发预览" v-if="runModeTypeNum == '2'">
-          <p v-if="runModeForm.choiceTime == 'eDay'">
-            每日的 {{ runModeForm.timeHM }} 执行
-          </p>
-          <p v-if="runModeForm.choiceTime == 'eWeek'">
-            每周 {{ checkedWeeks }} 的 {{ runModeForm.timeHM }} 执行
-          </p>
-          <div v-if="runModeForm.choiceTime == 'eMonth'">
-            <p v-if="runModeForm.timeType == 'dayday'">
-              每 {{ checkedMonth }} 第 {{ runModeForm.monthDay }} 的
-              {{ runModeForm.timeHM }} 执行
-            </p>
-            <p v-else>
-              每 {{ checkedMonth }} 最后1日的 {{ runModeForm.timeHM }} 执行
-            </p>
-          </div>
-        </el-form-item>
-        <el-form-item label="启动时间" v-if="runModeTypeNum == '2'">
-          <el-date-picker
-            v-model="startTime"
-            placeholder="请输入启动时间"
-            :disabled-date="disabledDate"
-          />
-        </el-form-item>
-        <el-form-item label="结束时间" v-if="runModeTypeNum == '2'">
-          <el-date-picker
-            v-model="endTime"
-            placeholder="请输入结束时间"
-            :disabled-date="disabledendDate"
-          />
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="clickTask(runModeTypeNum)"
-            >运行</el-button
+            <el-table-column
+              prop="start_time"
+              label="开始时间"
+              min-width="100"
+            />
+            <el-table-column prop="end_time" label="结束时间" min-width="100" />
+
+            <el-table-column prop="created_at" label="创建时间" min-width="100">
+              <template #default="{ row }">
+                <div>{{ new Date(row.created_at).toLocaleString() }}</div>
+              </template>
+            </el-table-column>
+            <!-- <el-table-column prop="annotation" label="备注" /> -->
+          </el-table>
+
+          <el-pagination
+            :background="true"
+            :current-page="taskPage.page_num"
+            :page-size="taskPage.page_size"
+            :page-sizes="[10, 25, 50, 100]"
+            :total="taskPage.total"
+            layout="total, sizes, prev, pager, next, jumper"
+            size="mini"
+            @size-change="handleTaskSizeChange"
+            @current-change="handleTaskCurrentChange"
+            style="margin-top: 10px; float: right"
+          ></el-pagination>
+        </div>
+      </div>
+      </div>
+      <el-dialog
+        v-model="runModeVisible"
+        width="800"
+        :title="runModeTypeNum == '1' ? '手动执行' : '定时执行'"
+        append-to-body
+        @closed="handleClose"
+      >
+        <el-form
+          ref="rulepRunModeFormRef"
+          :model="runModeForm"
+          :rules="runModeTypeNum == '1' ? manualRules : timingRules"
+          label-width="auto"
+          style="max-width: 800px"
+        >
+          <el-form-item
+            label="触发器名称"
+            v-if="runModeTypeNum == '2'"
+            prop="tiggerName"
           >
-          <el-button @click="handleClose">取消</el-button>
-        </el-form-item>
-      </el-form>
-    </el-dialog>
+            <el-input
+              v-model="runModeForm.tiggerName"
+              placeholder="请输入触发器名称"
+            />
+          </el-form-item>
+          <el-form-item label="流程名称">
+            <el-input v-model="runModeForm.name" disabled />
+          </el-form-item>
+          <el-form-item label="是否自动分配worker" prop="isWorker">
+            <el-switch v-model="runModeForm.isWorker" />
+          </el-form-item>
+          <el-form-item label="worker名称" v-if="!runModeForm.isWorker">
+            <el-select
+              v-model="runModeForm.workerName"
+              placeholder="请选择worker名称"
+            >
+              <el-option
+                v-for="(item, Index) in taskList"
+                :key="Index"
+                :label="
+                  item.wrWorkerName +
+                  ' (' +
+                  item.online +
+                  ') ' +
+                  '待运行' +
+                  '(' +
+                  item.willRun +
+                  ')'
+                "
+                :value="item.wrWorkerId"
+              />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="配置参数" v-if="ProcessParamsList.length > 2">
+            <el-table
+              :data="ProcessParamsList.filter((item) => item.show !== false)"
+              show-overflow-tooltip
+              border
+              style="width: 100%"
+            >
+              <el-table-column prop="key" label="参数名" />
+              <el-table-column prop="showType" label="参数类型" width="90" />
+              <el-table-column prop="value" label="参数值">
+                <template #default="{ row }">
+                  <el-input
+                    style="width: 100%"
+                    v-model="row.value"
+                    controls-position="right"
+                  ></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column prop="annotation" label="备注" />
+            </el-table>
+          </el-form-item>
+          <el-form-item label="执行频率" v-if="runModeTypeNum == '2'">
+            <el-radio-group v-model="runModeForm.choiceTime">
+              <el-radio-button label="每日" value="eDay"> </el-radio-button>
+              <el-radio-button label="每周" value="eWeek" />
+              <el-radio-button label="每月" value="eMonth" />
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item label=" " v-if="runModeTypeNum == '2'">
+            <el-card style="padding: 0px 20px">
+              <p class="cardTitle">执行方式</p>
+              <div v-if="runModeForm.choiceTime == 'eWeek'">
+                <el-checkbox
+                  v-model="checkAllWeeks"
+                  :indeterminate="isIndeterminate"
+                  @change="handleCheckAllChange"
+                >
+                  全选
+                </el-checkbox>
+                <el-checkbox-group
+                  v-model="checkedWeeks"
+                  @change="handleCheckedCitiesChange"
+                >
+                  <el-checkbox
+                    v-for="week in weekList"
+                    :key="week.label"
+                    :label="week.value"
+                    :value="week.label"
+                  >
+                    {{ week.value }}
+                  </el-checkbox>
+                </el-checkbox-group>
+              </div>
+              <div v-if="runModeForm.choiceTime == 'eMonth'">
+                <el-checkbox
+                  v-model="checkAllMonth"
+                  :indeterminate="isIndeterminateMonth"
+                  @change="handleCheckAllChangeMonth"
+                >
+                  全选
+                </el-checkbox>
+                <el-checkbox-group
+                  v-model="checkedMonth"
+                  @change="handleCheckedMonthChange"
+                >
+                  <el-checkbox
+                    v-for="month in MonthList"
+                    :key="month"
+                    :label="month"
+                    :value="month"
+                  >
+                    {{ month }}月
+                  </el-checkbox>
+                </el-checkbox-group>
+                <p class="cardTitle">指定日</p>
+                <el-radio-group v-model="runModeForm.timeType">
+                  <el-radio value="dayday" size="large">按日</el-radio>
+                  <el-radio value="monthlast" size="large"
+                    >当月最后一天</el-radio
+                  >
+                </el-radio-group>
+                <div v-if="runModeForm.timeType == 'dayday'">
+                  当月第
+                  <el-select
+                    v-model="runModeForm.monthDay"
+                    multiple
+                    placeholder="请选择"
+                    style="width: 240px"
+                  >
+                    <el-option
+                      v-for="item in montDayList"
+                      :key="item"
+                      :label="item"
+                      :value="item"
+                    />
+                  </el-select>
+                  日
+                </div>
+              </div>
+
+              <div>
+                在&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <el-time-picker
+                  v-model="runModeForm.timeHM"
+                  placeholder="选择时间"
+                  format="HH:mm"
+                  value-format="HH:mm"
+                />
+                执行
+              </div>
+            </el-card>
+          </el-form-item>
+          <el-form-item label="触发预览" v-if="runModeTypeNum == '2'">
+            <p v-if="runModeForm.choiceTime == 'eDay'">
+              每日的 {{ runModeForm.timeHM }} 执行
+            </p>
+            <p v-if="runModeForm.choiceTime == 'eWeek'">
+              每周 {{ checkedWeeks }} 的 {{ runModeForm.timeHM }} 执行
+            </p>
+            <div v-if="runModeForm.choiceTime == 'eMonth'">
+              <p v-if="runModeForm.timeType == 'dayday'">
+                每 {{ checkedMonth }} 第 {{ runModeForm.monthDay }} 的
+                {{ runModeForm.timeHM }} 执行
+              </p>
+              <p v-else>
+                每 {{ checkedMonth }} 最后1日的 {{ runModeForm.timeHM }} 执行
+              </p>
+            </div>
+          </el-form-item>
+          <el-form-item label="启动时间" v-if="runModeTypeNum == '2'">
+            <el-date-picker
+              v-model="startTime"
+              placeholder="请输入启动时间"
+              :disabled-date="disabledDate"
+            />
+          </el-form-item>
+          <el-form-item label="结束时间" v-if="runModeTypeNum == '2'">
+            <el-date-picker
+              v-model="endTime"
+              placeholder="请输入结束时间"
+              :disabled-date="disabledendDate"
+            />
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="clickTask(runModeTypeNum)"
+              >运行</el-button
+            >
+            <el-button @click="handleClose">取消</el-button>
+          </el-form-item>
+        </el-form>
+      </el-dialog>
+    </div>
   </div>
 </template>
 
@@ -486,14 +513,14 @@ const manualRules = {
   // ],
 };
 const timingRules = {
-  tiggerName:[
+  tiggerName: [
     {
       required: true,
       message: "请输入触发器名称",
       trigger: "blur",
     },
   ],
-}
+};
 
 const router = useRouter();
 const disabledDate = (time) => {
@@ -928,10 +955,10 @@ const gohome = () => {
 const goBack = () => {
   router.go(-1);
 };
-const handleClose = () =>{
-  rulepRunModeFormRef.value.resetFields()
-  runModeVisible.value = false
-}
+const handleClose = () => {
+  rulepRunModeFormRef.value.resetFields();
+  runModeVisible.value = false;
+};
 onMounted(() => {
   getProcessList();
   getWorkerList();
@@ -941,6 +968,33 @@ onMounted(() => {
 });
 </script>
 <style lang="scss" scoped>
+.main_page {
+  width: 100%;
+  background-color: #fff;
+  .breadclass {
+    width: 1920px;
+    height: 42px;
+    box-shadow: inset 0px -1px 0px 0px #f1f2f7;
+    font-family: AlibabaPuHuiTiR;
+    font-size: 14px;
+    color: #303133;
+    line-height: 42px;
+    text-align: left;
+    font-style: normal;
+    display: flex;
+    align-items: center;
+    padding-left: 24px;
+  }
+  .bottom_c {
+    margin: 24px;
+    padding: 24px;
+    width: 100%;
+    background: #ffffff;
+    background-image: url("../../../assets/images/cbg.png"); /* 替换为你的图片路径 */
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.05);
+    border-radius: 4px;
+  }
+}
 .top-title {
   width: 100%;
   height: 180px;
@@ -993,14 +1047,36 @@ svg {
   width: 100%;
   margin-top: 20px;
   text-align: center;
-  font-weight: 900;
-  font-size: 28px;
-  line-height: 50px;
+  font-family: YouSheBiaoTiHei;
+  font-size: 22px;
+  color: #303133;
+  line-height: 28px;
+  text-align: center;
+  font-style: normal;
+  text-transform: none;
+  line-height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  img {
+    width: 32px;
+    height: 32px;
+  }
 }
 
 .centerview {
   display: flex;
-
+  margin: auto;
+  margin-top: 32px;
+  width: 60%;
+  background-color: #fff;
+  background-image: url("../../../assets/images/cb.png"); /* 替换为你的图片路径 */
+  background-size: cover; /* 或者使用 contain */
+  background-position: center; /* 确保图片居中 */
+  background-repeat: no-repeat; /* 确保不重复 */
+  box-shadow: inset 0px -1px 0px 0px rgba(0, 128, 255, 0.48);
+  border: 1px solid #e1f6ff;
+  border-radius: 3px;
   .left {
     width: 50%;
     padding: 40px;
@@ -1020,12 +1096,13 @@ svg {
 }
 
 .bottom {
+  margin-top: 40px;
   margin-bottom: 70px;
   .card {
     width: 90%;
     padding: 20px;
     margin-left: 5%;
-    // background-image: url("../../../assets/images/bbg.png");
+    background-image: url("../../../assets/images/tableb.png");
     /* 替换为你的图片路径 */
     background-size: cover;
     /* 背景图片覆盖整个元素 */
@@ -1071,17 +1148,26 @@ svg {
 }
 
 .showTitle {
-  font-size: 18px;
-  line-height: 18px;
   margin-bottom: 15px;
+  font-family: YouSheBiaoTiHei;
+  font-size: 18px;
+  color: #303133;
+  line-height: 28px;
+  font-style: normal;
+  text-transform: none;
 }
 
 .showDetail,
 .showui {
   margin-top: 10px;
   margin-bottom: 10px;
+  font-family: AlibabaPuHuiTiR;
   font-size: 14px;
-  color: #333;
+  color: #303133;
+  line-height: 26px;
+  text-align: left;
+  font-style: normal;
+  text-transform: none;
 }
 
 .show {
@@ -1107,7 +1193,7 @@ svg {
   /* 向右移动，为了间隔效果 */
 }
 .table-with-bg {
-  background-image: url("../../../assets/images/bbg.png"); /* 替换为你的图片路径 */
+  // background-image: url("../../../assets/images/bbg.png"); /* 替换为你的图片路径 */
   background-size: cover; /* 背景图片覆盖整个元素 */
   background-position: center; /* 背景图片居中 */
   background-repeat: no-repeat; /* 背景图片不重复 */
