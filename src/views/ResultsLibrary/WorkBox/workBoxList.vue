@@ -1,8 +1,18 @@
 <template>
   <div class="main_page">
     <!-- 面包屑 -->
-    <div>
-      <el-breadcrumb separator="/">
+    <div class="search">
+      <el-input
+        placeholder="请输入关键词"
+        class="search_input"
+        v-model="searchValue"
+      ></el-input>
+      <el-button
+        type="primary"
+        style="height: 48px; width: 82px; margin-left: 24px"
+        >查询</el-button
+      >
+      <!-- <el-breadcrumb separator="/">
         <el-breadcrumb-item>
           <el-link type="primary" @click="gohome()">首页</el-link>
         </el-breadcrumb-item>
@@ -11,9 +21,9 @@
             >上一页</el-link
           ></el-breadcrumb-item
         >
-      </el-breadcrumb>
+      </el-breadcrumb> -->
     </div>
-    <div class="top_search">
+    <!-- <div class="top_search">
       <el-input
         :prefix-icon="Search"
         v-model="searchValue"
@@ -29,10 +39,10 @@
           >
         </template>
       </el-input>
-    </div>
+    </div> -->
     <div class="toplist">
       <el-row :gutter="20">
-        <el-col v-for="(item, index) in boxList" :key="index" :span="6">
+        <el-col v-for="(item, index) in boxList" :key="index" :span="8">
           <el-card class="boxcard">
             <img :src="item.imgurl" alt="" />
             <p class="title">{{ item.title }}</p>
@@ -43,8 +53,9 @@
             <div class="bth">
               <el-button
                 @click="toDetail(item)"
-                key="primary"
-                type="primary"
+                key="text"
+                class="detailLink"
+
                 link
               >
                 了解详情 >
@@ -139,9 +150,21 @@ onMounted(() => {
 });
 </script>
 <style lang="scss" scoped>
-.main_page {
+.search {
   width: 100%;
-  padding: 0px;
+  margin: auto;
+  text-align: center;
+  .search_input {
+    height: 48px;
+    width: 618px;
+  }
+}
+.main_page {
+  margin: 24px;
+  padding: 100px 441px 0px 441px;
+  background-image: url("../../../assets/images/cbg.png"); /* 替换为你的图片路径 */
+  background-size: cover; /* 背景图片覆盖整个元素 */
+  background-repeat: no-repeat; /* 背景图片不重复 */
   .top_search {
     text-align: center;
   }
@@ -149,6 +172,9 @@ onMounted(() => {
     margin-top: 50px;
     width: 100%;
     .boxcard {
+      background-image: url("../../../assets/images/bubg.png"); /* 替换为你的图片路径 */
+    background-size: cover; /* 背景图片覆盖整个元素 */
+    background-repeat: no-repeat; /* 背景图片不重复 */
       margin-bottom: 20px;
       img {
         width: 100%;

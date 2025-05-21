@@ -1,7 +1,8 @@
 <template>
   <div class="main-page">
+    <div class="title-page">查询条件</div>
     <!-- 面包屑 -->
-    <div>
+    <!-- <div>
       <el-breadcrumb separator="/">
         <el-breadcrumb-item>
           <el-link type="primary" @click="gohome()">首页</el-link>
@@ -10,7 +11,7 @@
           <el-link type="primary" @click="goBack()">上一页 </el-link>
         </el-breadcrumb-item>
       </el-breadcrumb>
-    </div>
+    </div> -->
     <div class="top-search">
       <el-form :model="searchForm" label-width="auto">
         <el-row :gutter="24">
@@ -94,9 +95,9 @@
             <el-button
               @click="edit(row)"
               key="primary"
-              type="primary"
               link
               :disabled="row.source !== 0"
+              class="bths_color"
             >
               编辑画布
             </el-button>
@@ -107,6 +108,7 @@
               v-if="row.online == false"
               @click="onlineDialog(row, '0')"
               :disabled="!isOnline(row)"
+              class="bths_color"
             >
               上线
             </el-button>
@@ -117,6 +119,7 @@
               v-else
               :disabled="!isOnline(row)"
               @click="prossDown(row)"
+              class="bths_color"
             >
               下线
             </el-button>
@@ -637,10 +640,10 @@ const addProcessApi = (val) => {
       console.log(fileList.value);
       if (fileList.value.length <= 0 && processSource.value === 1) {
         ElMessage({
-              showClose: true,
-              message: "请选择文件夹",
-              type: "error",
-            });
+          showClose: true,
+          message: "请选择文件夹",
+          type: "error",
+        });
       } else {
         const formdata = new FormData();
 
@@ -768,10 +771,10 @@ const gohome = () => {
 const goBack = () => {
   router.go(-1);
 };
-const handleClose = () =>{
-  rulepProcessFormRef.value.resetFields()
-  innerVisible.value = false
-}
+const handleClose = () => {
+  rulepProcessFormRef.value.resetFields();
+  innerVisible.value = false;
+};
 onMounted(() => {
   queryDepartmentList();
 
@@ -790,9 +793,27 @@ onMounted(() => {
 </script>
 <style lang="less" scoped>
 .main-page {
-  padding: 40px;
-  padding-top: 20px;
-
+  margin: 24px;
+  height: 100vh;
+  padding: 24px;
+  padding-top: 0px;
+  background: #ffffff;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+  .title-page {
+    width: 100%;
+    height: 57px;
+    font-family: YouSheBiaoTiHei;
+    font-size: 22px;
+    color: #303133;
+    line-height: 57px;
+    text-align: left;
+    font-style: normal;
+    box-shadow: inset 0px 0px 0px 0px #e0e3e5;
+    border-bottom: 1px solid #E0E3E5;
+    // display: flex;
+    // align-content: center;
+  }
   .onebox {
     width: 100%;
     text-align: center;
@@ -841,5 +862,8 @@ onMounted(() => {
 
 .btns {
   // float: right;
+}
+.bths_color{
+color: #079B79;
 }
 </style>

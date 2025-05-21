@@ -3,9 +3,9 @@
   <div>
     <div class="common-layout">
       <el-container>
-        <el-aside width="200px">
+        <!-- <el-aside width="200px">
           <AsideMenu></AsideMenu>
-        </el-aside>
+        </el-aside> -->
         <el-main>
           <RouterView></RouterView>
         </el-main>
@@ -19,7 +19,7 @@ import AsideMenu from './AsideMenu.vue'
 </script>
 <style lang="less" scoped>
 .el-main{
-  padding: 30px;
+  // padding: 30px;
 }
 .el-aside{
   background-color: #F3F7FE;

@@ -23,8 +23,8 @@ import pinia from '@/stores'
 
 //svg
 import svgIcon from './components/svgIcon.vue';
-import vue3videoPlay from 'vue3-video-play' // 引入组件
-import 'vue3-video-play/dist/style.css' // 引入css
+// import vue3videoPlay from 'vue3-video-play' // 引入组件
+// import '/dist/style.css' // 引入css
 
 const app = createApp(App)
 

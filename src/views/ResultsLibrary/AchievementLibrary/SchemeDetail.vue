@@ -64,7 +64,7 @@
             <div class="left">
               <!-- <img src="../../../assets/images/u45.png" alt="" />
            -->
-              <vue3VideoPlay
+              <!-- <vue3VideoPlay
                 v-if="videoUrl"
                 width="100%"
                 title="视屏演示"
@@ -73,8 +73,8 @@
                 @pause="onPause"
                 @timeupdate="onTimeupdate"
                 @canplay="onCanplay"
-              />
-              <img v-else src="../../../assets/images/u45.png" alt="" />
+              /> -->
+              <!-- <img v-else src="../../../assets/images/u45.png" alt="" /> -->
 
               <!-- :poster="options.poster"
             @play="onPlay"
